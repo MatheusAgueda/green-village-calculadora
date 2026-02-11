@@ -309,6 +309,9 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   <button onclick="GV.switchTab('brazil')" id="tab-brazil" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
     <span class="mr-1.5">🇧🇷</span> Brasil Detalhada
   </button>
+  <button onclick="GV.switchTab('history')" id="tab-history" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
+    <span class="mr-1.5">📊</span> Histórico
+  </button>
   <button onclick="GV.switchTab('settings')" id="tab-settings" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
     <span class="mr-1.5">⚙️</span> Configurações
   </button>
@@ -465,7 +468,32 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
 </div>
 </div>
 
-<!-- TAB 3: CONFIGURAÇÕES -->
+<!-- TAB 3: HISTÓRICO -->
+<div id="panel-history" class="hidden fade-in">
+<div class="glass rounded-3xl p-6 sm:p-8 glow-card">
+  <div class="flex items-center gap-4 mb-6">
+    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-gv-soft to-gv-bg border border-white/[.06] flex items-center justify-center text-3xl shadow-lg">
+      📊
+    </div>
+    <div class="flex-1">
+      <h2 class="text-xl font-display font-bold tracking-tight">Histórico de Cálculos</h2>
+      <p class="text-xs text-gray-500 font-light">Últimos 20 cálculos realizados • Clique para carregar</p>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="GV.clearHistory()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-red-400/30 hover:text-red-400 transition">
+        🗑️ Limpar
+      </button>
+      <button onclick="GV.exportHistoryCSV()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-gv-accent/30 hover:text-gv-accent transition">
+        📥 CSV
+      </button>
+    </div>
+  </div>
+
+  <div id="history-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</div>
+</div>
+
+<!-- TAB 4: CONFIGURAÇÕES -->
 <div id="panel-settings" class="hidden fade-in">
 <div class="glass rounded-3xl p-6 sm:p-8 glow-card">
   <div class="flex items-center gap-3 mb-1">
@@ -600,11 +628,12 @@ let R={
 
 // === TABS ===
 function switchTab(t){
-  ['international','brazil','settings'].forEach(x=>{
+  ['international','brazil','history','settings'].forEach(x=>{
     $('panel-'+x).classList.toggle('hidden',x!==t);
     $('tab-'+x).classList.toggle('tab-active',x===t);
   });
   if(t==='settings'){buildCfgSections();buildRouteEditor();}
+  if(t==='history'){buildHistoryUI();}
 }
 
 // === COUNTRY BUTTONS ===
@@ -736,6 +765,9 @@ function calcInternational(){
   card("Rota",`${rt.from} → ${rt.to} (${rt.type})`,{full:1});
   if(rt.note)card("⚠️ Observação",rt.note,{full:1});
   $('intl_results').classList.remove('hidden');
+
+  // Salvar no histórico
+  saveToHistory('international', {country: AC, price: ip, currency: cur, origin: ok, route: ri, tier: tid}, {subtotal: sub, iva, total: tot});
 }
 
 // === CALC BRAZIL ===
@@ -761,6 +793,9 @@ function calcBrazil(){
     row("Custo Nacionalizado",f(custoT),1)+'<div class="my-3 border-t border-white/[.04]"></div>'+
     row(`Mark-up (${mg}%)`,f(lucro))+row("PREÇO DE VENDA",f(pFinal),1);
   $('br_results').classList.remove('hidden');
+
+  // Salvar no histórico
+  saveToHistory('brazil', {fobUsd: fU, freightUsd: frU, insuranceUsd: iU, exchangeRate: ex}, {subtotal: custoT, iva: 0, total: pFinal});
 }
 
 // === BUILD BRAZIL FIELDS ===
@@ -1027,6 +1062,167 @@ async function forceUpdateRates() {
   toast('Taxas atualizadas!', true);
 }
 
+// === HISTÓRICO DE CÁLCULOS ===
+function saveToHistory(type, inputs, results) {
+  try {
+    const history = JSON.parse(localStorage.getItem('gv_history') || '[]');
+    const id = `calc_${Date.now()}`;
+
+    const snapshot = {
+      exchangeRates: JSON.parse(localStorage.getItem('gv_exchange_cache') || '{}').rates || {},
+      tierConfig: tiers()
+    };
+
+    const entry = {id, timestamp: Date.now(), type, inputs, results, snapshot};
+    history.unshift(entry);
+    localStorage.setItem('gv_history', JSON.stringify(history.slice(0, 20)));
+    console.log('[History] Cálculo salvo:', id);
+  } catch (error) {
+    console.error('[History] Erro ao salvar:', error);
+  }
+}
+
+function loadHistory() {
+  try {
+    return JSON.parse(localStorage.getItem('gv_history') || '[]').sort((a, b) => b.timestamp - a.timestamp);
+  } catch (error) {
+    console.error('[History] Erro ao carregar:', error);
+    return [];
+  }
+}
+
+function deleteHistoryItem(id) {
+  try {
+    const history = JSON.parse(localStorage.getItem('gv_history') || '[]');
+    localStorage.setItem('gv_history', JSON.stringify(history.filter(item => item.id !== id)));
+    buildHistoryUI();
+    toast('Item removido do histórico', true);
+  } catch (error) {
+    console.error('[History] Erro ao deletar:', error);
+    toast('Erro ao remover item', false);
+  }
+}
+
+function clearHistory() {
+  if (!confirm('Deseja realmente limpar todo o histórico? Esta ação não pode ser desfeita.')) return;
+  localStorage.removeItem('gv_history');
+  buildHistoryUI();
+  toast('Histórico limpo', true);
+}
+
+function exportHistoryCSV() {
+  try {
+    const history = loadHistory();
+    if (history.length === 0) {
+      toast('Histórico vazio', false);
+      return;
+    }
+
+    let csv = 'Data/Hora,Tipo,País,Preço Original,Moeda,Subtotal,IVA,Total\n';
+    history.forEach(item => {
+      const date = new Date(item.timestamp).toLocaleString('pt-PT');
+      const type = item.type === 'international' ? 'Internacional' : 'Brasil';
+      const country = item.inputs.country || 'N/A';
+      const price = item.inputs.price || 0;
+      const currency = item.inputs.currency || 'EUR';
+      const subtotal = item.results.subtotal || 0;
+      const iva = item.results.iva || 0;
+      const total = item.results.total || 0;
+      csv += `"${date}","${type}","${country}",${price},"${currency}",${subtotal},${iva},${total}\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `GreenVillage_Historico_${Date.now()}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    toast('CSV exportado!', true);
+  } catch (error) {
+    console.error('[History] Erro ao exportar:', error);
+    toast('Erro ao exportar CSV', false);
+  }
+}
+
+function buildHistoryUI() {
+  const container = $('history-list');
+  if (!container) return;
+
+  const history = loadHistory();
+  if (history.length === 0) {
+    container.innerHTML = `<div class="text-center py-16"><div class="text-6xl mb-4">📊</div><div class="text-lg font-semibold text-gray-400 mb-2">Nenhum cálculo no histórico</div><div class="text-sm text-gray-600">Os cálculos realizados aparecerão aqui automaticamente</div></div>`;
+    return;
+  }
+
+  container.innerHTML = history.map(item => {
+    const date = new Date(item.timestamp);
+    const dateStr = date.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const timeStr = date.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+    const country = item.inputs.country || 'N/A';
+    const countryData = R[country];
+    const flag = countryData?.flag || '🌍';
+    const label = countryData?.label || country;
+    const tier = item.inputs.tier || 'low';
+    const tierClasses = {low: 'tier-low', medium: 'tier-medium', luxury: 'tier-luxury'};
+    const total = item.results.total || 0;
+    const price = item.inputs.price || 0;
+    const currency = item.inputs.currency || 'EUR';
+    const symbol = csym[currency] || currency;
+    const routeInfo = item.type === 'international' ? `${item.inputs.origin || 'N/A'} → ${label}` : `Brasil`;
+
+    return `<div class="result-card cursor-pointer hover:border-gv-accent/30 transition group relative" onclick="GV.loadHistoryItem('${item.id}')">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-[11px] text-gray-500">${dateStr} às ${timeStr}</span>
+        <span class="${tierClasses[tier]} px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider">${tier}</span>
+      </div>
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-3xl">${flag}</span>
+        <div class="flex-1">
+          <div class="font-semibold text-sm text-gray-200">${label}</div>
+          <div class="text-xs text-gray-500">${routeInfo}</div>
+        </div>
+      </div>
+      <div class="flex justify-between items-center pt-3 border-t border-white/5">
+        <span class="text-xs text-gray-500">Preço: ${symbol}${fmt(price, 'pt-PT', 2)}</span>
+        <span class="font-mono font-bold text-gv-accent text-base">€${fmt(total, 'pt-PT', 2)}</span>
+      </div>
+      <button onclick="event.stopPropagation(); GV.deleteHistoryItem('${item.id}')" class="btn-delete absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity text-gray-600 hover:text-red-400 text-sm px-2 py-1 rounded-lg hover:bg-red-500/10" title="Remover">🗑️</button>
+    </div>`;
+  }).join('');
+}
+
+function loadHistoryItem(id) {
+  try {
+    const history = JSON.parse(localStorage.getItem('gv_history') || '[]');
+    const item = history.find(h => h.id === id);
+    if (!item) {toast('Cálculo não encontrado', false); return;}
+
+    if (item.type === 'international') {
+      switchTab('international');
+      setTimeout(() => {
+        $('intl_price') && ($('intl_price').value = item.inputs.price || '');
+        $('intl_currency') && ($('intl_currency').value = item.inputs.currency || 'EUR');
+        selectCountry(item.inputs.country || 'portugal');
+        setTimeout(() => {
+          $('intl_origin') && ($('intl_origin').value = item.inputs.origin || 'uk');
+          updateRoutes();
+          setTimeout(() => {
+            $('intl_route') && ($('intl_route').value = item.inputs.route || 0);
+            toast('Cálculo carregado! Clique em "Calcular" para ver o resultado atual', true);
+          }, 100);
+        }, 100);
+      }, 200);
+    } else {
+      switchTab('brazil');
+      toast('Cálculo Brasil carregado na aba correspondente', true);
+    }
+  } catch (error) {
+    console.error('[History] Erro ao carregar item:', error);
+    toast('Erro ao carregar cálculo', false);
+  }
+}
+
 // === PDF ===
 async function exportPDF(id,title){
   const el=$(id);if(!el)return;
@@ -1053,7 +1249,8 @@ function init(){
 }
 
 return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
-  updateTierPreview,onOriginChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,forceUpdateRates};
+  updateTierPreview,onOriginChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,forceUpdateRates,
+  loadHistory,deleteHistoryItem,clearHistory,exportHistoryCSV,buildHistoryUI,loadHistoryItem};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
