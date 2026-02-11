@@ -1315,15 +1315,28 @@ function calcInternational(){
   const c=R[AC];if(!c)return;
 
   // Parse de inputs com validação
-  const ip=parseFloat($('intl_price').value)||0;
+  const priceInput=$('intl_price');
+  const ip=parseFloat(priceInput.value)||0;
   const cur=$('intl_currency').value;
   const ok=$('intl_origin').value;
   const ri=parseInt($('intl_route').value,10);
 
+  // VALIDAÇÃO: Preço não pode ser zero ou negativo
+  if(ip<=0){
+    priceInput.classList.add('border-red-500','border-2');
+    setTimeout(()=>priceInput.classList.remove('border-red-500','border-2'),3000);
+    toast('⚠️ O preço deve ser maior que zero',false);
+    priceInput.focus();
+    return;
+  }
+
+  // Remove borda de erro se existir
+  priceInput.classList.remove('border-red-500','border-2');
+
   // Validação de rota
   const rts=c.routes?.[ok]||[];
   if(isNaN(ri)||ri>=rts.length){
-    alert("Seleciona uma rota válida.");
+    toast('⚠️ Selecione uma rota válida',false);
     return;
   }
 
@@ -1477,6 +1490,25 @@ function calcInternational(){
 // === CALC BRAZIL ===
 function calcBrazil(){
   const fU=pn('br_fobUsd'),frU=pn('br_freightUsd'),iU=pn('br_insuranceUsd'),ex=pn('br_exchangeRate')||pn('cfg_usdbrl')||6;
+
+  // VALIDAÇÃO: Valores FOB e Frete não podem ser zero
+  if(fU<=0){
+    const fobInput=$('br_fobUsd');
+    fobInput.classList.add('border-red-500','border-2');
+    setTimeout(()=>fobInput.classList.remove('border-red-500','border-2'),3000);
+    toast('⚠️ O valor FOB deve ser maior que zero',false);
+    fobInput.focus();
+    return;
+  }
+  if(frU<=0){
+    const freightInput=$('br_freightUsd');
+    freightInput.classList.add('border-red-500','border-2');
+    setTimeout(()=>freightInput.classList.remove('border-red-500','border-2'),3000);
+    toast('⚠️ O valor do frete deve ser maior que zero',false);
+    freightInput.focus();
+    return;
+  }
+
   const fB=fU*ex,frB=frU*ex,iB=iU*ex,cif=fB+frB+iB;
   const bk=$('br_isBk').checked,ii=(bk?pn('br_iiRateBk'):pn('br_iiRateNonBk'))/100;
   const ipi=pn('br_ipiRate')/100,pis=pn('br_pisRate')/100,cof=pn('br_cofinsRate')/100,icms=pn('br_icmsRate')/100;
