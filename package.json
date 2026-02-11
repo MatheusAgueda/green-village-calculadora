@@ -1,0 +1,18 @@
+{
+  "name": "green-village-calculator",
+  "version": "1.0.0",
+  "description": "Calculadora inteligente para Green Village com câmbio offline",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Calculadora pura - sem testes\" && exit 0"
+  },
+  "keywords": [
+    "calculator",
+    "transport",
+    "green-village",
+    "offline"
+  ],
+  "author": "Green Village",
+  "license": "MIT"
+}
+

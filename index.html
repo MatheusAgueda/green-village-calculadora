@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Green Village • Dashboard de Importação</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif'],display:['Sora','sans-serif'],mono:['Space Mono','monospace']},colors:{gv:{bg:'#060a12',card:'#0c1220',soft:'#111a2e',accent:'#00ff88',accentDim:'#00cc6e',blue:'#5eb5ff',purple:'#a78bfa',border:'rgba(255,255,255,0.06)'}}}}}
+</script>
+<style>
+*{box-sizing:border-box}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:10px}::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.15)}
+
+/* === BRAND COLORS === */
+:root{
+  --gv-primary:#1db854;
+  --gv-primary-light:#22dd66;
+  --gv-dark:#060a12;
+}
+
+/* === BACKGROUND === */
+body{
+  background:#060a12;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%,rgba(29,184,84,.08),transparent),
+    radial-gradient(ellipse 60% 40% at 80% 0%,rgba(94,181,255,.04),transparent),
+    radial-gradient(ellipse 40% 30% at 10% 90%,rgba(167,139,250,.03),transparent);
+  min-height:100vh;
+}
+
+/* === GLASSMORPHISM === */
+.glass{
+  background:linear-gradient(135deg,rgba(12,18,32,.85),rgba(12,18,32,.65));
+  backdrop-filter:blur(24px) saturate(1.3);
+  -webkit-backdrop-filter:blur(24px) saturate(1.3);
+  border:1px solid rgba(255,255,255,.06);
+}
+.glass-subtle{
+  background:linear-gradient(135deg,rgba(17,26,46,.7),rgba(17,26,46,.4));
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.05);
+}
+
+/* === GLOWS === */
+.glow-green{box-shadow:0 0 30px rgba(29,184,84,.2),0 0 80px rgba(29,184,84,.06)}
+.glow-soft{box-shadow:0 8px 32px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.04)}
+.glow-card{box-shadow:0 12px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04)}
+.glow-accent{box-shadow:0 0 20px rgba(29,184,84,.15),0 0 50px rgba(29,184,84,.05)}
+
+/* === TABS === */
+.tab-active{
+  border-color:#1db854!important;
+  color:#22dd66!important;
+  background:linear-gradient(135deg,rgba(29,184,84,.12),rgba(29,184,84,.04))!important;
+  box-shadow:0 0 20px rgba(29,184,84,.1),inset 0 1px 0 rgba(29,184,84,.15)!important;
+}
+
+/* === COUNTRY BUTTONS === */
+.country-btn{
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+}
+.country-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(29,184,84,.15),transparent);
+  opacity:0;transition:opacity .3s;border-radius:inherit;
+}
+.country-btn:hover::before{opacity:1}
+.country-btn:hover{border-color:rgba(255,255,255,.15)!important;transform:translateY(-1px)}
+.country-active{
+  border-color:rgba(29,184,84,.5)!important;
+  color:#22dd66!important;
+  background:linear-gradient(135deg,rgba(29,184,84,.1),rgba(29,184,84,.03))!important;
+  box-shadow:0 0 15px rgba(29,184,84,.15),inset 0 1px 0 rgba(29,184,84,.1);
+}
+.country-active::before{opacity:1!important}
+
+/* === RESULT CARDS === */
+.result-card{
+  background:linear-gradient(135deg,rgba(17,26,46,.8),rgba(12,18,32,.9));
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:16px;padding:16px;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+}
+.result-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+}
+.result-card:hover{border-color:rgba(255,255,255,.1);transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.result-highlight{
+  border-color:rgba(29,184,84,.3)!important;
+  background:linear-gradient(135deg,rgba(29,184,84,.08),rgba(6,10,18,.95))!important;
+  box-shadow:0 0 30px rgba(29,184,84,.08);
+}
+.result-highlight::after{background:linear-gradient(90deg,transparent,rgba(29,184,84,.2),transparent)!important}
+
+/* === INPUT STYLING === */
+input[type="number"]::-webkit-inner-spin-button{opacity:.3}
+select{
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:30px!important;
+}
+
+/* === ANIMATIONS === */
+.fade-in{animation:fadeIn .4s cubic-bezier(.4,0,.2,1)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-scale{animation:fadeScale .4s cubic-bezier(.4,0,.2,1)}
+@keyframes fadeScale{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 8px rgba(29,184,84,.15)}50%{box-shadow:0 0 20px rgba(29,184,84,.4)}}
+.pulse-rate{animation:pulse-glow 2s ease-in-out infinite}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.shimmer{background:linear-gradient(90deg,transparent,rgba(255,255,255,.03),transparent);background-size:200% 100%;animation:shimmer 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* === BUTTON MAIN === */
+.btn-main{
+  background:linear-gradient(135deg,#1db854 0%,#22dd66 50%,#4da6ff 100%);
+  box-shadow:0 8px 25px rgba(29,184,84,.25),0 2px 8px rgba(0,0,0,.3);
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+}
+.btn-main::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.2),transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.btn-main:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 35px rgba(29,184,84,.35),0 4px 12px rgba(0,0,0,.4);
+}
+.btn-main:hover::before{opacity:1}
+.btn-main:active{transform:translateY(0)}
+
+/* === TAB BUTTON === */
+.tab-btn{transition:all .3s cubic-bezier(.4,0,.2,1)}
+.tab-btn:hover{border-color:rgba(255,255,255,.15)!important;transform:translateY(-1px)}
+
+/* === SMALL BUTTON === */
+.small-btn{transition:all .25s cubic-bezier(.4,0,.2,1)}
+.small-btn:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);transform:translateY(-1px)}
+
+/* === CUSTOM CLASSES === */
+.ci{
+  width:100%;border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(6,10,18,.8);
+  color:white;font-size:.875rem;
+  padding:10px 14px;
+  font-family:'Space Mono',monospace;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+}
+.ci:focus{
+  border-color:rgba(29,184,84,.4)!important;
+  box-shadow:0 0 0 3px rgba(29,184,84,.08),0 0 15px rgba(29,184,84,.05);
+  outline:none;
+}
+.ci::placeholder{color:rgba(255,255,255,.2)}
+.cis{
+  width:100%;border-radius:8px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(6,10,18,.8);
+  color:white;font-size:.75rem;
+  padding:7px 10px;
+  font-family:'Space Mono',monospace;
+  transition:all .3s;
+}
+.cis:focus{border-color:rgba(29,184,84,.4)!important;outline:none;box-shadow:0 0 0 2px rgba(29,184,84,.06)}
+.lbl{display:block;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:rgba(156,163,175,.7);margin-bottom:6px;font-weight:500}
+.lbls{display:block;font-size:.6rem;color:rgba(156,163,175,.5);margin-bottom:2px}
+.sec{
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.05);
+  background:linear-gradient(135deg,rgba(17,26,46,.5),rgba(12,18,32,.6));
+  padding:20px;
+  position:relative;overflow:hidden;
+}
+.sec::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
+}
+
+/* === PRINT === */
+@media print{body{background:#fff!important;color:#000!important}}
+
+/* === ROUTE EDITOR === */
+.route-card{transition:all .25s ease}.route-card:hover{border-color:rgba(255,255,255,.1)!important}
+details>summary .chevron,details>summary .origin-chevron{transition:transform .25s cubic-bezier(.4,0,.2,1)}
+details[open]>summary .chevron,details[open]>summary .origin-chevron{transform:rotate(90deg)}
+details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-marker{display:none}
+.route-row{animation:fadeIn .25s cubic-bezier(.4,0,.2,1)}
+.btn-delete{opacity:.3;transition:all .2s}.btn-delete:hover{opacity:1;color:#f87171;transform:scale(1.1)}
+.cfg-input{transition:all .3s cubic-bezier(.4,0,.2,1)}
+.cfg-input:focus{border-color:rgba(29,184,84,.35)!important;outline:none;box-shadow:0 0 0 2px rgba(29,184,84,.06)}
+
+/* === TOAST === */
+.toast{animation:slideUp .35s cubic-bezier(.4,0,.2,1),fadeOut .3s ease-in 2.2s forwards}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fadeOut{to{opacity:0;transform:scale(.95)}}
+
+/* === TIER PILL COLORS === */
+.tier-low{background:rgba(29,184,84,.1);color:#1db854;border-color:rgba(29,184,84,.2)}
+.tier-medium{background:rgba(94,181,255,.1);color:#5eb5ff;border-color:rgba(94,181,255,.2)}
+.tier-luxury{background:rgba(251,191,36,.1);color:#fbbf24;border-color:rgba(251,191,36,.2)}
+
+/* === DECORATIVE ELEMENTS === */
+.header-orb{
+  position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;
+}
+.divider-glow{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(29,184,84,.15),rgba(94,181,255,.1),transparent);
+  margin:2rem 0;
+}
+
+/* === COUNTRY SECTION (settings) === */
+.country-section{transition:all .25s}
+.country-section:hover{border-color:rgba(255,255,255,.08)!important}
+.country-section[open]{border-color:rgba(255,255,255,.1)!important}
+
+/* === GV BRAND LOGO === */
+.gv-logo{
+  display:inline-block;
+  font-weight:700;
+  background:linear-gradient(135deg,#1db854,#22dd66);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.gv-subtitle{
+  background:linear-gradient(90deg,rgba(29,184,84,.8),rgba(94,181,255,.6));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:.08em;
+}
+</style>
+</head>
+<body class="min-h-screen text-gray-200 font-sans antialiased">
+
+<!-- AMBIENT BACKGROUND ORBS -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+  <div class="header-orb w-[600px] h-[400px] -top-48 left-1/4 bg-[#1db854] opacity-[.06]" style="position:absolute"></div>
+  <div class="header-orb w-[500px] h-[350px] -top-32 right-1/4 bg-[#5eb5ff] opacity-[.025]" style="position:absolute"></div>
+  <div class="header-orb w-[400px] h-[300px] bottom-0 left-0 bg-[#a78bfa] opacity-[.02]" style="position:absolute"></div>
+</div>
+
+<div id="app" class="max-w-[1440px] mx-auto px-4 sm:px-6 py-6 relative z-10">
+
+<!-- HEADER -->
+<header class="relative overflow-hidden rounded-3xl glass glow-card p-6 sm:p-8 mb-6">
+  <!-- Decorative elements with brand colors -->
+  <div class="absolute top-0 right-0 w-96 h-96 bg-[#1db854] opacity-[.06] rounded-full blur-[100px] -translate-y-1/2 translate-x-1/4"></div>
+  <div class="absolute bottom-0 left-0 w-64 h-64 bg-[#5eb5ff] opacity-[.03] rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4"></div>
+  <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[.08] to-transparent"></div>
+
+  <div class="flex flex-wrap items-center gap-5 relative z-10">
+    <div class="flex-1 min-w-[200px]">
+      <div class="flex items-center gap-3 mb-1">
+        <!-- GV Logo SVG -->
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1db854] to-[#22dd66] flex items-center justify-center shadow-lg shadow-[#1db854]/30">
+          <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- House frame -->
+            <path d="M12 28V38C12 39.1 12.9 40 14 40H34C35.1 40 36 39.1 36 38V28" stroke="#060a12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <!-- Roof -->
+            <path d="M8 28L24 12L40 28" stroke="#060a12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <!-- Door -->
+            <rect x="21" y="28" width="6" height="12" stroke="#060a12" stroke-width="1.5" fill="none"/>
+            <!-- Window -->
+            <rect x="14" y="32" width="4" height="4" stroke="#060a12" stroke-width="1.5" fill="none"/>
+            <rect x="30" y="32" width="4" height="4" stroke="#060a12" stroke-width="1.5" fill="none"/>
+            <!-- Leaf 1 -->
+            <path d="M36 18C36 18 40 14 42 10C40 14 38 16 36 16" stroke="#060a12" stroke-width="1.5" fill="#060a12"/>
+            <!-- Leaf 2 -->
+            <path d="M40 14C40 14 43 10 45 6C43 10 41 13 40 14" stroke="#060a12" stroke-width="1.5" fill="#060a12"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="font-display text-3xl sm:text-4xl font-bold tracking-tight">
+            <span class="gv-logo">Green Village</span>
+          </h1>
+          <p class="text-[11px] font-light tracking-[.15em] gv-subtitle">MOBILE HOMES</p>
+        </div>
+      </div>
+      <p class="text-gray-400 text-sm font-light ml-[60px] -mt-2">Importação • Margens • Rotas</p>
+      <p class="text-gray-600 text-xs mt-2 ml-[60px] flex flex-wrap gap-x-3 gap-y-1">
+        <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-[#1db854]"></span>Cálculos automáticos</span>
+        <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-[#5eb5ff]"></span>Câmbio em tempo real</span>
+        <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-[#a78bfa]"></span>Gestão completa</span>
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2 items-center">
+      <span class="px-3 py-1.5 rounded-full border border-[#1db854]/20 text-[#22dd66] text-[10px] uppercase tracking-[.2em] bg-[#1db854]/5 font-medium">v5.0</span>
+      <span id="rateStatus" class="px-3 py-1.5 rounded-full border border-[#00ff88]/30 text-[#00ff88] text-[10px] uppercase tracking-[.15em] bg-black/30 font-medium">✓ Câmbio: Offline (+5% margem)</span>
+    </div>
+  </div>
+</header>
+
+  <nav class="flex flex-wrap gap-2 mb-6">
+  <button onclick="GV.switchTab('international')" id="tab-international" class="tab-btn tab-active px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
+    <span class="mr-1.5">🌍</span> Internacional
+  </button>
+  <button onclick="GV.switchTab('brazil')" id="tab-brazil" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
+    <span class="mr-1.5">🇧🇷</span> Brasil Detalhada
+  </button>
+  <button onclick="GV.switchTab('settings')" id="tab-settings" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
+    <span class="mr-1.5">⚙️</span> Configurações
+  </button>
+</nav>
+
+<!-- TAB 1: INTERNACIONAL -->
+<div id="panel-international" class="fade-in">
+<div class="flex flex-col lg:flex-row gap-5">
+
+  <!-- Sidebar: Countries -->
+  <div class="lg:w-[300px] glass rounded-3xl p-5 glow-card">
+    <h3 class="text-[10px] font-semibold uppercase tracking-[.2em] text-gray-500 mb-3 flex items-center gap-2">
+      <span class="w-5 h-px bg-gradient-to-r from-[#00ff88]/50 to-transparent"></span>
+      União Europeia
+    </h3>
+    <div id="eu-countries" class="flex flex-wrap gap-1.5 mb-6"></div>
+
+    <div class="divider-glow !my-4"></div>
+
+    <h3 class="text-[10px] font-semibold uppercase tracking-[.2em] text-gray-500 mb-3 flex items-center gap-2">
+      <span class="w-5 h-px bg-gradient-to-r from-[#5eb5ff]/50 to-transparent"></span>
+      Fora da UE
+    </h3>
+    <div id="non-eu-countries" class="flex flex-wrap gap-1.5"></div>
+  </div>
+
+  <!-- Main Panel -->
+  <div class="flex-1 glass rounded-3xl p-6 sm:p-8 glow-card">
+
+    <!-- Country header -->
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-gv-soft to-gv-bg border border-white/[.06] flex items-center justify-center text-3xl shadow-lg" id="intl_flag_wrap">
+        <span id="intl_flag">🇵🇹</span>
+      </div>
+      <div>
+        <h2 class="text-xl font-display font-bold tracking-tight" id="intl_countryLabel">Portugal</h2>
+        <p class="text-xs text-gray-500 font-light">Escolhe o país à esquerda para alterar o destino</p>
+      </div>
+    </div>
+
+    <!-- Input grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <div class="col-span-2"><label class="lbl">Preço da casa</label><input type="text" id="intl_price" value="5000" placeholder="5000" class="ci"/></div>
+      <div><label class="lbl">Moeda</label>
+        <select id="intl_currency" onchange="GV.updateTierPreview()" class="ci">
+          <option value="EUR">EUR €</option><option value="GBP">GBP £</option><option value="BRL">BRL R$</option>
+          <option value="CNY">CNY ¥</option><option value="USD">USD $</option><option value="PLN">PLN zł</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tier indicator -->
+    <div class="mb-5 rounded-2xl border border-white/[.05] bg-gradient-to-r from-gv-soft/50 to-transparent px-5 py-4 flex items-center gap-4">
+      <span id="intl_tierPill" class="shrink-0 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[.15em] border tier-low">Low Budget</span>
+      <span id="intl_tierDesc" class="text-xs text-gray-400 leading-relaxed font-light">Casas até 5.000€. Lucro GV + Comissão base. Transporte normal.</span>
+    </div>
+
+    <!-- Origin + Route -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div><label class="lbl">Origem</label><select id="intl_origin" onchange="GV.onOriginChange()" class="ci"></select></div>
+      <div><label class="lbl">Rota</label><select id="intl_route" onchange="GV.showRouteNote()" class="ci"></select>
+        <div id="intl_routeNote" class="hidden mt-3 p-4 rounded-xl bg-amber-500/[.06] border border-amber-500/15 text-amber-300/90 text-xs leading-relaxed backdrop-blur-sm"></div>
+      </div>
+    </div>
+
+    <!-- Calculate button -->
+    <button onclick="GV.calcInternational()" class="w-full sm:w-auto px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">
+      Calcular Importação
+    </button>
+
+    <!-- Results -->
+    <div id="intl_results" class="hidden mt-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xs font-display font-semibold text-[#00ff88] uppercase tracking-[.2em] flex items-center gap-2">
+          <span class="w-5 h-px bg-gradient-to-r from-[#00ff88]/60 to-transparent"></span>
+          Resultado
+        </h3>
+        <div class="flex gap-2">
+          <button onclick="GV.copyIntl()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📋 Copiar</button>
+          <button onclick="GV.exportPDF('intl_grid','Internacional')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📄 PDF</button>
+        </div>
+      </div>
+      <div id="intl_grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 fade-in"></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- TAB 2: BRASIL -->
+<div id="panel-brazil" class="hidden fade-in">
+<div class="glass rounded-3xl p-6 sm:p-8 glow-card">
+  <div class="flex items-center gap-4 mb-6">
+    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-900/30 to-yellow-900/20 border border-white/[.06] flex items-center justify-center text-3xl shadow-lg">🇧🇷</div>
+    <div>
+      <h2 class="text-xl font-display font-bold tracking-tight">Importação para o Brasil</h2>
+      <p class="text-xs text-gray-500 font-light">Cálculo detalhado com tributos brasileiros • ICMS gross-up • Formação de preço</p>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <div class="sec">
+      <h4 class="text-[10px] font-semibold uppercase tracking-[.2em] text-[#00ff88] mb-4 flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#00ff88]"></span>Dados em USD
+      </h4>
+      <div class="space-y-3" id="br_usd_fields"></div>
+    </div>
+    <div class="sec">
+      <h4 class="text-[10px] font-semibold uppercase tracking-[.2em] text-[#5eb5ff] mb-4 flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#5eb5ff]"></span>Parâmetros Fiscais
+      </h4>
+      <div class="space-y-3">
+        <label class="flex items-center gap-3 p-3 rounded-xl bg-gv-bg/60 border border-white/[.04] cursor-pointer group">
+          <input type="checkbox" id="br_isBk" class="w-4 h-4 accent-[#00ff88] rounded"/>
+          <span class="text-xs text-gray-300 group-hover:text-white transition">Bem de Capital (BK) — II a 0%</span>
+        </label>
+        <div class="grid grid-cols-2 gap-2" id="br_fiscal_fields"></div>
+      </div>
+    </div>
+    <div class="sec">
+      <h4 class="text-[10px] font-semibold uppercase tracking-[.2em] text-amber-400 mb-4 flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Custos Brasil
+      </h4>
+      <div class="space-y-3" id="br_cost_fields"></div>
+      <button onclick="GV.calcBrazil()" class="mt-5 w-full px-6 py-3 rounded-2xl text-sm font-bold uppercase tracking-[.12em] text-gv-bg btn-main">Calcular</button>
+    </div>
+  </div>
+
+  <div id="br_results" class="hidden mt-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xs font-display font-semibold text-[#00ff88] uppercase tracking-[.2em] flex items-center gap-2">
+        <span class="w-5 h-px bg-gradient-to-r from-[#00ff88]/60 to-transparent"></span>
+        Resultado Detalhado
+      </h3>
+      <div class="flex gap-2">
+        <button onclick="GV.copyBrazil()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📋 Copiar</button>
+        <button onclick="GV.exportPDF('br_resultGrid','Brasil')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📄 PDF</button>
+      </div>
+    </div>
+    <div id="br_resultGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="sec">
+        <h4 class="text-[10px] font-semibold uppercase tracking-[.15em] text-gray-400 mb-4 flex items-center gap-2">
+          <span class="w-1 h-1 rounded-full bg-gray-500"></span>Resumo Importação
+        </h4>
+        <div id="br_importSummary"></div>
+      </div>
+      <div class="sec">
+        <h4 class="text-[10px] font-semibold uppercase tracking-[.15em] text-gray-400 mb-4 flex items-center gap-2">
+          <span class="w-1 h-1 rounded-full bg-gray-500"></span>Formação de Preço
+        </h4>
+        <div id="br_priceFormation"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 3: CONFIGURAÇÕES -->
+<div id="panel-settings" class="hidden fade-in">
+<div class="glass rounded-3xl p-6 sm:p-8 glow-card">
+  <div class="flex items-center gap-3 mb-1">
+    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gv-soft to-gv-bg border border-white/[.06] flex items-center justify-center text-xl">⚙️</div>
+    <h2 class="text-xl font-display font-bold tracking-tight">Configurações Globais</h2>
+  </div>
+  <p class="text-xs text-gray-500 mb-6 ml-[52px] font-light">Altera aqui os valores padrão. Estas configurações aplicam-se a todas as calculadoras.</p>
+  <div id="cfg_sections"></div>
+  <div id="routeEditor" class="space-y-3 mb-6"></div>
+  <button onclick="GV.addNewCountry()" class="mb-6 flex items-center gap-2.5 px-5 py-2.5 rounded-2xl border border-dashed border-white/10 text-gray-500 text-xs hover:border-[#a78bfa]/40 hover:text-[#a78bfa] transition-all group">
+    <span class="text-lg group-hover:scale-110 transition-transform">+</span> Adicionar novo país
+  </button>
+
+  <div class="divider-glow"></div>
+
+  <div class="flex items-center gap-4">
+    <button onclick="GV.applySettings()" class="px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">✓ Guardar Configurações</button>
+    <span id="cfg_saved" class="text-sm text-[#00ff88] hidden font-medium">✓ Guardado com sucesso!</span>
+  </div>
+</div>
+</div>
+
+</div>
+
+<div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5"></div>
+
+<script>
+const GV=(()=>{
+let AC="portugal";
+const $=id=>document.getElementById(id),$$=(s,p)=>(p||document).querySelectorAll(s);
+const pn=id=>{const e=$(id);if(!e)return 0;let v=e.value.trim();if(!v)return 0;const isENFormat=/\.\d{1,2}$/.test(v)&&!v.includes(',');if(isENFormat){v=v.replace(/,/g,'');}else{v=v.replace(/\./g,'').replace(',','.');}const r=parseFloat(v)||0;return Math.max(r,0);};
+const fmt=(v,l="pt-PT",d=0)=>new Intl.NumberFormat(l,{minimumFractionDigits:d,maximumFractionDigits:d}).format(v||0);
+const fc=(v,s="€",l="pt-PT",d=2)=>`${s}${fmt(v,l,d)}`;
+const LAND=()=>pn('cfg_landBase')||2000, CRANE=()=>pn('cfg_craneFrPt')||1000;
+
+function toast(msg,ok=true){
+  const t=document.createElement('div');
+  t.className=`toast px-5 py-3 rounded-2xl border backdrop-blur-xl ${ok?'border-[#00ff88]/20 bg-[#00ff88]/10 text-[#00ff88]':'border-red-400/20 bg-red-400/10 text-red-400'} text-sm font-medium shadow-xl`;
+  t.textContent=msg;$('toastContainer').appendChild(t);setTimeout(()=>t.remove(),2600);
+}
+
+const csym={EUR:"€",GBP:"£",BRL:"R$",CNY:"¥",USD:"$",PLN:"zł"};
+const oLabels={uk:"🇬🇧 Inglaterra",netherlands:"🇳🇱 Holanda",france:"🇫🇷 França",portugal:"🇵🇹 Portugal",belgium:"🇧🇪 Bélgica",china:"🇨🇳 China"};
+const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"]);
+
+function rates(){
+  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, gbp=g('gbp')||.84, brl=g('brl')||6.5, cny=g('cny')||8, usd=g('usd')||1.1, pln=g('pln')||4.5;
+  return{EUR:1,GBP:gbp>0?1/gbp:1.19,BRL:brl>0?1/brl:0.154,CNY:cny>0?1/cny:0.125,USD:usd>0?1/usd:0.909,PLN:pln>0?1/pln:0.222};
+}
+function localRates(){
+  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), cny=(g('cny')||8), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
+  const e={rate:1,symbol:"€",code:"EUR"};
+  return{portugal:e,spain:e,france:e,italy:e,greece:e,malta:e,"netherlands-dest":e,croatia:e,bulgaria:e,
+    poland:{rate:pln>0?pln:4.5,symbol:"zł",code:"PLN"},brazil:{rate:brl>0?brl:6.5,symbol:"R$",code:"BRL"},
+    china:{rate:cny>0?cny:8,symbol:"¥",code:"CNY"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
+}
+
+function tiers(){
+  const g=id=>pn(id);
+  return{
+    low:{id:"low",label:"Low Budget",description:"Casas até 5.000€. Lucro GV + Comissão base. Transporte normal.",
+      companyProfit:g('cfg_low_profit')||3000,commission:g('cfg_low_comm')||500,landMultiplier:1,seaMultiplier:1,craneCost:0},
+    medium:{id:"medium",label:"Valor Médio",description:"Casas entre 5.000€ e 20.000€. Lucro GV reforçado + Comissão intermédia.",
+      companyProfit:g('cfg_med_profit')||5000,commission:g('cfg_med_comm')||1000,landMultiplier:1,seaMultiplier:1,craneCost:0},
+    luxury:{id:"luxury",label:"Luxo",description:"Casas acima de 20.000€. Lucro máximo, marítimo x2, terrestre x2 + autogrua.",
+      companyProfit:g('cfg_lux_profit')||12000,commission:g('cfg_lux_comm')||2000,
+      landMultiplier:g('cfg_lux_land')||2,seaMultiplier:g('cfg_lux_sea')||2,craneCost:g('cfg_lux_crane')||2000}
+  };
+}
+
+const tierOf=p=>p<=5000?"low":p>20000?"luxury":"medium";
+
+// === ROUTES DATA ===
+let R={
+  portugal:{label:"Portugal",flag:"🇵🇹",vatRate:.23,routes:{
+    uk:[{from:"Purfleet",to:"Leixões",cost:3625,type:"RO-RO"},{from:"Killingholme",to:"Leixões",cost:3975,type:"RO-RO"},{from:"Portbury",to:"Setúbal",cost:5950,type:"RO-RO"},{from:"Felixstowe",to:"Leixões",cost:6780,type:"Flat Rack"}],
+    netherlands:[{from:"Rotterdam",to:"Leixões",cost:2400,type:"RO-RO"}],
+    france:[{from:"França",to:"Portugal",cost:6000,type:"Camião"}],
+    portugal:[
+      {from:"Leixões",to:"Caniçal (Madeira)",cost:2960,type:"Flat Rack",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa. Valor ref. casa grande (11,58×3,66×3,50m / 5t) em transporte convencional."},
+      {from:"Leixões",to:"Caniçal (Madeira)",cost:5550,type:"Breakbulk",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."},
+      {from:"Leixões",to:"Porto Santo",cost:3790,type:"Flat Rack",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa. Valor ref. casa grande (11,58×3,66×3,50m / 5t)."},
+      {from:"Leixões",to:"Porto Santo",cost:6945,type:"Breakbulk",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."},
+      {from:"Leixões",to:"Ponta Delgada (Açores)",cost:5985,type:"Flat Rack",note:"⚠️ ILHAS: Preço ref. casa grande (11,58×3,68×3,50m / 5t) em transporte CONVENCIONAL. Inclui despesas portuárias e BL. Varia conforme tamanho."},
+      {from:"Leixões",to:"Ponta Delgada (Açores)",cost:8162,type:"Breakbulk",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."},
+      {from:"Leixões",to:"Ilha do Pico (Açores)",cost:6650,type:"Flat Rack",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."}],
+    china:[{from:"Shanghai",to:"Leixões",cost:23244,type:"Flat Rack"},{from:"Shanghai",to:"Leixões",cost:2655,type:"Container 20'"},{from:"Shanghai",to:"Leixões",cost:3528,type:"Container 40'"}]}},
+  spain:{label:"Espanha",flag:"🇪🇸",vatRate:.21,routes:{
+    uk:[{from:"Purfleet",to:"Santander",cost:4950,type:"RO-RO"},{from:"Felixstowe",to:"Algeciras",cost:5980,type:"Flat Rack"},{from:"Felixstowe",to:"Valencia",cost:9650,type:"Flat Rack"},{from:"Portbury",to:"Vigo",cost:11050,type:"RO-RO"},{from:"Portbury",to:"Vigo",cost:11300,type:"RO-RO"},{from:"Southampton",to:"Valencia",cost:11950,type:"RO-RO"},{from:"Southampton",to:"Santander",cost:12950,type:"RO-RO"},{from:"Portbury",to:"Sagunto",cost:16570,type:"RO-RO"}],
+    netherlands:[{from:"Rotterdam",to:"Valencia",cost:3500,type:"RO-RO"},{from:"Rotterdam",to:"Santander",cost:3200,type:"RO-RO"}],
+    france:[{from:"Calais",to:"Santander",cost:2800,type:"RO-RO"},{from:"Marseille",to:"Valencia",cost:2500,type:"RO-RO"}],
+    portugal:[{from:"Leixões",to:"Las Palmas (Canárias)",cost:6200,type:"Flat Rack"}]}},
+  france:{label:"França",flag:"🇫🇷",vatRate:.20,routes:{
+    uk:[{from:"Purfleet",to:"Calais",cost:2950,type:"RO-RO"},{from:"Tilbury",to:"Le Havre",cost:3250,type:"RO-RO"},{from:"Southampton",to:"Le Havre",cost:3750,type:"RO-RO"}],
+    france:[{from:"Calais",to:"Le Havre",cost:2500,type:"Camião"},{from:"Le Havre",to:"Marseille",cost:3500,type:"Camião"}]}},
+  italy:{label:"Itália",flag:"🇮🇹",vatRate:.22,routes:{uk:[{from:"Southampton",to:"Salerno",cost:11950,type:"RO-RO"},{from:"Portbury",to:"Livorno",cost:16010,type:"RO-RO"},{from:"Portbury",to:"Livorno",cost:16520,type:"RO-RO"}]}},
+  greece:{label:"Grécia",flag:"🇬🇷",vatRate:.24,routes:{uk:[{from:"Southampton",to:"Pireu",cost:14900,type:"RO-RO"},{from:"Portbury",to:"Pireu",cost:18300,type:"RO-RO"},{from:"Portbury",to:"Pireu",cost:19100,type:"RO-RO"},{from:"Southampton",to:"Thessaloniki",cost:14500,type:"RO-RO"}]}},
+  malta:{label:"Malta",flag:"🇲🇹",vatRate:.18,routes:{uk:[{from:"Southampton",to:"Malta Free Port",cost:4560,type:"Flat Rack"},{from:"Southampton",to:"La Valleta",cost:11200,type:"RO-RO"}]}},
+  "netherlands-dest":{label:"Holanda",flag:"🇳🇱",vatRate:.21,routes:{uk:[{from:"Purfleet",to:"Rotterdam",cost:1325,type:"RO-RO"},{from:"Killingholme",to:"Rotterdam",cost:1675,type:"RO-RO"}],france:[{from:"Calais",to:"Rotterdam",cost:2800,type:"Camião"}]}},
+  poland:{label:"Polónia",flag:"🇵🇱",vatRate:.23,routes:{
+    uk:[{from:"Felixstowe",to:"Gdańsk",cost:6950,type:"Flat Rack"},{from:"Purfleet",to:"Gdańsk",cost:9900,type:"RO-RO"},{from:"Southampton",to:"Gdynia",cost:11950,type:"RO-RO"}],
+    belgium:[{from:"Antwerp",to:"Gdynia",cost:5895,type:"RO-RO",note:"Dims: 12×4×4m / 5t por unidade"}],
+    netherlands:[{from:"Rotterdam",to:"Szczecin",cost:3800,type:"RO-RO"},{from:"Rotterdam",to:"Gdańsk",cost:9667,type:"Camião",note:"Transporte por camião — 12×4×4m / 5t"}],
+    france:[{from:"Calais",to:"Gdańsk",cost:5200,type:"RO-RO"}]}},
+  croatia:{label:"Croácia",flag:"🇭🇷",vatRate:.25,routes:{uk:[{from:"Felixstowe",to:"Rijeka",cost:7150,type:"Flat Rack"},{from:"Southampton",to:"Rijeka",cost:11950,type:"RO-RO"},{from:"Southampton",to:"Split",cost:12950,type:"RO-RO"}]}},
+  bulgaria:{label:"Bulgária",flag:"🇧🇬",vatRate:.20,routes:{netherlands:[{from:"Rotterdam",to:"Sófia",cost:17167,type:"Camião",note:"Transporte por camião — 12×4×4m / 5t"}]}},
+  brazil:{label:"Brasil",flag:"🇧🇷",vatRate:0,taxII:.126,taxIPI:0,taxPIS:.021,taxCOFINS:.0965,taxICMS:.18,fobRate:.10,routes:{
+    uk:[{from:"Felixstowe",to:"Santos",cost:5850,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"},{from:"London Gateway",to:"Santos",cost:13500,type:"Flat Rack"},{from:"Tilbury",to:"Santos",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
+    netherlands:[{from:"Rotterdam",to:"Santos",cost:5450,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"},{from:"Rotterdam",to:"Santos",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
+    portugal:[{from:"Leixões",to:"Santos",cost:8850,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"}],
+    china:[{from:"Shanghai",to:"Santos",cost:21000,type:"Flat Rack"},{from:"Shanghai",to:"Santos",cost:2880,type:"Container 20HQ"},{from:"Shanghai",to:"Santos",cost:5760,type:"Container 40HQ"}]}},
+  china:{label:"China",flag:"🇨🇳",vatRate:.23,vatExtra:.027,routes:{china:[{from:"Shanghai",to:"Leixões",cost:23244,type:"Flat Rack"},{from:"Shanghai",to:"Leixões",cost:2655,type:"Container 20'"},{from:"Shanghai",to:"Leixões",cost:3528,type:"Container 40'"}]}},
+  usa:{label:"EUA",flag:"🇺🇸",vatRate:0,routes:{uk:[{from:"Southampton",to:"New York, NY",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Brunswick, GA",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Galveston, TX",cost:34370,type:"RO-RO"}]}}
+};
+
+// === TABS ===
+function switchTab(t){
+  ['international','brazil','settings'].forEach(x=>{
+    $('panel-'+x).classList.toggle('hidden',x!==t);
+    $('tab-'+x).classList.toggle('tab-active',x===t);
+  });
+  if(t==='settings'){buildCfgSections();buildRouteEditor();}
+}
+
+// === COUNTRY BUTTONS ===
+function buildCountryButtons(){
+  const euK=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"],nonK=["brazil","china","usa"];
+  const mk=(k,el)=>{const c=R[k];if(!c)return;const b=document.createElement('button');
+    b.className='country-btn flex items-center gap-1.5 px-3 py-2 rounded-xl border border-white/[.06] bg-gv-bg/60 text-gray-400 text-[13px] cursor-pointer';
+    b.dataset.country=k;b.innerHTML=`<span class="text-lg">${c.flag}</span><span class="font-medium">${c.label}</span>`;b.onclick=()=>selectCountry(k);el.appendChild(b);};
+  const eu=$('eu-countries'),ne=$('non-eu-countries');eu.innerHTML='';ne.innerHTML='';
+  euK.forEach(k=>mk(k,eu));nonK.forEach(k=>mk(k,ne));
+}
+
+function selectCountry(id,isInit=false){
+  const c=R[id];if(!c)return;AC=id;
+  $$('[data-country]').forEach(b=>b.classList.toggle('country-active',b.dataset.country===id));
+  $('intl_flag').textContent=c.flag;$('intl_countryLabel').textContent=c.label;
+  popOrigins(id);
+  updateRoutes();
+  // Garante que moeda seja atualizada após DOM estar pronto
+  setTimeout(()=>{
+    autoSelectCurrency(!isInit);
+    updateTierPreview();
+  },10);
+  $('intl_results').classList.add('hidden');
+}
+
+function popOrigins(id){
+  const c=R[id],sel=$('intl_origin');sel.innerHTML='';if(!c?.routes)return;
+  Object.keys(c.routes).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=oLabels[k]||k;sel.appendChild(o);});
+}
+
+function updateRoutes(){
+  const c=R[AC],o=$('intl_origin').value,sel=$('intl_route'),ne=$('intl_routeNote');
+  sel.innerHTML='';ne&&ne.classList.add('hidden');if(!c?.routes?.[o])return;
+  c.routes[o].forEach((r,i)=>{const op=document.createElement('option');op.value=i;op.textContent=`${r.from} → ${r.to} • ${r.type} • €${r.cost.toLocaleString("pt-PT")}`;sel.appendChild(op);});
+  showRouteNote();
+}
+
+function showRouteNote(){
+  const c=R[AC],o=$('intl_origin').value,i=parseInt($('intl_route').value,10),ne=$('intl_routeNote');if(!ne)return;
+  const rt=(c?.routes?.[o]||[])[i];
+  if(rt?.note){ne.textContent=rt.note;ne.classList.remove('hidden');}else ne.classList.add('hidden');
+}
+
+function autoSelectCurrency(showToast=true){
+  const origin=$('intl_origin').value;
+  if(!origin)return;  // Segurança: só atualiza se origem existir
+
+  const oldCurrency=$('intl_currency').value;
+
+  // Mapa completo: origem → moeda esperada
+  const currencyMap={
+    uk:'GBP',           // Inglaterra → Libras
+    netherlands:'EUR',  // Holanda → Euros
+    france:'EUR',       // França → Euros
+    portugal:'EUR',     // Portugal → Euros
+    belgium:'EUR',      // Bélgica → Euros
+    china:'CNY'         // China → Yuan (casas vendidas em CNY normalmente)
+  };
+
+  const currency=currencyMap[origin]||'EUR';
+  const currencySelect=$('intl_currency');
+
+  if(!currencySelect)return;  // Segurança
+
+  // Define a moeda
+  currencySelect.value=currency;
+
+  // Debug log (pode remover depois)
+  console.log(`[AutoCurrency] Origem: ${origin} → Moeda: ${currency} (era: ${oldCurrency})`);
+
+  // Notifica mudança apenas se houve alteração E showToast=true
+  if(showToast&&oldCurrency!==currency&&oldCurrency){
+    const symbols={EUR:'€',GBP:'£',CNY:'¥',USD:'$',BRL:'R$',PLN:'zł'};
+    toast(`✓ Moeda ajustada: ${currency} ${symbols[currency]||''}`,true);
+  }
+
+  // Atualiza preview do tier após mudar moeda
+  updateTierPreview();
+}
+
+function onOriginChange(){updateRoutes();autoSelectCurrency();updateTierPreview();}
+
+function updateTierPreview(){
+  const p=parseFloat($('intl_price').value)||0,cur=$('intl_currency').value,r=rates(),pe=p*(r[cur]||1);
+  const tid=tierOf(pe),t=tiers()[tid];
+  const pill=$('intl_tierPill');
+  pill.textContent=t.label;$('intl_tierDesc').textContent=t.description;
+  pill.className=`shrink-0 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[.15em] border tier-${tid}`;
+}
+
+// === CALC INTERNATIONAL ===
+function calcInternational(){
+  const c=R[AC];if(!c)return;
+  const ip=parseFloat($('intl_price').value)||0,cur=$('intl_currency').value,ok=$('intl_origin').value,ri=parseInt($('intl_route').value,10);
+  const rts=c.routes?.[ok]||[];if(isNaN(ri)||ri>=rts.length){alert("Seleciona uma rota.");return;}
+  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isEU=EU.has(AC),isBR=AC==="brazil";
+  const pe=ip*(cr[cur]||1),tid=tierOf(pe),tier=ts[tid];
+  const pill=$('intl_tierPill');
+  pill.textContent=tier.label;$('intl_tierDesc').textContent=tier.description;
+  pill.className=`shrink-0 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[.15em] border tier-${tid}`;
+  const PROF=tier.companyProfit,COM=tier.commission;
+  let sea=rt.cost*tier.seaMultiplier,land=LAND()*tier.landMultiplier,xCrane=0;
+  if(AC==="portugal"&&ok==="france"){land=0;xCrane=CRANE();}
+  const crane=tier.craneCost+xCrane;
+  let fob=0,cif=0,brTax={},sub=0;
+  if(isBR){fob=pe*(c.fobRate||0);cif=pe+fob+sea;const vII=cif*(c.taxII||0),vIPI=(cif+vII)*(c.taxIPI||0),bPC=cif+vII+vIPI,vPIS=bPC*(c.taxPIS||0),vCOF=bPC*(c.taxCOFINS||0),icR=c.taxICMS||0,bICMS=(cif+vII+vIPI+vPIS+vCOF)/((1-icR)||1),vICMS=bICMS*icR;brTax={vII,vIPI,vPIS,vCOF,vICMS};const tT=vII+vIPI+vPIS+vCOF+vICMS;sub=cif+tT+land+crane+PROF+COM;}
+  else if(AC==="china"){const b=pe+sea;const extraTax=b*(c.vatExtra||0);sub=b+land+crane+PROF+COM+extraTax;}
+  else{sub=pe+sea+land+crane+PROF+COM;}
+  const ivaR=isEU?(c.vatRate||0.23):0,iva=sub*ivaR,tot=sub+iva;
+  const lc=lr[AC]||{rate:1,symbol:"€",code:"EUR"},totL=tot*lc.rate;
+
+  const g=$('intl_grid');g.innerHTML='';
+  const card=(l,v,o={})=>{g.innerHTML+=`<div class="result-card text-sm ${o.full?'sm:col-span-2':''} ${o.hl?'result-highlight':''}"><div class="text-[10px] uppercase tracking-[.15em] text-gray-500 mb-1.5">${l}</div><div class="font-semibold font-mono ${o.fin?'text-base':'text-sm'}">${v}</div></div>`;};
+  const s=csym[cur]||'';
+  card("Escala aplicada",`<span class="tier-${tid} px-2 py-0.5 rounded-lg text-xs font-bold">${tier.label}</span>`,{full:1});
+  if(ip>0){card("Preço casa (origem)",`${s}${ip.toLocaleString("pt-PT")}`);if(cur!=="EUR")card("Preço em EUR",fc(pe));}
+  card(ok==="france"&&AC==="portugal"?"Camião França → Portugal":`Marítimo (${rt.type})`,fc(sea));
+  if(!(AC==="portugal"&&ok==="france"))card("Terrestre no destino",fc(land));
+  if(crane>0)card("Grua / Autogrua",fc(crane));
+  if(AC==="china"&&c.vatExtra>0){const extraTax=(pe+sea)*(c.vatExtra||0);card(`Taxa extra China (${(c.vatExtra*100).toFixed(1)}%)`,fc(extraTax));}
+  if(isBR){card("FOB ("+((c.fobRate||0)*100).toFixed(0)+"%)",fc(fob));card("CIF (Casa+FOB+Mar.)",fc(cif));card(`II (${((c.taxII||0)*100).toFixed(1)}%)`,fc(brTax.vII));if(brTax.vIPI>0)card(`IPI (${((c.taxIPI||0)*100).toFixed(1)}%)`,fc(brTax.vIPI));card(`PIS (${((c.taxPIS||0)*100).toFixed(1)}%)`,fc(brTax.vPIS));card(`COFINS (${((c.taxCOFINS||0)*100).toFixed(1)}%)`,fc(brTax.vCOF));card(`ICMS gross-up (${((c.taxICMS||0)*100).toFixed(0)}%)`,fc(brTax.vICMS));}
+  card("Lucro Green Village",fc(PROF));card("Comissão vendedor",fc(COM));
+  const subLabel=isBR?"Custo Nacionalizado (sem IVA)":isEU?"Subtotal (sem IVA)":"Subtotal";
+  card(subLabel,fc(sub),{full:1,fin:1});
+  if(ivaR>0)card(`IVA (${(ivaR*100).toFixed(0)}%)`,fc(iva));
+  card("TOTAL COM IVA",fc(tot),{full:1,hl:1,fin:1});
+  if(lc.code!=="EUR")card(`Total em ${lc.code}`,`${lc.symbol}${fmt(totL,"pt-PT",2)}`,{full:1,hl:1,fin:1});
+  card("Rota",`${rt.from} → ${rt.to} (${rt.type})`,{full:1});
+  if(rt.note)card("⚠️ Observação",rt.note,{full:1});
+  $('intl_results').classList.remove('hidden');
+}
+
+// === CALC BRAZIL ===
+function calcBrazil(){
+  const fU=pn('br_fobUsd'),frU=pn('br_freightUsd'),iU=pn('br_insuranceUsd'),ex=pn('br_exchangeRate')||pn('cfg_usdbrl')||6;
+  const fB=fU*ex,frB=frU*ex,iB=iU*ex,cif=fB+frB+iB;
+  const bk=$('br_isBk').checked,ii=(bk?pn('br_iiRateBk'):pn('br_iiRateNonBk'))/100;
+  const ipi=pn('br_ipiRate')/100,pis=pn('br_pisRate')/100,cof=pn('br_cofinsRate')/100,icms=pn('br_icmsRate')/100;
+  if(icms>=1||icms<0){toast('ERRO: ICMS deve estar entre 0% e 99%',false);return;}
+  const vII=cif*ii,bIPI=cif+vII,vIPI=bIPI*ipi,bPC=cif+vII+vIPI,vPIS=bPC*pis,vCOF=bPC*cof;
+  const div=1-icms,bICMS=(cif+vII+vIPI+vPIS+vCOF)/div,vICMS=bICMS*icms;
+  const tTrib=vII+vIPI+vPIS+vCOF+vICMS,cEf=cif>0?(tTrib/cif)*100:0;
+  const pc=pn('br_portCosts'),it=pn('br_inlandTransport'),custoT=cif+tTrib+pc+it;
+  const mg=pn('br_marginPercent'),lucro=custoT*(mg/100),pFinal=custoT+lucro;
+  const f=v=>fc(v,"R$","pt-BR");
+  const row=(l,v,b=false)=>`<div class="flex justify-between items-center py-2 ${b?'pt-3 mt-2 border-t border-white/[.06]':''}"><span class="text-gray-500 text-xs">${l}</span><span class="${b?'text-[#00ff88] font-bold':'font-medium'} text-sm font-mono">${v}</span></div>`;
+
+  $('br_importSummary').innerHTML=row("FOB (BRL)",f(fB))+row("Frete Marítimo (BRL)",f(frB))+row("Seguro (BRL)",f(iB))+row("Valor CIF (BRL)",f(cif),1)+
+    '<div class="my-3 border-t border-white/[.04]"></div>'+
+    row("II",f(vII))+row("IPI",f(vIPI))+row("PIS",f(vPIS))+row("COFINS",f(vCOF))+row("ICMS (gross-up)",f(vICMS))+
+    row("Total Tributos",f(tTrib),1)+row("Carga tributária efetiva",`${cEf.toFixed(1).replace('.',',')}%`);
+  $('br_priceFormation').innerHTML=row("Valor CIF",f(cif))+row("Total Tributos",f(tTrib))+row("Custos Portuários",f(pc))+row("Transporte Terrestre",f(it))+
+    row("Custo Nacionalizado",f(custoT),1)+'<div class="my-3 border-t border-white/[.04]"></div>'+
+    row(`Mark-up (${mg}%)`,f(lucro))+row("PREÇO DE VENDA",f(pFinal),1);
+  $('br_results').classList.remove('hidden');
+}
+
+// === BUILD BRAZIL FIELDS ===
+function buildBrFields(){
+  const inp=(id,lbl,val,cls='ci')=>`<div><label class="lbl">${lbl}</label><input type="text" id="${id}" value="${val}" class="${cls}"/></div>`;
+  const inps=(id,lbl,val)=>`<div><label class="lbls">${lbl}</label><input type="text" id="${id}" value="${val}" class="cis"/></div>`;
+  $('br_usd_fields').innerHTML=inp('br_fobUsd','FOB (USD)','10000')+inp('br_freightUsd','Frete Marítimo (USD)','2500')+
+    inp('br_insuranceUsd','Seguro (USD)','200')+inp('br_exchangeRate','Câmbio USD/BRL','6.00')+
+    '<span class="text-[10px] text-gray-600 block mt-1">Atualização via aba Configurações</span>';
+  $('br_fiscal_fields').innerHTML=inps('br_iiRateNonBk','II Normal (%)','12.6')+inps('br_iiRateBk','II BK (%)','0')+
+    inps('br_ipiRate','IPI (%)','0')+inps('br_pisRate','PIS (%)','2.1')+inps('br_cofinsRate','COFINS (%)','9.65')+inps('br_icmsRate','ICMS (%)','18');
+  $('br_cost_fields').innerHTML=inp('br_portCosts','Custos Portuários (BRL)','5000')+inp('br_inlandTransport','Transporte Terrestre (BRL)','3000')+inp('br_marginPercent','Margem de Lucro (%)','20');
+}
+
+// === CONFIG SECTIONS ===
+function buildCfgSections(){
+  const sec=(color,title,extra='')=>`<div class="flex items-center gap-3 mb-4"><div class="w-1.5 h-6 rounded-full bg-${color}"></div><h3 class="text-sm font-display font-semibold uppercase tracking-[.12em] text-gray-300">${title}</h3>${extra}</div>`;
+  const inp=(id,lbl,val,hint='')=>`<div><label class="lbl">${lbl}</label><input type="text" id="${id}" value="${val}" class="ci"/>${hint?`<span class="text-[10px] text-gray-600 block mt-1">${hint}</span>`:''}</div>`;
+  const inps=(id,lbl,val)=>`<div><label class="lbls">${lbl}</label><input type="text" id="${id}" value="${val}" class="cis"/></div>`;
+  const tierCard=(color,title,span,fields)=>`<div class="rounded-2xl border border-white/[.05] bg-gradient-to-br from-gv-soft/50 to-gv-bg/80 p-5"><h4 class="text-sm font-display font-semibold text-${color} mb-3">${title} <span class="text-gray-600 font-light text-xs">${span}</span></h4><div class="grid grid-cols-2 gap-3">${fields}</div></div>`;
+
+  $('cfg_sections').innerHTML=
+    sec('[#00ff88]','Taxas de Câmbio (Offline +5% Margem)',`<span class="text-gray-600 text-xs font-light ml-1">(1 EUR =)</span>`)+
+    `<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">${
+      inp('cfg_gbp','GBP (£)','0.88','1€ = £X')+inp('cfg_brl','BRL (R$)','6.83')+inp('cfg_cny','CNY (¥)','8.40')+
+      inp('cfg_usd','USD ($)','1.16')+inp('cfg_pln','PLN (zł)','4.73')+inp('cfg_usdbrl','USD/BRL','6.30','Para a aba Brasil')
+    }</div>`+
+    sec('[#5eb5ff]','Escalas de Margem (Tiers)')+
+    `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">${
+      tierCard('[#00ff88]','Low Budget','até 5.000€',inps('cfg_low_profit','Lucro GV (€)','3000')+inps('cfg_low_comm','Comissão (€)','500'))+
+      tierCard('[#5eb5ff]','Valor Médio','5k–20k€',inps('cfg_med_profit','Lucro GV (€)','5000')+inps('cfg_med_comm','Comissão (€)','1000'))+
+      tierCard('amber-400','Luxo','+20.000€',inps('cfg_lux_profit','Lucro GV (€)','12000')+inps('cfg_lux_comm','Comissão (€)','2000')+
+        inps('cfg_lux_sea','Multi. Marít.','2')+inps('cfg_lux_land','Multi. Terr.','2')+
+        `<div class="col-span-2">${inps('cfg_lux_crane','Autogrua (€)','2000')}</div>`)
+    }</div>`+
+    sec('amber-400','Outros Parâmetros')+
+    `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">${
+      inp('cfg_landBase','Transporte terrestre base (€)','2000')+inp('cfg_craneFrPt','Grua extra FR→PT (€)','1000')
+    }</div>`+
+    sec('[#a78bfa]','Gestão de Rotas por País',`<span class="ml-auto text-[10px] text-gray-600 bg-gv-bg/80 px-3 py-1 rounded-full border border-white/[.04]">Clica para expandir</span>`)+
+    `<p class="text-[11px] text-gray-500 mb-5 font-light">Edita os custos de transporte, taxa IVA, e informações de cada rota. Alterações refletidas automaticamente ao guardar.</p>`;
+}
+
+// === ROUTE EDITOR ===
+function rrHTML(ck,ok,i,r){
+  const p=`re_${ck}_${ok}_${i}`;
+  return`<div class="route-row space-y-1.5" id="${p}_row"><div class="grid grid-cols-[1fr_1fr_90px_110px_28px] gap-1.5 items-center">
+<input type="text" data-role="from" value="${r.from}" placeholder="De" class="cfg-input rounded-lg border border-white/[.06] bg-gv-bg/80 text-white text-[11px] px-2.5 py-2 font-mono"/>
+<input type="text" data-role="to" value="${r.to}" placeholder="Para" class="cfg-input rounded-lg border border-white/[.06] bg-gv-bg/80 text-white text-[11px] px-2.5 py-2 font-mono"/>
+<input type="text" data-role="cost" value="${r.cost}" placeholder="€" class="cfg-input rounded-lg border border-white/[.06] bg-gv-bg/80 text-white text-[11px] px-2.5 py-2 font-mono text-right"/>
+<input type="text" data-role="type" value="${r.type}" placeholder="Tipo" class="cfg-input rounded-lg border border-white/[.06] bg-gv-bg/80 text-gray-400 text-[11px] px-2.5 py-2"/>
+<button onclick="this.closest('.route-row').remove()" class="btn-delete text-center text-sm rounded-lg hover:bg-red-500/10 py-1.5" title="Remover">✕</button></div>
+<input type="text" data-role="note" value="${r.note||''}" placeholder="OBS (opcional)" class="cfg-input w-full rounded-lg border border-amber-500/8 bg-amber-500/[.03] text-amber-300/70 text-[10px] px-2.5 py-1.5 italic"/></div>`;
+}
+
+function buildRouteEditor(){
+  const ctn=$('routeEditor');ctn.innerHTML='';
+  const order=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","brazil","china","usa"];
+  [...new Set([...order,...Object.keys(R)])].forEach(ck=>{
+    const c=R[ck];if(!c)return;
+    const tot=Object.values(c.routes||{}).reduce((s,a)=>s+a.length,0);
+    const d=document.createElement('details');
+    d.className='country-section rounded-2xl border border-white/[.05] bg-gradient-to-br from-gv-soft/30 to-gv-bg/50 overflow-hidden';
+    d.innerHTML=`<summary class="flex items-center gap-3 px-5 py-3.5 hover:bg-white/[.02] transition-colors select-none">
+<span class="chevron text-gray-500 text-xs">▶</span><span class="text-xl">${c.flag}</span>
+<span class="font-display font-semibold text-sm text-gray-200">${c.label}</span>
+<span class="text-[10px] text-gray-500 bg-gv-bg/80 px-2.5 py-0.5 rounded-full border border-white/[.04]">${tot} rota${tot!==1?'s':''}</span>
+<div class="ml-auto flex items-center gap-2"><span class="text-[10px] text-gray-500">IVA:</span>
+<input type="text" data-field="vatRate" data-country="${ck}" value="${(c.vatRate*100).toFixed(1).replace('.0','')}" class="cfg-input w-14 text-center rounded-lg border border-white/8 bg-gv-bg/80 text-white text-xs px-1.5 py-1 font-mono" onclick="event.stopPropagation()"/>
+<span class="text-[10px] text-gray-500">%</span></div></summary>
+<div class="px-5 pb-5 space-y-3" id="re_${ck}_body"></div>`;
+    ctn.appendChild(d);
+    const body=$(`re_${ck}_body`);
+
+    if(ck==='brazil')body.innerHTML+=`<div class="rounded-xl border border-white/[.04] bg-gv-bg/50 p-4"><div class="text-[10px] uppercase tracking-[.2em] text-amber-400 mb-3 font-medium">Taxas Brasil (Internacional)</div><div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+${[['fobRate','FOB Rate'],['taxII','II'],['taxIPI','IPI'],['taxPIS','PIS'],['taxCOFINS','COFINS'],['taxICMS','ICMS']].map(([f,l])=>`<div><label class="text-[9px] text-gray-500">${l}</label><input type="text" data-field="${f}" data-country="brazil" value="${((c[f]||0)*100).toFixed(1)}" class="cfg-input w-full rounded-lg border border-white/8 bg-gv-bg/80 text-white text-xs px-2 py-1.5 font-mono"/>%</div>`).join('')}</div></div>`;
+
+    if(ck==='china'&&c.vatExtra!==undefined)body.innerHTML+=`<div class="rounded-xl border border-white/[.04] bg-gv-bg/50 p-4"><div class="text-[10px] uppercase tracking-[.2em] text-[#5eb5ff] mb-3 font-medium">Taxa Extra China</div><div class="flex items-center gap-2"><label class="text-[9px] text-gray-500">Taxa adicional</label><input type="text" data-field="vatExtra" data-country="china" value="${((c.vatExtra||0)*100).toFixed(1)}" class="cfg-input w-16 rounded-lg border border-white/8 bg-gv-bg/80 text-white text-xs px-2 py-1.5 font-mono"/><span class="text-[9px] text-gray-500">%</span></div></div>`;
+
+    Object.entries(c.routes||{}).forEach(([ok,arr])=>{
+      const og=document.createElement('details');og.className='origin-group rounded-xl border border-white/[.04] bg-gv-bg/30 overflow-hidden';og.open=true;
+      og.innerHTML=`<summary class="flex items-center gap-2 px-3 py-2.5 hover:bg-white/[.02] transition-colors select-none">
+<span class="origin-chevron text-gray-600 text-[10px]">▶</span><span class="text-xs font-semibold text-gray-400">${oLabels[ok]||ok}</span>
+<span class="text-[10px] text-gray-600">(${arr.length})</span>
+<button onclick="event.stopPropagation();GV.removeOrigin('${ck}','${ok}')" class="ml-auto btn-delete text-[10px] px-1.5 py-0.5 rounded" title="Remover origem">🗑️</button></summary>
+<div class="px-3 pb-3 space-y-2" id="re_${ck}_${ok}_routes">${arr.map((r,i)=>rrHTML(ck,ok,i,r)).join('')}</div>
+<div class="px-3 pb-3"><button onclick="GV.addRoute('${ck}','${ok}')" class="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-dashed border-white/8 text-gray-500 text-[11px] hover:border-[#00ff88]/30 hover:text-[#00ff88] transition-all w-full justify-center group"><span class="group-hover:scale-110 transition-transform">+</span> Adicionar rota</button></div>`;
+      body.appendChild(og);
+    });
+    body.innerHTML+=`<button onclick="GV.addOrigin('${ck}')" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-dashed border-white/8 text-gray-500 text-[11px] hover:border-[#a78bfa]/30 hover:text-[#a78bfa] transition-all w-full justify-center group"><span class="group-hover:scale-110 transition-transform">+</span> Adicionar nova origem para ${c.label}</button>`;
+  });
+}
+
+function addRoute(ck,ok){
+  const c=$(`re_${ck}_${ok}_routes`);if(!c)return;
+  const d=document.createElement('div');d.innerHTML=rrHTML(ck,ok,c.querySelectorAll('.route-row').length,{from:'',to:'',cost:0,type:'RO-RO'});
+  c.appendChild(d.firstElementChild);
+}
+function removeOrigin(ck,ok){
+  if(!confirm(`Remover todas as rotas de "${oLabels[ok]||ok}" para ${R[ck]?.label}?`))return;
+  delete R[ck].routes[ok];buildRouteEditor();toast(`Origem removida de ${R[ck]?.label}`);
+}
+function addOrigin(ck){
+  const n=prompt('Nome da origem (ex: "uk", "netherlands", "china", "france"):');if(!n?.trim())return;
+  const k=n.trim().toLowerCase().replace(/\s+/g,'-');
+  if(!R[ck].routes)R[ck].routes={};if(R[ck].routes[k]){alert('Essa origem já existe para este país!');return;}
+  R[ck].routes[k]=[{from:'',to:'',cost:0,type:'RO-RO'}];buildRouteEditor();toast(`Nova origem "${k}" adicionada a ${R[ck].label}`);
+}
+function addNewCountry(){
+  const k=prompt('ID do país (ex: "germany", "turkey"):');if(!k?.trim())return;
+  const ck=k.trim().toLowerCase().replace(/\s+/g,'-');if(R[ck]){alert('País já existe!');return;}
+  const l=prompt('Nome do país (ex: "Alemanha", "Turquia"):');if(!l)return;
+  const f=prompt('Emoji da bandeira (ex: 🇩🇪):')||'🏳️',v=parseFloat(prompt('Taxa IVA em % (ex: 19):')||'0');
+  R[ck]={label:l,flag:f,vatRate:v/100,routes:{uk:[{from:'',to:'',cost:0,type:'RO-RO'}]}};
+  buildCountryButtons();buildRouteEditor();toast(`${f} ${l} adicionado com sucesso!`);
+}
+
+function saveRoutes(){
+  $$('[data-field="vatRate"]').forEach(i=>{if(R[i.dataset.country])R[i.dataset.country].vatRate=(parseFloat(i.value.replace(',','.'))||0)/100;});
+  ['fobRate','taxII','taxIPI','taxPIS','taxCOFINS','taxICMS'].forEach(f=>{
+    const i=document.querySelector(`[data-field="${f}"][data-country="brazil"]`);if(i&&R.brazil)R.brazil[f]=(parseFloat(i.value.replace(',','.'))||0)/100;
+  });
+  const cx=document.querySelector('[data-field="vatExtra"][data-country="china"]');
+  if(cx&&R.china)R.china.vatExtra=(parseFloat(cx.value.replace(',','.'))||0)/100;
+  Object.keys(R).forEach(ck=>{
+    if(!R[ck]?.routes)return;
+    Object.keys(R[ck].routes).forEach(ok=>{
+      const c=$(`re_${ck}_${ok}_routes`);if(!c)return;
+      const nw=[];c.querySelectorAll('.route-row').forEach(row=>{
+        const from=row.querySelector('[data-role="from"]')?.value?.trim()||'',to=row.querySelector('[data-role="to"]')?.value?.trim()||'';
+        const cost=parseFloat(row.querySelector('[data-role="cost"]')?.value?.replace(/\./g,'').replace(',','.')||'0')||0;
+        const type=row.querySelector('[data-role="type"]')?.value?.trim()||'RO-RO';
+        if(from||to||cost>0){const o={from,to,cost,type};const note=row.querySelector('[data-role="note"]')?.value?.trim()||'';if(note)o.note=note;nw.push(o);}
+      });R[ck].routes[ok]=nw;
+    });
+    Object.keys(R[ck].routes).forEach(ok=>{if(R[ck].routes[ok].length===0)delete R[ck].routes[ok];});
+  });
+}
+
+function applySettings(){
+  saveRoutes();buildCountryButtons();selectCountry(AC);updateTierPreview();
+  const m=$('cfg_saved');m.classList.remove('hidden');setTimeout(()=>m.classList.add('hidden'),3000);toast('Todas as configurações guardadas!');
+}
+
+// === COPY ===
+function copyIntl(){
+  const g=$('intl_grid');if(!g)return;const l=[];
+  g.querySelectorAll('.result-card').forEach(c=>{const a=c.querySelector('.text-gray-500'),b=c.querySelector('.font-semibold');if(a&&b)l.push(`${a.textContent}: ${b.textContent}`);});
+  navigator.clipboard.writeText(l.join('\n')).then(()=>toast('Copiado!'));
+}
+function copyBrazil(){
+  let t='=== RESUMO IMPORTAÇÃO ===\n';
+  $('br_importSummary')?.querySelectorAll('.flex.justify-between').forEach(r=>{t+=`${r.children[0]?.textContent}: ${r.children[1]?.textContent}\n`;});
+  t+='\n=== FORMAÇÃO DE PREÇO ===\n';
+  $('br_priceFormation')?.querySelectorAll('.flex.justify-between').forEach(r=>{t+=`${r.children[0]?.textContent}: ${r.children[1]?.textContent}\n`;});
+  navigator.clipboard.writeText(t).then(()=>toast('Copiado!'));
+}
+
+// === CÂMBIO OFFLINE ===
+// Câmbio agora é 100% offline com valores hardcoded
+// com margem de segurança de 5% aplicada aos valores máximos históricos
+// API removida por problemas de estabilidade
+
+// === PDF ===
+async function exportPDF(id,title){
+  const el=$(id);if(!el)return;
+  try{
+    const cv=await html2canvas(el,{backgroundColor:'#0c1220',scale:2,useCORS:true});
+    const{jsPDF}=window.jspdf,pdf=new jsPDF('p','mm','a4'),img=cv.toDataURL('image/png');
+    const w=pdf.internal.pageSize.getWidth(),h=(cv.height*w)/cv.width;
+    pdf.setFillColor(12,18,32);pdf.rect(0,0,w,pdf.internal.pageSize.getHeight(),'F');
+    pdf.setTextColor(0,255,136);pdf.setFontSize(14);pdf.text(`Green Village — ${title}`,10,12);
+    pdf.setTextColor(156,162,184);pdf.setFontSize(8);pdf.text(`Gerado em: ${new Date().toLocaleString("pt-PT")}`,10,18);
+    pdf.addImage(img,'PNG',5,22,w-10,h-10);pdf.save(`GreenVillage_${title}_${Date.now()}.pdf`);
+  }catch(e){alert("Erro ao gerar PDF.");console.error(e);}
+}
+
+// === INIT ===
+function init(){
+  buildBrFields();buildCountryButtons();selectCountry("portugal",true);
+  $('intl_price').addEventListener('input',updateTierPreview);
+  $('intl_currency').addEventListener('change',updateTierPreview);
+  $('intl_origin').addEventListener('change',()=>{updateRoutes();autoSelectCurrency();updateTierPreview();});
+}
+
+return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
+  updateTierPreview,onOriginChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry};
+})();
+window.addEventListener('DOMContentLoaded',GV.init);
+</script>
+
+
+</body>
+</html>
