@@ -253,6 +253,115 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   background-clip:text;
   letter-spacing:.08em;
 }
+
+/* === LIGHT MODE === */
+html.light-mode {
+  background: #f8f9fa !important;
+}
+
+html.light-mode body {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #1f2937 !important;
+}
+
+html.light-mode .glass {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+html.light-mode .glow-card {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-mode .sec {
+  background: rgba(248, 249, 250, 0.8) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-mode .ci,
+html.light-mode .cis {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: #1f2937 !important;
+}
+
+html.light-mode .lbl,
+html.light-mode .lbls {
+  color: #4b5563 !important;
+}
+
+html.light-mode .text-gray-200,
+html.light-mode .text-gray-300,
+html.light-mode .text-gray-400 {
+  color: #4b5563 !important;
+}
+
+html.light-mode .text-gray-500,
+html.light-mode .text-gray-600 {
+  color: #6b7280 !important;
+}
+
+html.light-mode .result-card {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-mode .result-card:hover {
+  background: rgba(248, 249, 250, 1) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-mode .result-highlight {
+  background: rgba(29, 184, 84, 0.08) !important;
+  border-color: rgba(29, 184, 84, 0.3) !important;
+}
+
+html.light-mode .tab-btn {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #6b7280 !important;
+}
+
+html.light-mode .tab-active {
+  background: rgba(29, 184, 84, 0.1) !important;
+  border-color: rgba(29, 184, 84, 0.3) !important;
+  color: #059669 !important;
+}
+
+html.light-mode .country-btn {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #4b5563 !important;
+}
+
+html.light-mode .country-btn.selected {
+  background: rgba(29, 184, 84, 0.15) !important;
+  border-color: rgba(29, 184, 84, 0.4) !important;
+  color: #059669 !important;
+}
+
+html.light-mode .btn-main {
+  box-shadow: 0 4px 8px rgba(29, 184, 84, 0.3) !important;
+}
+
+html.light-mode .small-btn {
+  color: #6b7280 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-mode .small-btn:hover {
+  color: #1f2937 !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+html.light-mode .header-orb {
+  opacity: 0.02 !important;
+}
+
+html.light-mode .divider-glow {
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent) !important;
+}
 </style>
 </head>
 <body class="min-h-screen text-gray-200 font-sans antialiased">
@@ -311,6 +420,10 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     <div class="flex flex-wrap gap-2 items-center">
       <span class="px-3 py-1.5 rounded-full border border-[#1db854]/20 text-[#22dd66] text-[10px] uppercase tracking-[.2em] bg-[#1db854]/5 font-medium">v5.0</span>
       <span id="rateStatus" class="px-3 py-1.5 rounded-full border border-[#00ff88]/30 text-[#00ff88] text-[10px] uppercase tracking-[.15em] bg-black/30 font-medium">✓ Câmbio: Offline (+5% margem)</span>
+      <button id="theme-toggle" onclick="GV.toggleTheme()" class="px-3 py-1.5 rounded-full border border-white/10 text-gray-400 text-[10px] uppercase tracking-[.2em] bg-gv-card/60 font-medium hover:border-white/20 hover:text-gray-300 transition flex items-center gap-1.5">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-label">Escuro</span>
+      </button>
     </div>
   </div>
 </header>
@@ -2607,6 +2720,38 @@ function closeSharedBanner() {
   window.history.replaceState({}, '', url);
 }
 
+// === MODO CLARO/ESCURO ===
+function loadTheme() {
+  const savedTheme = localStorage.getItem('gv_theme') || 'dark';
+  applyTheme(savedTheme);
+}
+
+function toggleTheme() {
+  const currentTheme = localStorage.getItem('gv_theme') || 'dark';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  applyTheme(newTheme);
+  localStorage.setItem('gv_theme', newTheme);
+  toast(`Tema ${newTheme === 'dark' ? 'escuro' : 'claro'} ativado`, true);
+}
+
+function applyTheme(theme) {
+  const html = document.documentElement;
+  const icon = $('theme-icon');
+  const label = $('theme-label');
+
+  if (theme === 'light') {
+    html.classList.add('light-mode');
+    if (icon) icon.textContent = '☀️';
+    if (label) label.textContent = 'Claro';
+  } else {
+    html.classList.remove('light-mode');
+    if (icon) icon.textContent = '🌙';
+    if (label) label.textContent = 'Escuro';
+  }
+
+  console.log('[Theme] Applied:', theme);
+}
+
 // === PDF ===
 async function exportPDF(id,title){
   const el=$(id);if(!el)return;
@@ -2623,6 +2768,9 @@ async function exportPDF(id,title){
 
 // === INIT ===
 function init(){
+  // Carregar tema salvo
+  loadTheme();
+
   buildBrFields();buildCountryButtons();selectCountry("portugal",true);
   $('intl_price').addEventListener('input',updateTierPreview);
   $('intl_currency').addEventListener('change',updateTierPreview);
@@ -2645,7 +2793,8 @@ return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
   compUpdateOrigins,compUpdateRoutes,addRouteToComparison,removeRouteFromComparison,clearComparison,exportComparisonPDF,
   showAnalytics,closeAnalytics,
   toggleMarginSimulator,updateMarginSimulation,resetMarginSimulation,applyMarginChanges,
-  generateShareableURL,copyShareLink,shareViaEmail,shareViaWhatsApp,closeShareModal,closeSharedBanner};
+  generateShareableURL,copyShareLink,shareViaEmail,shareViaWhatsApp,closeShareModal,closeSharedBanner,
+  toggleTheme};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
