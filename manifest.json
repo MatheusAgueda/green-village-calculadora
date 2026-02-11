@@ -1,0 +1,28 @@
+{
+  "name": "Green Village Calculator",
+  "short_name": "GV Calc",
+  "description": "Calculadora profissional de importação de mobile homes para múltiplos países",
+  "start_url": "/green-village-calculadora/index.html",
+  "display": "standalone",
+  "background_color": "#060a12",
+  "theme_color": "#1db854",
+  "orientation": "portrait-primary",
+  "scope": "/green-village-calculadora/",
+  "icons": [
+    {
+      "src": "/green-village-calculadora/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/green-village-calculadora/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "finance", "productivity"],
+  "lang": "pt-PT",
+  "dir": "ltr"
+}
