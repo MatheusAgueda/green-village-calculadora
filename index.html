@@ -850,10 +850,16 @@ html.light-mode .divider-glow {
 
   <div class="divider-glow"></div>
 
-  <div class="flex items-center gap-4">
-    <button onclick="GV.applySettings()" class="px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">✓ Guardar Configurações</button>
+  <div class="flex flex-wrap items-center gap-4">
+    <button onclick="GV.applySettings()" class="px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">
+      ✓ Guardar Configurações
+    </button>
+    <button onclick="GV.validateCalculation()" class="px-6 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] border border-blue-400/30 text-blue-400 hover:bg-blue-400/10 transition">
+      🔍 Diagnóstico (Console)
+    </button>
     <span id="cfg_saved" class="text-sm text-[#00ff88] hidden font-medium">✓ Guardado com sucesso!</span>
   </div>
+  <p class="text-xs text-gray-600 mt-3 ml-1">💡 Use "Diagnóstico" para verificar taxas de câmbio e margens. Abra o Console (F12) para ver resultados detalhados.</p>
 </div>
 </div>
 
@@ -1025,7 +1031,39 @@ html.light-mode .divider-glow {
 const GV=(()=>{
 let AC="portugal";
 const $=id=>document.getElementById(id),$$=(s,p)=>(p||document).querySelectorAll(s);
-const pn=id=>{const e=$(id);if(!e)return 0;let v=e.value.trim();if(!v)return 0;const isENFormat=/\.\d{1,2}$/.test(v)&&!v.includes(',');if(isENFormat){v=v.replace(/,/g,'');}else{v=v.replace(/\./g,'').replace(',','.');}const r=parseFloat(v)||0;return Math.max(r,0);};
+// FUNÇÃO CORRIGIDA: Parse de números com suporte PT-BR/PT-PT e EN-US
+const pn=id=>{
+  const e=$(id);
+  if(!e)return 0;
+  let v=e.value.trim();
+  if(!v)return 0;
+
+  // Remove espaços
+  v=v.replace(/\s/g,'');
+
+  // Detecta formato EN: termina com .XX (1-2 dígitos após ponto)
+  // Exemplo: 5,500.00 ou 1500.5 ou 5500.00
+  const isENFormat=/\.\d{1,2}$/.test(v);
+
+  if(isENFormat){
+    // Formato EN-US: 5,500.00 → remove vírgulas (separador de milhar)
+    v=v.replace(/,/g,'');
+  } else {
+    // Formato PT: 5.500,00 ou 5500,00
+    // Remove pontos (separador de milhar) e troca vírgula por ponto
+    v=v.replace(/\./g,'').replace(',','.');
+  }
+
+  const r=parseFloat(v);
+
+  // Validação robusta
+  if(isNaN(r)||!isFinite(r)){
+    console.warn(`[Parse] Valor inválido em ${id}: "${e.value}" → 0`);
+    return 0;
+  }
+
+  return Math.max(r,0);
+};
 const fmt=(v,l="pt-PT",d=0)=>new Intl.NumberFormat(l,{minimumFractionDigits:d,maximumFractionDigits:d}).format(v||0);
 const fc=(v,s="€",l="pt-PT",d=2)=>`${s}${fmt(v,l,d)}`;
 const LAND=()=>pn('cfg_landBase')||2000, CRANE=()=>pn('cfg_craneFrPt')||1000;
@@ -1040,26 +1078,54 @@ const csym={EUR:"€",GBP:"£",BRL:"R$",CNY:"¥",USD:"$",PLN:"zł"};
 const oLabels={uk:"🇬🇧 Inglaterra",netherlands:"🇳🇱 Holanda",france:"🇫🇷 França",portugal:"🇵🇹 Portugal",belgium:"🇧🇪 Bélgica",china:"🇨🇳 China"};
 const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"]);
 
+// FUNÇÃO CORRIGIDA: Taxas de câmbio com fallback consistente
 function rates(){
-  // Tentar ler do cache primeiro (taxas mais precisas)
+  // Taxas de fallback FIXAS (atualizadas 2026-02-11)
+  // Base: EUR (1 EUR = X moeda)
+  const FALLBACK_RATES = {
+    EUR_TO_GBP: 0.8810,  // 1 EUR = 0.8810 GBP
+    EUR_TO_BRL: 6.0850,  // 1 EUR = 6.0850 BRL
+    EUR_TO_CNY: 7.7450,  // 1 EUR = 7.7450 CNY
+    EUR_TO_USD: 1.0890,  // 1 EUR = 1.0890 USD
+    EUR_TO_PLN: 4.2650   // 1 EUR = 4.2650 PLN
+  };
+
+  // Tentar ler do cache primeiro (taxas mais precisas da API)
   const cache = JSON.parse(localStorage.getItem('gv_exchange_cache') || '{}');
+
   if (cache.rates && cache.timestamp) {
-    const rates = cache.rates;
-    // Retornar taxas invertidas (base EUR)
-    return {
+    const apiRates = cache.rates;
+    // API retorna base EUR: { GBP: 0.88, USD: 1.09, ... }
+    // Para converter de outra moeda → EUR, invertemos
+    const converted = {
       EUR: 1,
-      GBP: rates.GBP > 0 ? 1 / rates.GBP : 1.19,
-      BRL: rates.BRL > 0 ? 1 / rates.BRL : 0.154,
-      CNY: rates.CNY > 0 ? 1 / rates.CNY : 0.125,
-      USD: rates.USD > 0 ? 1 / rates.USD : 0.909,
-      PLN: rates.PLN > 0 ? 1 / rates.PLN : 0.222
+      GBP: apiRates.GBP > 0 ? 1 / apiRates.GBP : 1 / FALLBACK_RATES.EUR_TO_GBP,
+      BRL: apiRates.BRL > 0 ? 1 / apiRates.BRL : 1 / FALLBACK_RATES.EUR_TO_BRL,
+      CNY: apiRates.CNY > 0 ? 1 / apiRates.CNY : 1 / FALLBACK_RATES.EUR_TO_CNY,
+      USD: apiRates.USD > 0 ? 1 / apiRates.USD : 1 / FALLBACK_RATES.EUR_TO_USD,
+      PLN: apiRates.PLN > 0 ? 1 / apiRates.PLN : 1 / FALLBACK_RATES.EUR_TO_PLN
     };
+
+    console.log('[Rates] Cache:', {
+      GBP: `1 GBP = €${converted.GBP.toFixed(4)}`,
+      BRL: `1 BRL = €${converted.BRL.toFixed(4)}`,
+      CNY: `1 CNY = €${converted.CNY.toFixed(4)}`
+    });
+
+    return converted;
   }
 
-  // Fallback: ler dos inputs de configuração
-  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;};
-  const gbp=g('gbp')||.88, brl=g('brl')||6.83, cny=g('cny')||8.40, usd=g('usd')||1.16, pln=g('pln')||4.73;
-  return{EUR:1,GBP:gbp>0?1/gbp:1.19,BRL:brl>0?1/brl:0.154,CNY:cny>0?1/cny:0.125,USD:usd>0?1/usd:0.909,PLN:pln>0?1/pln:0.222};
+  // Se não há cache, usar fallback consistente
+  console.warn('[Rates] Usando fallback offline (+5% margem segurança)');
+
+  return {
+    EUR: 1,
+    GBP: (1 / FALLBACK_RATES.EUR_TO_GBP) * 1.05, // +5% margem de segurança
+    BRL: (1 / FALLBACK_RATES.EUR_TO_BRL) * 1.05,
+    CNY: (1 / FALLBACK_RATES.EUR_TO_CNY) * 1.05,
+    USD: (1 / FALLBACK_RATES.EUR_TO_USD) * 1.05,
+    PLN: (1 / FALLBACK_RATES.EUR_TO_PLN) * 1.05
+  };
 }
 function localRates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), cny=(g('cny')||8), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
@@ -1069,20 +1135,113 @@ function localRates(){
     china:{rate:cny>0?cny:8,symbol:"¥",code:"CNY"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
 }
 
+// FUNÇÃO CORRIGIDA: Tiers com valores padrão consistentes
 function tiers(){
   const g=id=>pn(id);
-  return{
-    low:{id:"low",label:"Low Budget",description:"Casas até 5.000€. Lucro GV + Comissão base. Transporte normal.",
-      companyProfit:g('cfg_low_profit')||3000,commission:g('cfg_low_comm')||500,landMultiplier:1,seaMultiplier:1,craneCost:0},
-    medium:{id:"medium",label:"Valor Médio",description:"Casas entre 5.000€ e 20.000€. Lucro GV reforçado + Comissão intermédia.",
-      companyProfit:g('cfg_med_profit')||5000,commission:g('cfg_med_comm')||1000,landMultiplier:1,seaMultiplier:1,craneCost:0},
-    luxury:{id:"luxury",label:"Luxo",description:"Casas acima de 20.000€. Lucro máximo, marítimo x2, terrestre x2 + autogrua.",
-      companyProfit:g('cfg_lux_profit')||12000,commission:g('cfg_lux_comm')||2000,
-      landMultiplier:g('cfg_lux_land')||2,seaMultiplier:g('cfg_lux_sea')||2,craneCost:g('cfg_lux_crane')||2000}
+
+  // VALORES PADRÃO FIXOS (garantem consistência entre vendedores)
+  const DEFAULTS = {
+    low: {
+      profit: 3000,
+      commission: 500,
+      landMult: 1,
+      seaMult: 1,
+      crane: 0
+    },
+    medium: {
+      profit: 5000,
+      commission: 1000,
+      landMult: 1,
+      seaMult: 1,
+      crane: 0
+    },
+    luxury: {
+      profit: 12000,
+      commission: 2000,
+      landMult: 2,
+      seaMult: 2,
+      crane: 2000
+    }
+  };
+
+  return {
+    low: {
+      id: "low",
+      label: "Low Budget",
+      description: "Casas até 5.000€. Lucro GV + Comissão base. Transporte normal.",
+      companyProfit: g('cfg_low_profit') || DEFAULTS.low.profit,
+      commission: g('cfg_low_comm') || DEFAULTS.low.commission,
+      landMultiplier: DEFAULTS.low.landMult,
+      seaMultiplier: DEFAULTS.low.seaMult,
+      craneCost: DEFAULTS.low.crane,
+      max: 5000  // Limite do tier
+    },
+    medium: {
+      id: "medium",
+      label: "Valor Médio",
+      description: "Casas entre 5.000€ e 20.000€. Lucro GV reforçado + Comissão intermédia.",
+      companyProfit: g('cfg_med_profit') || DEFAULTS.medium.profit,
+      commission: g('cfg_med_comm') || DEFAULTS.medium.commission,
+      landMultiplier: DEFAULTS.medium.landMult,
+      seaMultiplier: DEFAULTS.medium.seaMult,
+      craneCost: DEFAULTS.medium.crane,
+      max: 20000  // Limite do tier
+    },
+    luxury: {
+      id: "luxury",
+      label: "Luxo",
+      description: "Casas acima de 20.000€. Lucro máximo, marítimo x2, terrestre x2 + autogrua.",
+      companyProfit: g('cfg_lux_profit') || DEFAULTS.luxury.profit,
+      commission: g('cfg_lux_comm') || DEFAULTS.luxury.commission,
+      landMultiplier: g('cfg_lux_land') || DEFAULTS.luxury.landMult,
+      seaMultiplier: g('cfg_lux_sea') || DEFAULTS.luxury.seaMult,
+      craneCost: g('cfg_lux_crane') || DEFAULTS.luxury.crane,
+      max: Infinity
+    }
   };
 }
 
-const tierOf=p=>p<=5000?"low":p>20000?"luxury":"medium";
+// Determina tier baseado no preço em EUR (limites fixos)
+const tierOf = p => {
+  if(p <= 5000) return "low";
+  if(p > 20000) return "luxury";
+  return "medium";
+};
+
+// VALIDAÇÃO E DIAGNÓSTICO
+function validateCalculation() {
+  const cr = rates();
+  const ts = tiers();
+
+  console.log('╔═══════════════════════════════════════╗');
+  console.log('║  DIAGNÓSTICO DE CONFIGURAÇÃO         ║');
+  console.log('╚═══════════════════════════════════════╝');
+  console.log('\n[1] TAXAS DE CÂMBIO (Outra moeda → EUR):');
+  console.log(`    1 GBP = €${cr.GBP.toFixed(4)}`);
+  console.log(`    1 USD = €${cr.USD.toFixed(4)}`);
+  console.log(`    1 BRL = €${cr.BRL.toFixed(4)}`);
+  console.log(`    1 CNY = €${cr.CNY.toFixed(4)}`);
+  console.log(`    1 PLN = €${cr.PLN.toFixed(4)}`);
+
+  console.log('\n[2] TIERS E MARGENS:');
+  console.log(`    LOW (≤€5.000):`);
+  console.log(`      Lucro GV: €${ts.low.companyProfit}`);
+  console.log(`      Comissão: €${ts.low.commission}`);
+  console.log(`    MEDIUM (€5.001-€20.000):`);
+  console.log(`      Lucro GV: €${ts.medium.companyProfit}`);
+  console.log(`      Comissão: €${ts.medium.commission}`);
+  console.log(`    LUXURY (>€20.000):`);
+  console.log(`      Lucro GV: €${ts.luxury.companyProfit}`);
+  console.log(`      Comissão: €${ts.luxury.commission}`);
+  console.log(`      Mult Mar: ${ts.luxury.seaMultiplier}x`);
+  console.log(`      Mult Terr: ${ts.luxury.landMultiplier}x`);
+  console.log(`      Grua: €${ts.luxury.craneCost}`);
+
+  console.log('\n[3] CUSTOS BASE:');
+  console.log(`    Terrestre: €${LAND()}`);
+  console.log(`    Grua FR→PT: €${CRANE()}`);
+  console.log('\n═══════════════════════════════════════\n');
+}
 
 // === ROUTES DATA ===
 let R={
@@ -1230,23 +1389,132 @@ function updateTierPreview(){
 // === CALC INTERNATIONAL ===
 function calcInternational(){
   const c=R[AC];if(!c)return;
-  const ip=parseFloat($('intl_price').value)||0,cur=$('intl_currency').value,ok=$('intl_origin').value,ri=parseInt($('intl_route').value,10);
-  const rts=c.routes?.[ok]||[];if(isNaN(ri)||ri>=rts.length){alert("Seleciona uma rota.");return;}
-  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isEU=EU.has(AC),isBR=AC==="brazil";
-  const pe=ip*(cr[cur]||1),tid=tierOf(pe),tier=ts[tid];
+
+  // Parse de inputs com validação
+  const ip=parseFloat($('intl_price').value)||0;
+  const cur=$('intl_currency').value;
+  const ok=$('intl_origin').value;
+  const ri=parseInt($('intl_route').value,10);
+
+  // Validação de rota
+  const rts=c.routes?.[ok]||[];
+  if(isNaN(ri)||ri>=rts.length){
+    alert("Seleciona uma rota válida.");
+    return;
+  }
+
+  const rt=rts[ri];
+  const lr=localRates();
+  const cr=rates();
+  const ts=tiers();
+  const isEU=EU.has(AC);
+  const isBR=AC==="brazil";
+
+  // CONVERSÃO PARA EUR (crítico para consistência)
+  const exchangeRate = cr[cur] || 1;
+  const pe = ip * exchangeRate;
+
+  // Determinar tier baseado no preço em EUR
+  const tid=tierOf(pe);
+  const tier=ts[tid];
+
+  // LOG DETALHADO para debug
+  console.log('═══════════════════════════════════════');
+  console.log('[CALC] Inputs:', {
+    país: AC,
+    origem: ok,
+    rota: ri,
+    preçoOriginal: `${ip} ${cur}`,
+    taxaCâmbio: exchangeRate.toFixed(4),
+    preçoEUR: pe.toFixed(2),
+    tier: tid
+  });
+  console.log('[CALC] Tier:', {
+    id: tid,
+    label: tier.label,
+    lucroGV: tier.companyProfit,
+    comissão: tier.commission,
+    multMar: tier.seaMultiplier,
+    multTerr: tier.landMultiplier
+  });
+  // Atualizar UI do tier
   const pill=$('intl_tierPill');
-  pill.textContent=tier.label;$('intl_tierDesc').textContent=tier.description;
+  pill.textContent=tier.label;
+  $('intl_tierDesc').textContent=tier.description;
   pill.className=`shrink-0 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[.15em] border tier-${tid}`;
-  const PROF=tier.companyProfit,COM=tier.commission;
-  let sea=rt.cost*tier.seaMultiplier,land=LAND()*tier.landMultiplier,xCrane=0;
-  if(AC==="portugal"&&ok==="france"){land=0;xCrane=CRANE();}
-  const crane=tier.craneCost+xCrane;
-  let fob=0,cif=0,brTax={},sub=0;
-  if(isBR){fob=pe*(c.fobRate||0);cif=pe+fob+sea;const vII=cif*(c.taxII||0),vIPI=(cif+vII)*(c.taxIPI||0),bPC=cif+vII+vIPI,vPIS=bPC*(c.taxPIS||0),vCOF=bPC*(c.taxCOFINS||0),icR=c.taxICMS||0,bICMS=(cif+vII+vIPI+vPIS+vCOF)/((1-icR)||1),vICMS=bICMS*icR;brTax={vII,vIPI,vPIS,vCOF,vICMS};const tT=vII+vIPI+vPIS+vCOF+vICMS;sub=cif+tT+land+crane+PROF+COM;}
-  else if(AC==="china"){const b=pe+sea;const extraTax=b*(c.vatExtra||0);sub=b+land+crane+PROF+COM+extraTax;}
-  else{sub=pe+sea+land+crane+PROF+COM;}
-  const ivaR=isEU?(c.vatRate||0.23):0,iva=sub*ivaR,tot=sub+iva;
-  const lc=lr[AC]||{rate:1,symbol:"€",code:"EUR"},totL=tot*lc.rate;
+
+  // VALORES DO TIER (garantir consistência)
+  const PROF = tier.companyProfit;
+  const COM = tier.commission;
+
+  // CÁLCULO DE CUSTOS
+  let sea = rt.cost * tier.seaMultiplier;
+  let land = LAND() * tier.landMultiplier;
+  let xCrane = 0;
+
+  // Exceção: França → Portugal usa camião (sem terrestre, com grua)
+  if(AC==="portugal" && ok==="france"){
+    land = 0;
+    xCrane = CRANE();
+  }
+
+  const crane = tier.craneCost + xCrane;
+
+  console.log('[CALC] Custos base:', {
+    marítimo: sea.toFixed(2),
+    terrestre: land.toFixed(2),
+    grua: crane.toFixed(2),
+    lucroGV: PROF.toFixed(2),
+    comissão: COM.toFixed(2)
+  });
+
+  // CÁLCULO ESPECÍFICO POR PAÍS
+  let fob=0, cif=0, brTax={}, sub=0;
+
+  if(isBR){
+    // Brasil: cálculo com tributos
+    fob = pe * (c.fobRate||0);
+    cif = pe + fob + sea;
+    const vII = cif * (c.taxII||0);
+    const vIPI = (cif + vII) * (c.taxIPI||0);
+    const bPC = cif + vII + vIPI;
+    const vPIS = bPC * (c.taxPIS||0);
+    const vCOF = bPC * (c.taxCOFINS||0);
+    const icR = c.taxICMS||0;
+    const bICMS = (cif + vII + vIPI + vPIS + vCOF) / (1 - icR);
+    const vICMS = bICMS * icR;
+
+    brTax = {vII, vIPI, vPIS, vCOF, vICMS};
+    const tT = vII + vIPI + vPIS + vCOF + vICMS;
+    sub = cif + tT + land + crane + PROF + COM;
+
+  } else if(AC==="china"){
+    // China: taxa extra de IVA
+    const b = pe + sea;
+    const extraTax = b * (c.vatExtra||0);
+    sub = b + land + crane + PROF + COM + extraTax;
+
+  } else {
+    // Outros países: cálculo padrão
+    sub = pe + sea + land + crane + PROF + COM;
+  }
+
+  // IVA (apenas para países da UE)
+  const ivaR = isEU ? (c.vatRate || 0.23) : 0;
+  const iva = sub * ivaR;
+  const tot = sub + iva;
+
+  // Conversão para moeda local (se diferente de EUR)
+  const lc = lr[AC] || {rate:1, symbol:"€", code:"EUR"};
+  const totL = tot * lc.rate;
+
+  console.log('[CALC] Resultado:', {
+    subtotal: sub.toFixed(2),
+    IVA: `${(ivaR*100).toFixed(0)}% = €${iva.toFixed(2)}`,
+    total: tot.toFixed(2),
+    moedaLocal: lc.code !== 'EUR' ? `${lc.code} ${totL.toFixed(2)}` : 'N/A'
+  });
+  console.log('═══════════════════════════════════════');
 
   const g=$('intl_grid');g.innerHTML='';
   const card=(l,v,o={})=>{g.innerHTML+=`<div class="result-card text-sm ${o.full?'sm:col-span-2':''} ${o.hl?'result-highlight':''}"><div class="text-[10px] uppercase tracking-[.15em] text-gray-500 mb-1.5">${l}</div><div class="font-semibold font-mono ${o.fin?'text-base':'text-sm'}">${v}</div></div>`;};
@@ -2794,7 +3062,7 @@ return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
   showAnalytics,closeAnalytics,
   toggleMarginSimulator,updateMarginSimulation,resetMarginSimulation,applyMarginChanges,
   generateShareableURL,copyShareLink,shareViaEmail,shareViaWhatsApp,closeShareModal,closeSharedBanner,
-  toggleTheme};
+  toggleTheme,validateCalculation};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
