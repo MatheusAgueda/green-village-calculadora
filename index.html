@@ -306,6 +306,9 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   <button onclick="GV.switchTab('international')" id="tab-international" class="tab-btn tab-active px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
     <span class="mr-1.5">🌍</span> Internacional
   </button>
+  <button onclick="GV.switchTab('comparison')" id="tab-comparison" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
+    <span class="mr-1.5">🔄</span> Comparador
+  </button>
   <button onclick="GV.switchTab('brazil')" id="tab-brazil" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
     <span class="mr-1.5">🇧🇷</span> Brasil Detalhada
   </button>
@@ -499,6 +502,113 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
 </div>
 </div>
 
+<!-- TAB 2.5: COMPARADOR DE ROTAS -->
+<div id="panel-comparison" class="hidden fade-in">
+<div class="glass rounded-3xl p-6 sm:p-8 glow-card">
+  <div class="flex items-center gap-4 mb-6">
+    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-900/30 to-purple-900/20 border border-white/[.06] flex items-center justify-center text-3xl shadow-lg">🔄</div>
+    <div>
+      <h2 class="text-xl font-display font-bold tracking-tight">Comparador de Rotas</h2>
+      <p class="text-xs text-gray-500 font-light">Compare até 5 rotas diferentes • Melhor custo em destaque</p>
+    </div>
+  </div>
+
+  <!-- Base Inputs -->
+  <div class="mb-6 p-4 rounded-2xl border border-white/5 bg-gv-soft/30">
+    <h4 class="lbls mb-3 text-[#5eb5ff]">📦 Dados Base</h4>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div>
+        <label class="lbls mb-1">Preço da casa</label>
+        <input type="text" id="comp_price" value="5000" placeholder="5000" class="ci"/>
+      </div>
+      <div>
+        <label class="lbls mb-1">Moeda</label>
+        <select id="comp_currency" class="ci">
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="BRL">BRL (R$)</option>
+          <option value="CNY">CNY (¥)</option>
+          <option value="USD">USD ($)</option>
+          <option value="PLN">PLN (zł)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Route Section -->
+  <div class="mb-6 p-4 rounded-2xl border border-white/5 bg-amber-500/5">
+    <h4 class="lbls mb-3 text-amber-400">➕ Adicionar Rota</h4>
+    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-3">
+      <div>
+        <label class="lbls mb-1">País</label>
+        <select id="comp_country" class="cis" onchange="GV.compUpdateOrigins()">
+          <option value="portugal">🇵🇹 Portugal</option>
+          <option value="spain">🇪🇸 Espanha</option>
+          <option value="france">🇫🇷 França</option>
+          <option value="italy">🇮🇹 Itália</option>
+          <option value="greece">🇬🇷 Grécia</option>
+          <option value="malta">🇲🇹 Malta</option>
+          <option value="netherlands-dest">🇳🇱 Holanda</option>
+          <option value="croatia">🇭🇷 Croácia</option>
+          <option value="bulgaria">🇧🇬 Bulgária</option>
+          <option value="germany-dest">🇩🇪 Alemanha</option>
+          <option value="poland-dest">🇵🇱 Polônia</option>
+          <option value="czech">🇨🇿 República Tcheca</option>
+          <option value="slovakia">🇸🇰 Eslováquia</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbls mb-1">Origem</label>
+        <select id="comp_origin" class="cis" onchange="GV.compUpdateRoutes()">
+          <option value="uk">🇬🇧 UK</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbls mb-1">Rota</label>
+        <select id="comp_route" class="cis">
+          <option value="0">Rota 1</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <button onclick="GV.addRouteToComparison()" class="w-full px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wider text-gv-bg btn-main">
+          Adicionar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Table -->
+  <div id="comp_results_container" class="hidden">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xs font-display font-semibold text-[#00ff88] uppercase tracking-[.2em] flex items-center gap-2">
+        <span class="w-5 h-px bg-gradient-to-r from-[#00ff88]/60 to-transparent"></span>
+        Comparação de Rotas (<span id="comp_count">0</span>/5)
+      </h3>
+      <div class="flex gap-2">
+        <button onclick="GV.clearComparison()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-red-400/30 hover:text-red-400 transition">
+          🗑️ Limpar
+        </button>
+        <button onclick="GV.exportComparisonPDF()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-gv-accent/30 hover:text-gv-accent transition">
+          📄 PDF
+        </button>
+      </div>
+    </div>
+
+    <div id="comp_table" class="overflow-x-auto">
+      <!-- Table will be generated dynamically -->
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div id="comp_empty" class="text-center py-12 text-gray-500">
+    <div class="text-4xl mb-3">🔄</div>
+    <p class="text-sm">Adicione rotas para comparar os custos</p>
+    <p class="text-xs mt-1 text-gray-600">Configure os dados base e adicione até 5 rotas diferentes</p>
+  </div>
+
+</div>
+</div>
+
 <!-- TAB 3: HISTÓRICO -->
 <div id="panel-history" class="hidden fade-in">
 <div class="glass rounded-3xl p-6 sm:p-8 glow-card">
@@ -678,12 +788,13 @@ let R={
 
 // === TABS ===
 function switchTab(t){
-  ['international','brazil','history','settings'].forEach(x=>{
+  ['international','comparison','brazil','history','settings'].forEach(x=>{
     $('panel-'+x).classList.toggle('hidden',x!==t);
     $('tab-'+x).classList.toggle('tab-active',x===t);
   });
   if(t==='settings'){buildCfgSections();buildRouteEditor();}
   if(t==='history'){buildHistoryUI();}
+  if(t==='comparison'){compUpdateOrigins();}
 }
 
 // === COUNTRY BUTTONS ===
@@ -1451,6 +1562,220 @@ function confirmSaveFavorite() {
   saveAsFavorite(category, name, data);
 }
 
+// === COMPARADOR DE ROTAS ===
+let comparisonState = {
+  baseInputs: {},
+  routes: []
+};
+
+function compUpdateOrigins() {
+  const country = $('comp_country')?.value || 'portugal';
+  const originSelect = $('comp_origin');
+  if (!originSelect) return;
+
+  const cfg = config();
+  const countryData = cfg[country];
+  if (!countryData || !countryData.origins) return;
+
+  originSelect.innerHTML = Object.keys(countryData.origins).map(ok => {
+    const oname = countryData.origins[ok].name;
+    return `<option value="${ok}">${oname}</option>`;
+  }).join('');
+
+  compUpdateRoutes();
+}
+
+function compUpdateRoutes() {
+  const country = $('comp_country')?.value || 'portugal';
+  const origin = $('comp_origin')?.value;
+  const routeSelect = $('comp_route');
+  if (!routeSelect || !origin) return;
+
+  const cfg = config();
+  const originData = cfg[country]?.origins?.[origin];
+  if (!originData || !originData.routes) return;
+
+  routeSelect.innerHTML = originData.routes.map((route, idx) => {
+    return `<option value="${idx}">Rota ${idx + 1}: ${route.desc || 'Padrão'}</option>`;
+  }).join('');
+}
+
+function addRouteToComparison() {
+  // Validar base inputs
+  const price = parseFloat($('comp_price')?.value || 0);
+  const currency = $('comp_currency')?.value || 'EUR';
+
+  if (price <= 0) {
+    toast('Digite um preço válido', false);
+    return;
+  }
+
+  // Validar limite de 5 rotas
+  if (comparisonState.routes.length >= 5) {
+    toast('Máximo de 5 rotas atingido', false);
+    return;
+  }
+
+  // Capturar dados da rota
+  const country = $('comp_country')?.value || 'portugal';
+  const origin = $('comp_origin')?.value || 'uk';
+  const routeIndex = parseInt($('comp_route')?.value || 0, 10);
+
+  // Calcular resultado para esta rota
+  const cfg = config();
+  const rt = rates();
+  const tr = tiers();
+
+  const conversionRate = rt[currency] || 1;
+  const priceEur = price * conversionRate;
+
+  const tierKey = priceEur <= tr.low.max ? 'low' : priceEur <= tr.medium.max ? 'medium' : 'luxury';
+  const tier = tr[tierKey];
+
+  const originData = cfg[country]?.origins?.[origin];
+  const route = originData?.routes?.[routeIndex];
+
+  if (!route) {
+    toast('Rota inválida', false);
+    return;
+  }
+
+  const maritimeCost = route.maritime || 0;
+  const landCost = route.land || 0;
+  const profit = tier.profit || 0;
+  const commission = tier.commission || 0;
+
+  const subtotal = priceEur + maritimeCost + landCost + profit + commission;
+  const iva = subtotal * 0.23;
+  const total = subtotal + iva;
+
+  // Adicionar ao estado
+  const routeData = {
+    id: Date.now(),
+    country,
+    origin,
+    routeIndex,
+    tierKey,
+    priceEur,
+    maritime: maritimeCost,
+    land: landCost,
+    profit,
+    commission,
+    subtotal,
+    iva,
+    total,
+    routeDesc: route.desc || `Rota ${routeIndex + 1}`,
+    countryName: cfg[country]?.name || country,
+    originName: originData?.name || origin
+  };
+
+  comparisonState.baseInputs = { price, currency };
+  comparisonState.routes.push(routeData);
+
+  buildComparisonTable();
+  toast(`✓ Rota adicionada (${comparisonState.routes.length}/5)`, true);
+}
+
+function removeRouteFromComparison(id) {
+  comparisonState.routes = comparisonState.routes.filter(r => r.id !== id);
+  buildComparisonTable();
+  toast('Rota removida', true);
+}
+
+function clearComparison() {
+  if (comparisonState.routes.length === 0) return;
+  comparisonState.routes = [];
+  buildComparisonTable();
+  toast('Comparação limpa', true);
+}
+
+function buildComparisonTable() {
+  const container = $('comp_results_container');
+  const emptyState = $('comp_empty');
+  const tableDiv = $('comp_table');
+  const countSpan = $('comp_count');
+
+  if (!container || !emptyState || !tableDiv || !countSpan) return;
+
+  const routes = comparisonState.routes;
+
+  if (routes.length === 0) {
+    container.classList.add('hidden');
+    emptyState.classList.remove('hidden');
+    return;
+  }
+
+  container.classList.remove('hidden');
+  emptyState.classList.add('hidden');
+  countSpan.textContent = routes.length;
+
+  // Encontrar melhor rota (menor total)
+  let bestRouteId = null;
+  let minTotal = Infinity;
+  routes.forEach(r => {
+    if (r.total < minTotal) {
+      minTotal = r.total;
+      bestRouteId = r.id;
+    }
+  });
+
+  // Construir tabela
+  const tableHTML = `
+    <table class="w-full text-xs">
+      <thead>
+        <tr class="border-b border-white/5">
+          <th class="text-left py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider">Rota</th>
+          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider">Marítimo</th>
+          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider">Terrestre</th>
+          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider">Lucro GV</th>
+          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider">Comissão</th>
+          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider">IVA 23%</th>
+          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider">Total</th>
+          <th class="text-center py-3 px-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${routes.map(r => {
+          const isBest = r.id === bestRouteId;
+          const rowClass = isBest
+            ? 'border-b border-white/5 bg-gradient-to-r from-[#00ff88]/10 to-transparent result-highlight'
+            : 'border-b border-white/5 hover:bg-white/[.02]';
+          return `
+            <tr class="${rowClass}">
+              <td class="py-3 px-3">
+                <div class="flex flex-col">
+                  <span class="font-semibold text-gray-200">${r.countryName} ${isBest ? '🏆' : ''}</span>
+                  <span class="text-[10px] text-gray-500">${r.originName} → ${r.routeDesc}</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-gray-400 inline-block mt-1 w-fit">${r.tierKey.toUpperCase()}</span>
+                </div>
+              </td>
+              <td class="text-right py-3 px-3 text-gray-300">${fc(r.maritime, '€')}</td>
+              <td class="text-right py-3 px-3 text-gray-300">${fc(r.land, '€')}</td>
+              <td class="text-right py-3 px-3 text-gray-300">${fc(r.profit, '€')}</td>
+              <td class="text-right py-3 px-3 text-gray-300">${fc(r.commission, '€')}</td>
+              <td class="text-right py-3 px-3 text-gray-300">${fc(r.iva, '€')}</td>
+              <td class="text-right py-3 px-3 font-bold ${isBest ? 'text-[#00ff88]' : 'text-gray-100'}">${fc(r.total, '€')}</td>
+              <td class="text-center py-3 px-3">
+                <button onclick="GV.removeRouteFromComparison(${r.id})" class="text-red-400/60 hover:text-red-400 transition text-sm">🗑️</button>
+              </td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+
+  tableDiv.innerHTML = tableHTML;
+}
+
+function exportComparisonPDF() {
+  if (comparisonState.routes.length === 0) {
+    toast('Adicione rotas para exportar', false);
+    return;
+  }
+  exportPDF('comp_table', 'Comparacao_Rotas');
+}
+
 // === PDF ===
 async function exportPDF(id,title){
   const el=$(id);if(!el)return;
@@ -1482,7 +1807,8 @@ function init(){
 return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
   updateTierPreview,onOriginChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,forceUpdateRates,
   loadHistory,deleteHistoryItem,clearHistory,exportHistoryCSV,buildHistoryUI,loadHistoryItem,
-  loadFavorites,deleteFavorite,applyFavorite,updateFavoriteDropdowns,showFavoriteSaveModal,closeFavModal,confirmSaveFavorite};
+  loadFavorites,deleteFavorite,applyFavorite,updateFavoriteDropdowns,showFavoriteSaveModal,closeFavModal,confirmSaveFavorite,
+  compUpdateOrigins,compUpdateRoutes,addRouteToComparison,removeRouteFromComparison,clearComparison,exportComparisonPDF};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
