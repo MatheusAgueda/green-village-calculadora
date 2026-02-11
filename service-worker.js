@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gv-calc-v1.0.0';
+const CACHE_NAME = 'gv-calc-v2.0.0';
 const urlsToCache = [
   '/green-village-calculadora/index.html',
   '/green-village-calculadora/manifest.json',
