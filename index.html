@@ -352,6 +352,14 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       </div>
     </div>
 
+    <!-- Favoritos -->
+    <div class="mb-4 p-4 rounded-2xl border border-white/5 bg-gradient-to-r from-amber-500/5 to-transparent">
+      <label class="lbl mb-2">⭐ Carregar Favorito</label>
+      <select id="fav-selector-intl" onchange="GV.applyFavorite(this.value); this.value='';" class="ci">
+        <option value="">-- Selecionar Favorito --</option>
+      </select>
+    </div>
+
     <!-- Input grid -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
       <div class="col-span-2"><label class="lbl">Preço da casa</label><input type="text" id="intl_price" value="5000" placeholder="5000" class="ci"/></div>
@@ -378,9 +386,14 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     </div>
 
     <!-- Calculate button -->
-    <button onclick="GV.calcInternational()" class="w-full sm:w-auto px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">
-      Calcular Importação
-    </button>
+    <div class="flex flex-wrap gap-3">
+      <button onclick="GV.calcInternational()" class="flex-1 sm:flex-initial px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">
+        Calcular Importação
+      </button>
+      <button onclick="GV.showFavoriteSaveModal('international')" class="small-btn px-5 py-3.5 rounded-2xl border border-white/8 text-gray-400 text-sm hover:border-amber-400/30 hover:text-amber-400 transition">
+        ⭐ Salvar Favorito
+      </button>
+    </div>
 
     <!-- Results -->
     <div id="intl_results" class="hidden mt-6">
@@ -411,6 +424,17 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       <p class="text-xs text-gray-500 font-light">Cálculo detalhado com tributos brasileiros • ICMS gross-up • Formação de preço</p>
     </div>
   </div>
+
+  <!-- Favoritos Dropdown -->
+  <div class="mb-5 p-4 rounded-2xl border border-white/5 bg-amber-500/5">
+    <label class="lbls mb-2 flex items-center gap-2">
+      <span>⭐</span> Carregar Favorito
+    </label>
+    <select id="fav-selector-br" onchange="GV.applyFavorite(this.value)" class="ci w-full">
+      <option value="">-- Selecionar favorito --</option>
+    </select>
+  </div>
+
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
     <div class="sec">
       <h4 class="text-[10px] font-semibold uppercase tracking-[.2em] text-[#00ff88] mb-4 flex items-center gap-2">
@@ -435,7 +459,14 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
         <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Custos Brasil
       </h4>
       <div class="space-y-3" id="br_cost_fields"></div>
-      <button onclick="GV.calcBrazil()" class="mt-5 w-full px-6 py-3 rounded-2xl text-sm font-bold uppercase tracking-[.12em] text-gv-bg btn-main">Calcular</button>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <button onclick="GV.calcBrazil()" class="flex-1 sm:flex-initial px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.12em] text-gv-bg btn-main">
+          Calcular
+        </button>
+        <button onclick="GV.showFavoriteSaveModal('brazil')" class="small-btn px-5 py-3.5 rounded-2xl border border-white/8 text-gray-400 text-sm hover:border-amber-400/30 hover:text-amber-400 transition">
+          ⭐ Salvar Favorito
+        </button>
+      </div>
     </div>
   </div>
 
@@ -519,6 +550,25 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
 </div>
 
 <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5"></div>
+
+<!-- MODAL: SALVAR FAVORITO -->
+<div id="fav-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm">
+  <div class="glass rounded-3xl p-6 max-w-md w-full mx-4">
+    <h3 class="text-xl font-bold mb-4 text-gray-200">⭐ Salvar como Favorito</h3>
+    <label class="lbl mb-2">Nome do Favorito</label>
+    <input type="text" id="fav-name" class="ci mb-4" placeholder="Ex: Rota UK → Portugal Low" maxlength="50"/>
+    <label class="lbl mb-2">Categoria</label>
+    <select id="fav-category" class="ci mb-6">
+      <option value="route">Rota Favorita</option>
+      <option value="client">Cliente Frequente</option>
+      <option value="template">Template Completo</option>
+    </select>
+    <div class="flex gap-2">
+      <button onclick="GV.confirmSaveFavorite()" class="btn-main px-6 py-2 flex-1 rounded-2xl text-sm font-bold uppercase tracking-wider">Salvar</button>
+      <button onclick="GV.closeFavModal()" class="small-btn px-6 py-2 rounded-2xl border border-white/8 text-gray-400 text-sm">Cancelar</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const GV=(()=>{
@@ -1223,6 +1273,184 @@ function loadHistoryItem(id) {
   }
 }
 
+// === SISTEMA DE FAVORITOS ===
+function loadFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem('gv_favorites') || '{"routes":[],"clients":[],"templates":[]}');
+  } catch (error) {
+    console.error('[Favorites] Erro ao carregar:', error);
+    return {routes: [], clients: [], templates: []};
+  }
+}
+
+function saveAsFavorite(type, name, data) {
+  try {
+    const favorites = loadFavorites();
+    const id = `fav_${type}_${Date.now()}`;
+    const entry = {id, name, type, data, createdAt: Date.now()};
+
+    if (type === 'route') favorites.routes.unshift(entry);
+    else if (type === 'client') favorites.clients.unshift(entry);
+    else if (type === 'template') favorites.templates.unshift(entry);
+
+    // Limitar a 50 favoritos por categoria
+    favorites.routes = favorites.routes.slice(0, 50);
+    favorites.clients = favorites.clients.slice(0, 50);
+    favorites.templates = favorites.templates.slice(0, 50);
+
+    localStorage.setItem('gv_favorites', JSON.stringify(favorites));
+    closeFavModal();
+    toast(`⭐ "${name}" salvo nos favoritos!`, true);
+    updateFavoriteDropdowns();
+    console.log('[Favorites] Favorito salvo:', id);
+  } catch (error) {
+    console.error('[Favorites] Erro ao salvar:', error);
+    toast('Erro ao salvar favorito', false);
+  }
+}
+
+function deleteFavorite(id) {
+  try {
+    const favorites = loadFavorites();
+    favorites.routes = favorites.routes.filter(f => f.id !== id);
+    favorites.clients = favorites.clients.filter(f => f.id !== id);
+    favorites.templates = favorites.templates.filter(f => f.id !== id);
+    localStorage.setItem('gv_favorites', JSON.stringify(favorites));
+    toast('Favorito removido', true);
+    updateFavoriteDropdowns();
+  } catch (error) {
+    console.error('[Favorites] Erro ao deletar:', error);
+    toast('Erro ao remover favorito', false);
+  }
+}
+
+function applyFavorite(id) {
+  try {
+    const favorites = loadFavorites();
+    const allFavorites = [...favorites.routes, ...favorites.clients, ...favorites.templates];
+    const favorite = allFavorites.find(f => f.id === id);
+
+    if (!favorite) {
+      toast('Favorito não encontrado', false);
+      return;
+    }
+
+    const data = favorite.data;
+
+    if (favorite.type === 'route') {
+      // Carregar rota na aba internacional
+      switchTab('international');
+      setTimeout(() => {
+        $('intl_price') && ($('intl_price').value = data.price || '');
+        $('intl_currency') && ($('intl_currency').value = data.currency || 'EUR');
+        selectCountry(data.country || 'portugal');
+        setTimeout(() => {
+          $('intl_origin') && ($('intl_origin').value = data.origin || 'uk');
+          updateRoutes();
+          setTimeout(() => {
+            $('intl_route') && ($('intl_route').value = data.route || 0);
+            updateTierPreview();
+            toast(`⭐ Favorito "${favorite.name}" carregado!`, true);
+          }, 100);
+        }, 100);
+      }, 200);
+    } else if (favorite.type === 'client') {
+      // Carregar cliente na aba brasil
+      switchTab('brazil');
+      setTimeout(() => {
+        $('br_exchangeRate') && ($('br_exchangeRate').value = data.exchangeRate || '6.00');
+        $('br_icmsRate') && ($('br_icmsRate').value = data.icmsRate || '18');
+        $('br_marginPercent') && ($('br_marginPercent').value = data.marginPercent || '20');
+        toast(`⭐ Cliente "${favorite.name}" carregado!`, true);
+      }, 200);
+    } else if (favorite.type === 'template') {
+      // Carregar template completo
+      if (data.tabType === 'international') {
+        applyFavorite(data.routeId || id); // Reutilizar lógica de rota
+      }
+    }
+  } catch (error) {
+    console.error('[Favorites] Erro ao aplicar:', error);
+    toast('Erro ao carregar favorito', false);
+  }
+}
+
+function updateFavoriteDropdowns() {
+  const favorites = loadFavorites();
+
+  // Dropdown Internacional
+  const intlDropdown = $('fav-selector-intl');
+  if (intlDropdown) {
+    intlDropdown.innerHTML = '<option value="">-- Selecionar Favorito --</option>' +
+      favorites.routes.map(f => `<option value="${f.id}">⭐ ${f.name}</option>`).join('');
+  }
+
+  // Dropdown Brasil
+  const brDropdown = $('fav-selector-br');
+  if (brDropdown) {
+    brDropdown.innerHTML = '<option value="">-- Selecionar Cliente --</option>' +
+      favorites.clients.map(f => `<option value="${f.id}">⭐ ${f.name}</option>`).join('');
+  }
+}
+
+function showFavoriteSaveModal(tabType) {
+  const modal = $('fav-modal');
+  if (!modal) return;
+
+  modal.classList.remove('hidden');
+  modal.dataset.tabType = tabType;
+
+  // Limpar campos
+  $('fav-name') && ($('fav-name').value = '');
+
+  // Atualizar categorias baseado na aba
+  const categorySelect = $('fav-category');
+  if (categorySelect) {
+    if (tabType === 'international') {
+      categorySelect.innerHTML = '<option value="route">Rota Favorita</option><option value="template">Template Completo</option>';
+    } else {
+      categorySelect.innerHTML = '<option value="client">Cliente Frequente</option>';
+    }
+  }
+}
+
+function closeFavModal() {
+  const modal = $('fav-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function confirmSaveFavorite() {
+  const modal = $('fav-modal');
+  const name = $('fav-name')?.value.trim();
+  const category = $('fav-category')?.value;
+  const tabType = modal?.dataset.tabType;
+
+  if (!name) {
+    toast('Digite um nome para o favorito', false);
+    return;
+  }
+
+  let data = {};
+
+  if (tabType === 'international') {
+    data = {
+      country: AC,
+      price: parseFloat($('intl_price')?.value || 0),
+      currency: $('intl_currency')?.value || 'EUR',
+      origin: $('intl_origin')?.value || 'uk',
+      route: parseInt($('intl_route')?.value || 0, 10)
+    };
+  } else if (tabType === 'brazil') {
+    data = {
+      exchangeRate: parseFloat($('br_exchangeRate')?.value || 6),
+      icmsRate: parseFloat($('br_icmsRate')?.value || 18),
+      marginPercent: parseFloat($('br_marginPercent')?.value || 20)
+    };
+  }
+
+  saveAsFavorite(category, name, data);
+}
+
 // === PDF ===
 async function exportPDF(id,title){
   const el=$(id);if(!el)return;
@@ -1246,11 +1474,15 @@ function init(){
 
   // Buscar taxas de câmbio (assíncrono, não bloqueia)
   fetchExchangeRates().catch(err => console.error('Erro ao buscar câmbio:', err));
+
+  // Carregar favoritos nos dropdowns
+  updateFavoriteDropdowns();
 }
 
 return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
   updateTierPreview,onOriginChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,forceUpdateRates,
-  loadHistory,deleteHistoryItem,clearHistory,exportHistoryCSV,buildHistoryUI,loadHistoryItem};
+  loadHistory,deleteHistoryItem,clearHistory,exportHistoryCSV,buildHistoryUI,loadHistoryItem,
+  loadFavorites,deleteFavorite,applyFavorite,updateFavoriteDropdowns,showFavoriteSaveModal,closeFavModal,confirmSaveFavorite};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
