@@ -7,6 +7,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <script>
 tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif'],display:['Sora','sans-serif'],mono:['Space Mono','monospace']},colors:{gv:{bg:'#060a12',card:'#0c1220',soft:'#111a2e',accent:'#00ff88',accentDim:'#00cc6e',blue:'#5eb5ff',purple:'#a78bfa',border:'rgba(255,255,255,0.06)'}}}}}
@@ -406,6 +407,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
           Resultado
         </h3>
         <div class="flex gap-2">
+          <button onclick="GV.showAnalytics('international')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-blue-400/30 hover:text-blue-400 transition">📊 Análise</button>
           <button onclick="GV.copyIntl()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📋 Copiar</button>
           <button onclick="GV.exportPDF('intl_grid','Internacional')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📄 PDF</button>
         </div>
@@ -480,6 +482,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
         Resultado Detalhado
       </h3>
       <div class="flex gap-2">
+        <button onclick="GV.showAnalytics('brazil')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-blue-400/30 hover:text-blue-400 transition">📊 Análise</button>
         <button onclick="GV.copyBrazil()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📋 Copiar</button>
         <button onclick="GV.exportPDF('br_resultGrid','Brasil')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📄 PDF</button>
       </div>
@@ -677,6 +680,65 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       <button onclick="GV.confirmSaveFavorite()" class="btn-main px-6 py-2 flex-1 rounded-2xl text-sm font-bold uppercase tracking-wider">Salvar</button>
       <button onclick="GV.closeFavModal()" class="small-btn px-6 py-2 rounded-2xl border border-white/8 text-gray-400 text-sm">Cancelar</button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL: ANALYTICS DASHBOARD -->
+<div id="analytics-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+  <div class="glass rounded-3xl p-6 sm:p-8 max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-900/40 to-purple-900/30 flex items-center justify-center text-2xl">
+          📊
+        </div>
+        <div>
+          <h3 class="text-2xl font-display font-bold text-gray-100">Dashboard de Análise</h3>
+          <p class="text-xs text-gray-500">Visualização detalhada da distribuição de custos</p>
+        </div>
+      </div>
+      <button onclick="GV.closeAnalytics()" class="text-gray-400 hover:text-gray-200 text-2xl transition">×</button>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div class="sec">
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Total Final</div>
+        <div id="metric-total" class="text-xl font-bold text-[#00ff88]">€0</div>
+      </div>
+      <div class="sec">
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Margem GV</div>
+        <div id="metric-margin" class="text-xl font-bold text-[#5eb5ff]">€0</div>
+      </div>
+      <div class="sec">
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Transporte</div>
+        <div id="metric-transport" class="text-xl font-bold text-amber-400">€0</div>
+      </div>
+      <div class="sec">
+        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Tributos (IVA)</div>
+        <div id="metric-tax" class="text-xl font-bold text-purple-400">€0</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+      <div class="sec">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Distribuição de Custos</h4>
+        <canvas id="chart-pie" width="400" height="400"></canvas>
+      </div>
+      <div class="sec">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Composição Detalhada</h4>
+        <canvas id="chart-bar" width="400" height="400"></canvas>
+      </div>
+    </div>
+
+    <!-- Detailed Table -->
+    <div class="sec">
+      <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Detalhamento Completo</h4>
+      <div id="analytics-table" class="overflow-x-auto">
+        <!-- Table will be generated dynamically -->
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -929,6 +991,19 @@ function calcInternational(){
 
   // Salvar no histórico
   saveToHistory('international', {country: AC, price: ip, currency: cur, origin: ok, route: ri, tier: tid}, {subtotal: sub, iva, total: tot});
+
+  // Capturar dados para analytics
+  lastCalculationData = {
+    type: 'international',
+    priceEur: pe,
+    maritime: sea,
+    land: land + crane,
+    profit: PROF,
+    commission: COM,
+    subtotal: sub,
+    iva,
+    total: tot
+  };
 }
 
 // === CALC BRAZIL ===
@@ -957,6 +1032,20 @@ function calcBrazil(){
 
   // Salvar no histórico
   saveToHistory('brazil', {fobUsd: fU, freightUsd: frU, insuranceUsd: iU, exchangeRate: ex}, {subtotal: custoT, iva: 0, total: pFinal});
+
+  // Capturar dados para analytics
+  lastCalculationData = {
+    type: 'brazil',
+    price: fB,
+    maritime: frB,
+    land: it,
+    profit: lucro,
+    commission: 0,
+    priceEur: fB, // Using BRL as base for Brazil
+    iva: tTrib, // In Brazil context, showing total taxes as "iva"
+    subtotal: custoT,
+    total: pFinal
+  };
 }
 
 // === BUILD BRAZIL FIELDS ===
@@ -1776,6 +1865,263 @@ function exportComparisonPDF() {
   exportPDF('comp_table', 'Comparacao_Rotas');
 }
 
+// === DASHBOARD DE ANÁLISE ===
+let lastCalculationData = null;
+let chartInstances = { pie: null, bar: null };
+
+function showAnalytics(type) {
+  if (!lastCalculationData || lastCalculationData.type !== type) {
+    toast('Execute um cálculo primeiro', false);
+    return;
+  }
+
+  const modal = $('analytics-modal');
+  if (!modal) return;
+
+  modal.classList.remove('hidden');
+  buildAnalyticsDashboard(lastCalculationData);
+}
+
+function closeAnalytics() {
+  const modal = $('analytics-modal');
+  if (modal) modal.classList.add('hidden');
+
+  // Destroy chart instances to prevent memory leaks
+  if (chartInstances.pie) {
+    chartInstances.pie.destroy();
+    chartInstances.pie = null;
+  }
+  if (chartInstances.bar) {
+    chartInstances.bar.destroy();
+    chartInstances.bar = null;
+  }
+}
+
+function buildAnalyticsDashboard(data) {
+  // Update key metrics
+  $('metric-total').textContent = fc(data.total, '€');
+  $('metric-margin').textContent = fc(data.profit + data.commission, '€');
+  $('metric-transport').textContent = fc(data.maritime + data.land, '€');
+  $('metric-tax').textContent = fc(data.iva, '€');
+
+  // Build charts
+  createCostPieChart(data);
+  createCostBarChart(data);
+
+  // Build detailed table
+  buildAnalyticsTable(data);
+}
+
+function createCostPieChart(data) {
+  const canvas = $('chart-pie');
+  if (!canvas) return;
+
+  // Destroy existing chart
+  if (chartInstances.pie) {
+    chartInstances.pie.destroy();
+  }
+
+  const ctx = canvas.getContext('2d');
+
+  const chartData = {
+    labels: ['Produto', 'Transporte Marítimo', 'Transporte Terrestre', 'Lucro GV', 'Comissão', 'IVA 23%'],
+    datasets: [{
+      data: [
+        data.priceEur || data.price,
+        data.maritime,
+        data.land,
+        data.profit,
+        data.commission,
+        data.iva
+      ],
+      backgroundColor: [
+        'rgba(29, 184, 84, 0.8)',   // Verde GV
+        'rgba(94, 181, 255, 0.8)',  // Azul
+        'rgba(251, 191, 36, 0.8)',  // Amarelo
+        'rgba(167, 139, 250, 0.8)', // Roxo
+        'rgba(248, 113, 113, 0.8)', // Vermelho
+        'rgba(156, 163, 175, 0.8)'  // Cinza
+      ],
+      borderColor: 'rgba(255, 255, 255, 0.1)',
+      borderWidth: 2
+    }]
+  };
+
+  chartInstances.pie = new Chart(ctx, {
+    type: 'pie',
+    data: chartData,
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: 'rgba(229, 231, 235, 0.9)',
+            font: { size: 11 },
+            padding: 12
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(12, 18, 32, 0.95)',
+          titleColor: 'rgba(229, 231, 235, 1)',
+          bodyColor: 'rgba(229, 231, 235, 0.9)',
+          borderColor: 'rgba(29, 184, 84, 0.3)',
+          borderWidth: 1,
+          padding: 12,
+          callbacks: {
+            label: function(context) {
+              const value = context.parsed;
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const percentage = ((value / total) * 100).toFixed(1);
+              return `${context.label}: ${fc(value, '€')} (${percentage}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function createCostBarChart(data) {
+  const canvas = $('chart-bar');
+  if (!canvas) return;
+
+  // Destroy existing chart
+  if (chartInstances.bar) {
+    chartInstances.bar.destroy();
+  }
+
+  const ctx = canvas.getContext('2d');
+
+  const chartData = {
+    labels: ['Produto', 'Marítimo', 'Terrestre', 'Lucro', 'Comissão', 'IVA'],
+    datasets: [{
+      label: 'Valor (€)',
+      data: [
+        data.priceEur || data.price,
+        data.maritime,
+        data.land,
+        data.profit,
+        data.commission,
+        data.iva
+      ],
+      backgroundColor: [
+        'rgba(29, 184, 84, 0.8)',
+        'rgba(94, 181, 255, 0.8)',
+        'rgba(251, 191, 36, 0.8)',
+        'rgba(167, 139, 250, 0.8)',
+        'rgba(248, 113, 113, 0.8)',
+        'rgba(156, 163, 175, 0.8)'
+      ],
+      borderColor: 'rgba(255, 255, 255, 0.1)',
+      borderWidth: 2
+    }]
+  };
+
+  chartInstances.bar = new Chart(ctx, {
+    type: 'bar',
+    data: chartData,
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(12, 18, 32, 0.95)',
+          titleColor: 'rgba(229, 231, 235, 1)',
+          bodyColor: 'rgba(229, 231, 235, 0.9)',
+          borderColor: 'rgba(29, 184, 84, 0.3)',
+          borderWidth: 1,
+          padding: 12,
+          callbacks: {
+            label: function(context) {
+              return `Valor: ${fc(context.parsed.y, '€')}`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: 'rgba(156, 163, 175, 0.8)',
+            font: { size: 10 },
+            callback: function(value) {
+              return fc(value, '€', 'pt-PT', 0);
+            }
+          },
+          grid: {
+            color: 'rgba(255, 255, 255, 0.05)',
+            drawBorder: false
+          }
+        },
+        x: {
+          ticks: {
+            color: 'rgba(156, 163, 175, 0.8)',
+            font: { size: 10 }
+          },
+          grid: {
+            display: false
+          }
+        }
+      }
+    }
+  });
+}
+
+function buildAnalyticsTable(data) {
+  const tableDiv = $('analytics-table');
+  if (!tableDiv) return;
+
+  const subtotal = data.subtotal || (data.priceEur + data.maritime + data.land + data.profit + data.commission);
+  const total = data.total;
+
+  const components = [
+    { name: 'Produto Base', value: data.priceEur || data.price, color: 'text-[#1db854]' },
+    { name: 'Transporte Marítimo', value: data.maritime, color: 'text-[#5eb5ff]' },
+    { name: 'Transporte Terrestre', value: data.land, color: 'text-amber-400' },
+    { name: 'Lucro Green Village', value: data.profit, color: 'text-purple-400' },
+    { name: 'Comissão Vendedor', value: data.commission, color: 'text-red-400' },
+    { name: 'IVA 23%', value: data.iva, color: 'text-gray-400' }
+  ];
+
+  const tableHTML = `
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-white/5">
+          <th class="text-left py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider text-xs">Componente</th>
+          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider text-xs">Valor</th>
+          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider text-xs">% Total</th>
+          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider text-xs">% Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${components.map((comp, idx) => {
+          const pctTotal = ((comp.value / total) * 100).toFixed(1);
+          const pctSubtotal = idx < 5 ? ((comp.value / subtotal) * 100).toFixed(1) : '-';
+          return `
+            <tr class="border-b border-white/5 hover:bg-white/[.02]">
+              <td class="py-3 px-3 font-medium ${comp.color}">${comp.name}</td>
+              <td class="text-right py-3 px-3 text-gray-300">${fc(comp.value, '€')}</td>
+              <td class="text-right py-3 px-3 text-gray-400">${pctTotal}%</td>
+              <td class="text-right py-3 px-3 text-gray-400">${pctSubtotal}${pctSubtotal !== '-' ? '%' : ''}</td>
+            </tr>
+          `;
+        }).join('')}
+        <tr class="border-t-2 border-white/10 font-bold">
+          <td class="py-3 px-3 text-[#00ff88]">TOTAL FINAL</td>
+          <td class="text-right py-3 px-3 text-[#00ff88]">${fc(total, '€')}</td>
+          <td class="text-right py-3 px-3 text-gray-400">100%</td>
+          <td class="text-right py-3 px-3 text-gray-400">-</td>
+        </tr>
+      </tbody>
+    </table>
+  `;
+
+  tableDiv.innerHTML = tableHTML;
+}
+
 // === PDF ===
 async function exportPDF(id,title){
   const el=$(id);if(!el)return;
@@ -1808,7 +2154,8 @@ return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
   updateTierPreview,onOriginChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,forceUpdateRates,
   loadHistory,deleteHistoryItem,clearHistory,exportHistoryCSV,buildHistoryUI,loadHistoryItem,
   loadFavorites,deleteFavorite,applyFavorite,updateFavoriteDropdowns,showFavoriteSaveModal,closeFavModal,confirmSaveFavorite,
-  compUpdateOrigins,compUpdateRoutes,addRouteToComparison,removeRouteFromComparison,clearComparison,exportComparisonPDF};
+  compUpdateOrigins,compUpdateRoutes,addRouteToComparison,removeRouteFromComparison,clearComparison,exportComparisonPDF,
+  showAnalytics,closeAnalytics};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
