@@ -408,6 +408,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
         </h3>
         <div class="flex gap-2">
           <button onclick="GV.showAnalytics('international')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-blue-400/30 hover:text-blue-400 transition">📊 Análise</button>
+          <button onclick="GV.generateShareableURL()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-green-400/30 hover:text-green-400 transition">🔗 Compartilhar</button>
           <button onclick="GV.copyIntl()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📋 Copiar</button>
           <button onclick="GV.exportPDF('intl_grid','Internacional')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📄 PDF</button>
         </div>
@@ -553,6 +554,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       </h3>
       <div class="flex gap-2">
         <button onclick="GV.showAnalytics('brazil')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-blue-400/30 hover:text-blue-400 transition">📊 Análise</button>
+        <button onclick="GV.generateShareableURL()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-green-400/30 hover:text-green-400 transition">🔗 Compartilhar</button>
         <button onclick="GV.copyBrazil()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📋 Copiar</button>
         <button onclick="GV.exportPDF('br_resultGrid','Brasil')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📄 PDF</button>
       </div>
@@ -809,6 +811,69 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- MODAL: COMPARTILHAR VIA URL -->
+<div id="share-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+  <div class="glass rounded-3xl p-6 sm:p-8 max-w-lg w-full mx-4">
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-900/40 to-green-900/30 flex items-center justify-center text-2xl">
+          🔗
+        </div>
+        <div>
+          <h3 class="text-xl font-display font-bold text-gray-100">Compartilhar Cálculo</h3>
+          <p class="text-xs text-gray-500">Link único com todos os dados</p>
+        </div>
+      </div>
+      <button onclick="GV.closeShareModal()" class="text-gray-400 hover:text-gray-200 text-2xl transition">×</button>
+    </div>
+
+    <!-- URL Display -->
+    <div class="mb-5">
+      <label class="lbls mb-2">Link de Compartilhamento</label>
+      <div class="flex gap-2">
+        <input type="text" id="share-url-input" readonly
+          class="ci flex-1 bg-gv-bg/80 text-gray-300 text-xs font-mono cursor-text select-all"
+          value=""/>
+        <button onclick="GV.copyShareLink()" class="px-4 py-2 rounded-xl border border-white/8 text-gray-400 text-sm hover:border-gv-accent/30 hover:text-gv-accent transition">
+          📋 Copiar
+        </button>
+      </div>
+    </div>
+
+    <!-- Share Options -->
+    <div class="sec mb-5">
+      <h4 class="lbls mb-3 text-gray-400">Compartilhar via</h4>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="GV.shareViaEmail()" class="px-4 py-3 rounded-xl border border-white/5 bg-gv-bg/60 text-gray-300 text-sm hover:bg-white/5 transition flex items-center gap-2">
+          <span>📧</span> Email
+        </button>
+        <button onclick="GV.shareViaWhatsApp()" class="px-4 py-3 rounded-xl border border-white/5 bg-gv-bg/60 text-gray-300 text-sm hover:bg-white/5 transition flex items-center gap-2">
+          <span>💬</span> WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <div class="text-center text-xs text-gray-600">
+      <p>O link contém todos os dados do cálculo codificados.</p>
+      <p>Qualquer pessoa com o link poderá visualizar o cálculo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER: CÁLCULO COMPARTILHADO -->
+<div id="shared-banner" class="hidden max-w-[1440px] mx-auto px-4 sm:px-6 mb-4">
+  <div class="p-4 rounded-2xl border border-blue-500/30 bg-gradient-to-r from-blue-900/20 to-transparent">
+    <div class="flex items-center gap-3">
+      <span class="text-2xl">🔗</span>
+      <div class="flex-1">
+        <div class="font-semibold text-blue-300 text-sm">Visualizando Cálculo Compartilhado</div>
+        <div class="text-xs text-gray-500">Este cálculo foi compartilhado via link</div>
+      </div>
+      <button onclick="GV.closeSharedBanner()" class="text-gray-500 hover:text-gray-300 transition">×</button>
+    </div>
   </div>
 </div>
 
@@ -2347,6 +2412,170 @@ function applyMarginChanges() {
   updateMarginSimulation();
 }
 
+// === COMPARTILHAR VIA URL ===
+function generateShareableURL() {
+  if (!lastCalculationData) {
+    toast('Execute um cálculo primeiro', false);
+    return;
+  }
+
+  try {
+    // Build payload with calculation data
+    const payload = {
+      v: 1, // schema version
+      type: lastCalculationData.type,
+      timestamp: Date.now(),
+      data: lastCalculationData
+    };
+
+    // If international, add input details
+    if (lastCalculationData.type === 'international') {
+      const country = AC;
+      const price = parseFloat($('intl_price')?.value || 0);
+      const currency = $('intl_currency')?.value || 'EUR';
+      const origin = $('intl_origin')?.value || 'uk';
+      const route = parseInt($('intl_route')?.value || 0, 10);
+
+      payload.inputs = { country, price, currency, origin, route };
+    }
+
+    // Encode to Base64
+    const jsonStr = JSON.stringify(payload);
+    const base64 = btoa(unescape(encodeURIComponent(jsonStr)));
+
+    // Generate URL
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?calc=${base64}`;
+
+    // Show modal with URL
+    showShareModal(shareUrl);
+
+    console.log('[Share] URL generated:', shareUrl.length, 'chars');
+  } catch (error) {
+    console.error('[Share] Erro ao gerar URL:', error);
+    toast('Erro ao gerar link de compartilhamento', false);
+  }
+}
+
+function showShareModal(url) {
+  const modal = $('share-modal');
+  const input = $('share-url-input');
+
+  if (!modal || !input) return;
+
+  input.value = url;
+  modal.classList.remove('hidden');
+}
+
+function closeShareModal() {
+  const modal = $('share-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function copyShareLink() {
+  const input = $('share-url-input');
+  if (!input) return;
+
+  input.select();
+  input.setSelectionRange(0, 99999); // For mobile
+
+  try {
+    navigator.clipboard.writeText(input.value).then(() => {
+      toast('✓ Link copiado!', true);
+    }).catch(() => {
+      // Fallback
+      document.execCommand('copy');
+      toast('✓ Link copiado!', true);
+    });
+  } catch (error) {
+    toast('Erro ao copiar link', false);
+  }
+}
+
+function shareViaEmail() {
+  const url = $('share-url-input')?.value;
+  if (!url) return;
+
+  const subject = encodeURIComponent('Green Village - Cálculo de Importação');
+  const body = encodeURIComponent(`Confira este cálculo de importação:\n\n${url}\n\nGerado via Green Village Calculator`);
+
+  window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+}
+
+function shareViaWhatsApp() {
+  const url = $('share-url-input')?.value;
+  if (!url) return;
+
+  const text = encodeURIComponent(`*Green Village - Cálculo de Importação*\n\n${url}\n\nGerado via Green Village Calculator`);
+
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function loadFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const calcParam = urlParams.get('calc');
+
+  if (!calcParam) return;
+
+  try {
+    // Decode from Base64
+    const jsonStr = decodeURIComponent(escape(atob(calcParam)));
+    const payload = JSON.parse(jsonStr);
+
+    console.log('[Share] Loading shared calculation:', payload);
+
+    // Show banner
+    const banner = $('shared-banner');
+    if (banner) banner.classList.remove('hidden');
+
+    // Load calculation based on type
+    if (payload.type === 'international' && payload.inputs) {
+      const { country, price, currency, origin, route } = payload.inputs;
+
+      // Switch to international tab
+      switchTab('international');
+
+      // Wait for UI to load, then populate fields
+      setTimeout(() => {
+        selectCountry(country);
+
+        setTimeout(() => {
+          if ($('intl_price')) $('intl_price').value = price;
+          if ($('intl_currency')) $('intl_currency').value = currency;
+          if ($('intl_origin')) $('intl_origin').value = origin;
+
+          updateRoutes();
+
+          setTimeout(() => {
+            if ($('intl_route')) $('intl_route').value = route;
+            updateTierPreview();
+
+            // Auto-calculate
+            setTimeout(() => {
+              calcInternational();
+              toast('✓ Cálculo compartilhado carregado!', true);
+            }, 200);
+          }, 100);
+        }, 100);
+      }, 300);
+    }
+
+  } catch (error) {
+    console.error('[Share] Erro ao carregar URL:', error);
+    toast('Link de compartilhamento inválido', false);
+  }
+}
+
+function closeSharedBanner() {
+  const banner = $('shared-banner');
+  if (banner) banner.classList.add('hidden');
+
+  // Remove query parameter from URL
+  const url = new URL(window.location);
+  url.searchParams.delete('calc');
+  window.history.replaceState({}, '', url);
+}
+
 // === PDF ===
 async function exportPDF(id,title){
   const el=$(id);if(!el)return;
@@ -2373,6 +2602,9 @@ function init(){
 
   // Carregar favoritos nos dropdowns
   updateFavoriteDropdowns();
+
+  // Verificar se há cálculo compartilhado na URL
+  loadFromURL();
 }
 
 return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
@@ -2381,7 +2613,8 @@ return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
   loadFavorites,deleteFavorite,applyFavorite,updateFavoriteDropdowns,showFavoriteSaveModal,closeFavModal,confirmSaveFavorite,
   compUpdateOrigins,compUpdateRoutes,addRouteToComparison,removeRouteFromComparison,clearComparison,exportComparisonPDF,
   showAnalytics,closeAnalytics,
-  toggleMarginSimulator,updateMarginSimulation,resetMarginSimulation,applyMarginChanges};
+  toggleMarginSimulator,updateMarginSimulation,resetMarginSimulation,applyMarginChanges,
+  generateShareableURL,copyShareLink,shareViaEmail,shareViaWhatsApp,closeShareModal,closeSharedBanner};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
