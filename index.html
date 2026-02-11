@@ -512,7 +512,24 @@ const oLabels={uk:"🇬🇧 Inglaterra",netherlands:"🇳🇱 Holanda",france:"�
 const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"]);
 
 function rates(){
-  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, gbp=g('gbp')||.84, brl=g('brl')||6.5, cny=g('cny')||8, usd=g('usd')||1.1, pln=g('pln')||4.5;
+  // Tentar ler do cache primeiro (taxas mais precisas)
+  const cache = JSON.parse(localStorage.getItem('gv_exchange_cache') || '{}');
+  if (cache.rates && cache.timestamp) {
+    const rates = cache.rates;
+    // Retornar taxas invertidas (base EUR)
+    return {
+      EUR: 1,
+      GBP: rates.GBP > 0 ? 1 / rates.GBP : 1.19,
+      BRL: rates.BRL > 0 ? 1 / rates.BRL : 0.154,
+      CNY: rates.CNY > 0 ? 1 / rates.CNY : 0.125,
+      USD: rates.USD > 0 ? 1 / rates.USD : 0.909,
+      PLN: rates.PLN > 0 ? 1 / rates.PLN : 0.222
+    };
+  }
+
+  // Fallback: ler dos inputs de configuração
+  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;};
+  const gbp=g('gbp')||.88, brl=g('brl')||6.83, cny=g('cny')||8.40, usd=g('usd')||1.16, pln=g('pln')||4.73;
   return{EUR:1,GBP:gbp>0?1/gbp:1.19,BRL:brl>0?1/brl:0.154,CNY:cny>0?1/cny:0.125,USD:usd>0?1/usd:0.909,PLN:pln>0?1/pln:0.222};
 }
 function localRates(){
@@ -766,7 +783,16 @@ function buildCfgSections(){
   const tierCard=(color,title,span,fields)=>`<div class="rounded-2xl border border-white/[.05] bg-gradient-to-br from-gv-soft/50 to-gv-bg/80 p-5"><h4 class="text-sm font-display font-semibold text-${color} mb-3">${title} <span class="text-gray-600 font-light text-xs">${span}</span></h4><div class="grid grid-cols-2 gap-3">${fields}</div></div>`;
 
   $('cfg_sections').innerHTML=
-    sec('[#00ff88]','Taxas de Câmbio (Offline +5% Margem)',`<span class="text-gray-600 text-xs font-light ml-1">(1 EUR =)</span>`)+
+    sec('[#00ff88]','Taxas de Câmbio',`<span class="text-gray-600 text-xs font-light ml-1">(Atualização automática via API)</span>`)+
+    `<div class="flex items-center gap-3 mb-4 p-4 rounded-2xl border border-[#00ff88]/10 bg-[#00ff88]/5">
+      <div class="flex-1">
+        <div class="text-sm font-medium text-gray-300 mb-1">Atualização Automática de Câmbio</div>
+        <div class="text-xs text-gray-500">As taxas são atualizadas automaticamente via API a cada 6 horas. Cache atual fica salvo localmente.</div>
+      </div>
+      <button onclick="GV.forceUpdateRates()" class="small-btn px-4 py-2 rounded-xl border border-white/8 text-gray-300 hover:border-[#00ff88]/30 hover:text-[#00ff88] transition whitespace-nowrap">
+        🔄 Atualizar Agora
+      </button>
+    </div>` +
     `<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">${
       inp('cfg_gbp','GBP (£)','0.88','1€ = £X')+inp('cfg_brl','BRL (R$)','6.83')+inp('cfg_cny','CNY (¥)','8.40')+
       inp('cfg_usd','USD ($)','1.16')+inp('cfg_pln','PLN (zł)','4.73')+inp('cfg_usdbrl','USD/BRL','6.30','Para a aba Brasil')
@@ -902,10 +928,104 @@ function copyBrazil(){
   navigator.clipboard.writeText(t).then(()=>toast('Copiado!'));
 }
 
-// === CÂMBIO OFFLINE ===
-// Câmbio agora é 100% offline com valores hardcoded
-// com margem de segurança de 5% aplicada aos valores máximos históricos
-// API removida por problemas de estabilidade
+// === CÂMBIO (API COM FALLBACK OFFLINE) ===
+async function fetchExchangeRates() {
+  try {
+    // Verificar cache (válido por 6 horas)
+    const cache = JSON.parse(localStorage.getItem('gv_exchange_cache') || '{}');
+    const now = Date.now();
+    const SIX_HOURS = 6 * 60 * 60 * 1000;
+
+    if (cache.timestamp && (now - cache.timestamp) < SIX_HOURS) {
+      console.log('[Exchange] Usando cache válido');
+      updateRateStatus('✓ Câmbio: Atualizado', true, new Date(cache.timestamp));
+      return cache.rates;
+    }
+
+    // Buscar taxas via API (ExchangeRate-API - gratuita 1500 req/mês)
+    console.log('[Exchange] Buscando taxas via API...');
+    const response = await fetch('https://open.er-api.com/v6/latest/EUR', {timeout: 5000});
+
+    if (!response.ok) throw new Error('API error: ' + response.status);
+
+    const data = await response.json();
+
+    if (data.result === 'success') {
+      const rates = {
+        EUR: 1,
+        GBP: data.rates.GBP,
+        BRL: data.rates.BRL,
+        CNY: data.rates.CNY,
+        USD: data.rates.USD,
+        PLN: data.rates.PLN
+      };
+
+      // Salvar no cache
+      localStorage.setItem('gv_exchange_cache', JSON.stringify({
+        timestamp: now,
+        rates: rates,
+        lastUpdate: new Date().toISOString()
+      }));
+
+      // Atualizar inputs de configuração
+      $('cfg_gbp')  && ($('cfg_gbp').value = rates.GBP.toFixed(4));
+      $('cfg_brl') && ($('cfg_brl').value = rates.BRL.toFixed(2));
+      $('cfg_cny') && ($('cfg_cny').value = rates.CNY.toFixed(2));
+      $('cfg_usd') && ($('cfg_usd').value = rates.USD.toFixed(4));
+      $('cfg_pln') && ($('cfg_pln').value = rates.PLN.toFixed(2));
+      $('cfg_usdbrl') && ($('cfg_usdbrl').value = (rates.BRL / rates.USD).toFixed(2));
+
+      updateRateStatus('✓ Câmbio: Online', true, new Date());
+      console.log('[Exchange] Taxas atualizadas via API');
+      return rates;
+    }
+
+    throw new Error('API returned error');
+
+  } catch (error) {
+    console.warn('[Exchange] Falha na API, usando valores offline:', error);
+    // Fallback: valores hardcoded com margem de segurança
+    updateRateStatus('⚠️ Câmbio: Offline (+5% margem)', false);
+    return {
+      EUR: 1,
+      GBP: 0.88,
+      BRL: 6.83,
+      CNY: 8.40,
+      USD: 1.16,
+      PLN: 4.73
+    };
+  }
+}
+
+function updateRateStatus(message, isOnline, lastUpdate = null) {
+  const badge = $('rateStatus');
+  if (!badge) return;
+
+  badge.textContent = message;
+  badge.className = `px-3 py-1.5 rounded-full text-[10px] uppercase tracking-[.15em] font-medium ${
+    isOnline
+      ? 'border border-[#00ff88]/30 text-[#00ff88] bg-[#00ff88]/10'
+      : 'border border-amber-400/30 text-amber-400 bg-amber-400/10'
+  }`;
+
+  if (lastUpdate) {
+    const timeStr = lastUpdate.toLocaleString('pt-PT', {
+      day: '2-digit',
+      month: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    badge.title = `Última atualização: ${timeStr}`;
+  }
+}
+
+async function forceUpdateRates() {
+  // Limpar cache para forçar atualização
+  localStorage.removeItem('gv_exchange_cache');
+  toast('Atualizando taxas de câmbio...', true);
+  await fetchExchangeRates();
+  toast('Taxas atualizadas!', true);
+}
 
 // === PDF ===
 async function exportPDF(id,title){
@@ -927,10 +1047,13 @@ function init(){
   $('intl_price').addEventListener('input',updateTierPreview);
   $('intl_currency').addEventListener('change',updateTierPreview);
   $('intl_origin').addEventListener('change',()=>{updateRoutes();autoSelectCurrency();updateTierPreview();});
+
+  // Buscar taxas de câmbio (assíncrono, não bloqueia)
+  fetchExchangeRates().catch(err => console.error('Erro ao buscar câmbio:', err));
 }
 
 return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
-  updateTierPreview,onOriginChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry};
+  updateTierPreview,onOriginChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,forceUpdateRates};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
