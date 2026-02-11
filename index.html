@@ -1235,10 +1235,13 @@ function updateRefTable(){
 
   const rt=rates();
   const tr=tiers();
-  const sea=c.routes[ok][ri].maritime||0;
-  const land=c.routes[ok][ri].land||0;
+  const route=c.routes[ok][ri];
+  const seaCostBase=route.cost||0; // Custo marítimo BASE da rota
+  const landCostBase=LAND(); // Custo terrestre BASE (2000 padrão)
   const csym={EUR:'€',GBP:'£',CNY:'¥',USD:'$',BRL:'R$',PLN:'zł'};
   const symbol=csym[cur]||cur;
+  const isEU=EU.has(AC);
+  const isBR=AC==="brazil";
 
   // Valores de referência (ajustados para cada moeda)
   const baseValues = cur==='GBP'?[1000,2000,5000,10000,20000,50000,100000]
@@ -1249,13 +1252,55 @@ function updateRefTable(){
                     :[1000,2500,5000,10000,25000,50000,100000];
 
   const rows=baseValues.map(price=>{
+    // CONVERSÃO PARA EUR (igual ao cálculo principal)
     const pe=price*(rt[cur]||1);
+
+    // TIER baseado no preço EUR
     const tid=tierOf(pe);
     const t=tr[tid];
-    const crane=tid==='luxury'?2000:0;
-    const sub=pe+sea+(land*t.landMultiplier)+(sea*t.seaMultiplier)+crane+t.companyProfit+t.commission;
-    const iva=sub*c.vatRate;
+
+    // CUSTOS MULTIPLICADOS (igual ao cálculo principal)
+    let sea=seaCostBase*t.seaMultiplier;
+    let land=landCostBase*t.landMultiplier;
+    let crane=t.craneCost||0;
+
+    // EXCEÇÃO: França → Portugal usa camião (sem terrestre, com grua extra)
+    if(AC==="portugal"&&ok==="france"){
+      land=0;
+      crane=crane+CRANE();
+    }
+
+    // CÁLCULO ESPECÍFICO POR PAÍS (igual ao cálculo principal)
+    let sub=0;
+    if(isBR){
+      // Brasil: cálculo com tributos
+      const fob=pe*(c.fobRate||0);
+      const cif=pe+fob+sea;
+      const vII=cif*(c.taxII||0);
+      const vIPI=(cif+vII)*(c.taxIPI||0);
+      const bPC=cif+vII+vIPI;
+      const vPIS=bPC*(c.taxPIS||0);
+      const vCOF=bPC*(c.taxCOFINS||0);
+      const icR=c.taxICMS||0;
+      const bICMS=(cif+vII+vIPI+vPIS+vCOF)/(1-icR);
+      const vICMS=bICMS*icR;
+      const tT=vII+vIPI+vPIS+vCOF+vICMS;
+      sub=cif+tT+land+crane+t.companyProfit+t.commission;
+    }else if(AC==="china"){
+      // China: taxa extra de IVA
+      const b=pe+sea;
+      const extraTax=b*(c.vatExtra||0);
+      sub=b+land+crane+t.companyProfit+t.commission+extraTax;
+    }else{
+      // Outros países: cálculo padrão
+      sub=pe+sea+land+crane+t.companyProfit+t.commission;
+    }
+
+    // IVA (apenas UE)
+    const ivaR=isEU?(c.vatRate||0.23):0;
+    const iva=sub*ivaR;
     const tot=sub+iva;
+
     return`<tr class="border-b border-white/5 hover:bg-white/[.02]">
       <td class="py-2 px-3 text-gray-300">${symbol}${fmt(price,'pt-PT',0)}</td>
       <td class="text-right py-2 px-3 font-mono font-semibold text-gv-accent">€${fmt(tot,'pt-PT',2)}</td>
