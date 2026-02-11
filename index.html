@@ -413,6 +413,76 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
         </div>
       </div>
       <div id="intl_grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 fade-in"></div>
+
+      <!-- Margin Simulator -->
+      <button onclick="GV.toggleMarginSimulator()" id="btn-toggle-margin" class="mt-6 w-full px-5 py-3 rounded-2xl border border-white/8 bg-gradient-to-r from-purple-900/20 to-transparent text-gray-300 text-sm font-semibold uppercase tracking-wider hover:border-purple-400/30 hover:text-purple-300 transition">
+        💰 Simular Margens Diferentes
+      </button>
+
+      <div id="margin-simulator" class="hidden mt-6 sec">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-purple-400 mb-4 flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>Simulador de Margens
+        </h4>
+
+        <!-- Lucro Slider -->
+        <div class="mb-5">
+          <div class="flex justify-between items-center mb-2">
+            <label class="lbls text-gray-300">Lucro Green Village</label>
+            <span id="margin-profit-value" class="font-mono text-sm text-purple-300">€0</span>
+          </div>
+          <input type="range" id="margin-profit-slider" min="0" max="20000" step="100" value="0"
+            class="w-full h-2 rounded-lg appearance-none cursor-pointer bg-gradient-to-r from-purple-900/30 to-purple-600/30"
+            oninput="GV.updateMarginSimulation()"
+            style="accent-color: #a78bfa">
+          <div class="flex justify-between text-[10px] text-gray-600 mt-1">
+            <span>€0</span>
+            <span>€20.000</span>
+          </div>
+        </div>
+
+        <!-- Comissão Slider -->
+        <div class="mb-5">
+          <div class="flex justify-between items-center mb-2">
+            <label class="lbls text-gray-300">Comissão Vendedor</label>
+            <span id="margin-commission-value" class="font-mono text-sm text-blue-300">€0</span>
+          </div>
+          <input type="range" id="margin-commission-slider" min="0" max="5000" step="50" value="0"
+            class="w-full h-2 rounded-lg appearance-none cursor-pointer bg-gradient-to-r from-blue-900/30 to-blue-600/30"
+            oninput="GV.updateMarginSimulation()"
+            style="accent-color: #5eb5ff">
+          <div class="flex justify-between text-[10px] text-gray-600 mt-1">
+            <span>€0</span>
+            <span>€5.000</span>
+          </div>
+        </div>
+
+        <!-- Comparison Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+          <div class="p-4 rounded-2xl border border-white/5 bg-gv-bg/60">
+            <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Total Original</div>
+            <div id="margin-original-total" class="text-2xl font-bold text-gray-400">€0</div>
+          </div>
+          <div class="p-4 rounded-2xl border border-white/5 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
+            <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Total Simulado</div>
+            <div id="margin-simulated-total" class="text-2xl font-bold text-[#00ff88]">€0</div>
+          </div>
+        </div>
+
+        <!-- Difference Indicator -->
+        <div id="margin-difference" class="p-3 rounded-xl bg-white/5 text-center mb-5">
+          <span class="text-sm text-gray-400">Diferença: <span id="margin-diff-value" class="font-bold text-gray-200">€0</span></span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3">
+          <button onclick="GV.applyMarginChanges()" class="flex-1 px-6 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider text-gv-bg btn-main">
+            ✓ Aplicar Mudanças
+          </button>
+          <button onclick="GV.resetMarginSimulation()" class="px-6 py-3 rounded-2xl border border-white/8 text-gray-400 text-sm font-semibold uppercase tracking-wider hover:border-red-400/30 hover:text-red-400 transition">
+            ↺ Resetar
+          </button>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -2122,6 +2192,161 @@ function buildAnalyticsTable(data) {
   tableDiv.innerHTML = tableHTML;
 }
 
+// === SIMULADOR DE MARGENS ===
+let marginSimulatorState = {
+  isOpen: false,
+  originalProfit: 0,
+  originalCommission: 0,
+  originalTotal: 0,
+  baseSubtotal: 0, // Subtotal without profit and commission
+  ivaRate: 0.23
+};
+
+function toggleMarginSimulator() {
+  const simulator = $('margin-simulator');
+  const button = $('btn-toggle-margin');
+
+  if (!simulator || !button) return;
+
+  marginSimulatorState.isOpen = !marginSimulatorState.isOpen;
+
+  if (marginSimulatorState.isOpen) {
+    simulator.classList.remove('hidden');
+    button.textContent = '▲ Ocultar Simulador de Margens';
+    initializeMarginSimulator();
+  } else {
+    simulator.classList.add('hidden');
+    button.textContent = '💰 Simular Margens Diferentes';
+  }
+}
+
+function initializeMarginSimulator() {
+  if (!lastCalculationData || lastCalculationData.type !== 'international') {
+    toast('Disponível apenas para cálculo internacional', false);
+    return;
+  }
+
+  const data = lastCalculationData;
+
+  // Store original values
+  marginSimulatorState.originalProfit = data.profit;
+  marginSimulatorState.originalCommission = data.commission;
+  marginSimulatorState.originalTotal = data.total;
+  marginSimulatorState.baseSubtotal = data.subtotal - data.profit - data.commission;
+  marginSimulatorState.ivaRate = data.iva / data.subtotal;
+
+  // Set slider values
+  const profitSlider = $('margin-profit-slider');
+  const commissionSlider = $('margin-commission-slider');
+
+  if (profitSlider) profitSlider.value = data.profit;
+  if (commissionSlider) commissionSlider.value = data.commission;
+
+  // Update displays
+  updateMarginSimulation();
+}
+
+function updateMarginSimulation() {
+  const profitSlider = $('margin-profit-slider');
+  const commissionSlider = $('margin-commission-slider');
+
+  if (!profitSlider || !commissionSlider) return;
+
+  const newProfit = parseFloat(profitSlider.value);
+  const newCommission = parseFloat(commissionSlider.value);
+
+  // Update value displays
+  $('margin-profit-value').textContent = fc(newProfit, '€');
+  $('margin-commission-value').textContent = fc(newCommission, '€');
+
+  // Calculate new total
+  const newSubtotal = marginSimulatorState.baseSubtotal + newProfit + newCommission;
+  const newIva = newSubtotal * marginSimulatorState.ivaRate;
+  const newTotal = newSubtotal + newIva;
+
+  // Update comparison cards
+  $('margin-original-total').textContent = fc(marginSimulatorState.originalTotal, '€');
+  $('margin-simulated-total').textContent = fc(newTotal, '€');
+
+  // Calculate and display difference
+  const diff = newTotal - marginSimulatorState.originalTotal;
+  const diffElem = $('margin-diff-value');
+
+  if (diffElem) {
+    const diffText = fc(Math.abs(diff), '€');
+    const sign = diff >= 0 ? '+' : '-';
+    diffElem.textContent = `${sign}${diffText}`;
+    diffElem.className = diff >= 0 ? 'font-bold text-[#00ff88]' : 'font-bold text-red-400';
+  }
+}
+
+function resetMarginSimulation() {
+  const profitSlider = $('margin-profit-slider');
+  const commissionSlider = $('margin-commission-slider');
+
+  if (profitSlider) profitSlider.value = marginSimulatorState.originalProfit;
+  if (commissionSlider) commissionSlider.value = marginSimulatorState.originalCommission;
+
+  updateMarginSimulation();
+  toast('Valores resetados', true);
+}
+
+function applyMarginChanges() {
+  const profitSlider = $('margin-profit-slider');
+  const commissionSlider = $('margin-commission-slider');
+
+  if (!profitSlider || !commissionSlider) return;
+
+  const newProfit = parseFloat(profitSlider.value);
+  const newCommission = parseFloat(commissionSlider.value);
+
+  // Update the tier configuration temporarily for this calculation
+  const data = lastCalculationData;
+  const newSubtotal = marginSimulatorState.baseSubtotal + newProfit + newCommission;
+  const newIva = newSubtotal * marginSimulatorState.ivaRate;
+  const newTotal = newSubtotal + newIva;
+
+  // Update lastCalculationData
+  lastCalculationData.profit = newProfit;
+  lastCalculationData.commission = newCommission;
+  lastCalculationData.subtotal = newSubtotal;
+  lastCalculationData.iva = newIva;
+  lastCalculationData.total = newTotal;
+
+  // Update original values in simulator state
+  marginSimulatorState.originalProfit = newProfit;
+  marginSimulatorState.originalCommission = newCommission;
+  marginSimulatorState.originalTotal = newTotal;
+
+  // Trigger recalculation (calling calcInternational with updated tier values would be complex)
+  // Instead, we'll manually update the result cards
+  const grid = $('intl_grid');
+  if (grid) {
+    // Find and update specific result cards
+    const cards = grid.querySelectorAll('.result-card');
+    cards.forEach(card => {
+      const label = card.querySelector('div:first-child')?.textContent.toLowerCase();
+
+      if (label?.includes('lucro green village')) {
+        card.querySelector('div:last-child').textContent = fc(newProfit, '€');
+      } else if (label?.includes('comissão')) {
+        card.querySelector('div:last-child').textContent = fc(newCommission, '€');
+      } else if (label?.includes('subtotal')) {
+        card.querySelector('div:last-child').textContent = fc(newSubtotal, '€');
+      } else if (label?.includes('iva')) {
+        card.querySelector('div:last-child').textContent = fc(newIva, '€');
+      } else if (label?.includes('total com iva')) {
+        card.querySelector('div:last-child').textContent = fc(newTotal, '€');
+      }
+    });
+  }
+
+  toast('✓ Margens aplicadas com sucesso!', true);
+
+  // Update simulator displays
+  updateMarginSimulation();
+}
+
 // === PDF ===
 async function exportPDF(id,title){
   const el=$(id);if(!el)return;
@@ -2155,7 +2380,8 @@ return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
   loadHistory,deleteHistoryItem,clearHistory,exportHistoryCSV,buildHistoryUI,loadHistoryItem,
   loadFavorites,deleteFavorite,applyFavorite,updateFavoriteDropdowns,showFavoriteSaveModal,closeFavModal,confirmSaveFavorite,
   compUpdateOrigins,compUpdateRoutes,addRouteToComparison,removeRouteFromComparison,clearComparison,exportComparisonPDF,
-  showAnalytics,closeAnalytics};
+  showAnalytics,closeAnalytics,
+  toggleMarginSimulator,updateMarginSimulation,resetMarginSimulation,applyMarginChanges};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
