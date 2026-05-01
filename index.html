@@ -759,11 +759,6 @@ function calcInternational(){
   const demDays=pn('cfg_demurrageDays')||0;
   const demRate=pn('cfg_demurrageRate')||65;
   const demurrage=demDays*demRate;
-  // Armazenamento (warehousing) — Across Leixões: €21/dia (fatura real FT 2026/226)
-  const stoDays=pn('cfg_storageDays');// default 21 in config, 0 = no storage
-  const stoRate=pn('cfg_storageRate')||70;// CLDN Leixões: €70/dia (FT 2026/339: €2,110/30d)
-  const storage=stoDays*stoRate;
-
   // Documentação: BL €50 + EUR.1/CMR €50 + certificados €30 = ~€130
   const docFee=needsCustoms?DOCFEE():0;
 
@@ -786,7 +781,7 @@ function calcInternational(){
   } else if(needsCustoms){
     // Non-EU → UE: custo total = preço + transporte + seguro + direitos + despacho + porto + demurrage + terrestre + grua
     // NOTA: IVA aduaneiro NÃO entra no custo (é dedutível — recuperado na declaração IVA)
-    const totalAcq=pe+sea+insuranceFee+customsDuty+antiDumping+despacho+docFee+portHandling+demurrage+storage+land+crane;
+    const totalAcq=pe+sea+insuranceFee+customsDuty+antiDumping+despacho+docFee+portHandling+demurrage+land+crane;
     sub=totalAcq+PROF+COM;
   } else {
     // UE → UE (intracomunitário) ou destinos sem IVA
@@ -886,7 +881,6 @@ function calcInternational(){
     if(portIncl)dtl+=`<div class="text-[9px] text-[#00ff88]/60 py-0.5">Porto incluído no frete (LINER IN/OUT)</div>`;
     else dr(`Porto (${portOrig}+${portDest})`,fc(portHandling));
     if(demurrage>0)dr(`Demurrage (${demDays}d × €${demRate})`,fc(demurrage));
-    if(storage>0)dr(`Armazenamento (${stoDays}d × €${stoRate})`,fc(storage));
     if(docFee>0)dr("Documentação (BL+EUR.1+cert.)",fc(docFee));
   } else if(isBR){
     ds("Tributos Brasil");
@@ -1017,9 +1011,7 @@ function buildCfgSections(){
     `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">${
       inp('cfg_portDest','Porto destino THC (€)','220','Unloading/handling porto de chegada')+
       inp('cfg_demurrageRate','Demurrage (€/dia)','65','Custo por dia extra no porto')+
-      inp('cfg_demurrageDays','Dias de demurrage','0','Dias extra no porto (0 = sem atraso)')+
-      inp('cfg_storageDays','Dias de armazenamento','21','CLDN Leixões: típico 21 dias — ajustar conforme caso')+
-      inp('cfg_storageRate','Armazenamento (€/dia)','70','CLDN Leixões: €70/dia (real FT 2026/339: €2,110/30d)')
+      inp('cfg_demurrageDays','Dias de demurrage','0','Dias extra no porto (0 = sem atraso)')
     }</div>`+
     sec('#fbbf24','Direitos Aduaneiros — HS 8716.10.98',`<span class="text-[10px] text-amber-400/60 ml-2">Reboques para habitação / Mobile homes >3.5t</span>`)+
     `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">${
@@ -1226,8 +1218,7 @@ function saveToLS(){
      'cfg_landBase','cfg_craneFrPt','cfg_truckingPerKm','cfg_customsFee','cfg_insurance',
      'cfg_insurancePct','cfg_portOrigin','cfg_portDest','cfg_demurrageRate','cfg_demurrageDays',
      'cfg_dutyUK','cfg_dutyChina','cfg_antiDumpChina',
-     'cfg_docFee','cfg_safetyMargin',
-     'cfg_storageDays','cfg_storageRate'].forEach(id=>{const e=$(id);if(e)cfg[id]=e.value;});
+     'cfg_docFee','cfg_safetyMargin'].forEach(id=>{const e=$(id);if(e)cfg[id]=e.value;});
     localStorage.setItem(LS_KEY,JSON.stringify({routes:R,cfg,ts:Date.now()}));
   }catch(e){console.warn('LS save failed',e);}
 }
