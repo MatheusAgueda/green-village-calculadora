@@ -4,22 +4,9 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Green Village • Dashboard de Importação</title>
-
-<!-- PWA Meta Tags -->
-<meta name="description" content="Calculadora profissional de importação de mobile homes para múltiplos países da União Europeia"/>
-<meta name="theme-color" content="#1db854"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="GV Calc"/>
-<link rel="manifest" href="manifest.json"/>
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png"/>
-<link rel="apple-touch-icon" href="icon-192x192.png"/>
-
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <script>
 tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif'],display:['Sora','sans-serif'],mono:['Space Mono','monospace']},colors:{gv:{bg:'#060a12',card:'#0c1220',soft:'#111a2e',accent:'#00ff88',accentDim:'#00cc6e',blue:'#5eb5ff',purple:'#a78bfa',border:'rgba(255,255,255,0.06)'}}}}}
@@ -253,115 +240,6 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   background-clip:text;
   letter-spacing:.08em;
 }
-
-/* === LIGHT MODE === */
-html.light-mode {
-  background: #f8f9fa !important;
-}
-
-html.light-mode body {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  color: #1f2937 !important;
-}
-
-html.light-mode .glass {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-html.light-mode .glow-card {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
-}
-
-html.light-mode .sec {
-  background: rgba(248, 249, 250, 0.8) !important;
-  border: 1px solid rgba(0, 0, 0, 0.06) !important;
-}
-
-html.light-mode .ci,
-html.light-mode .cis {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border: 1px solid rgba(0, 0, 0, 0.12) !important;
-  color: #1f2937 !important;
-}
-
-html.light-mode .lbl,
-html.light-mode .lbls {
-  color: #4b5563 !important;
-}
-
-html.light-mode .text-gray-200,
-html.light-mode .text-gray-300,
-html.light-mode .text-gray-400 {
-  color: #4b5563 !important;
-}
-
-html.light-mode .text-gray-500,
-html.light-mode .text-gray-600 {
-  color: #6b7280 !important;
-}
-
-html.light-mode .result-card {
-  background: rgba(255, 255, 255, 0.8) !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-}
-
-html.light-mode .result-card:hover {
-  background: rgba(248, 249, 250, 1) !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
-}
-
-html.light-mode .result-highlight {
-  background: rgba(29, 184, 84, 0.08) !important;
-  border-color: rgba(29, 184, 84, 0.3) !important;
-}
-
-html.light-mode .tab-btn {
-  background: rgba(255, 255, 255, 0.8) !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  color: #6b7280 !important;
-}
-
-html.light-mode .tab-active {
-  background: rgba(29, 184, 84, 0.1) !important;
-  border-color: rgba(29, 184, 84, 0.3) !important;
-  color: #059669 !important;
-}
-
-html.light-mode .country-btn {
-  background: rgba(255, 255, 255, 0.7) !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  color: #4b5563 !important;
-}
-
-html.light-mode .country-btn.selected {
-  background: rgba(29, 184, 84, 0.15) !important;
-  border-color: rgba(29, 184, 84, 0.4) !important;
-  color: #059669 !important;
-}
-
-html.light-mode .btn-main {
-  box-shadow: 0 4px 8px rgba(29, 184, 84, 0.3) !important;
-}
-
-html.light-mode .small-btn {
-  color: #6b7280 !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
-}
-
-html.light-mode .small-btn:hover {
-  color: #1f2937 !important;
-  border-color: rgba(0, 0, 0, 0.2) !important;
-}
-
-html.light-mode .header-orb {
-  opacity: 0.02 !important;
-}
-
-html.light-mode .divider-glow {
-  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent) !important;
-}
 </style>
 </head>
 <body class="min-h-screen text-gray-200 font-sans antialiased">
@@ -410,19 +288,11 @@ html.light-mode .divider-glow {
           <p class="text-[11px] font-light tracking-[.15em] gv-subtitle">MOBILE HOMES</p>
         </div>
       </div>
-      <p class="text-gray-400 text-sm font-light ml-[60px] -mt-2">Importação • Margens • Rotas</p>
-      <p class="text-gray-600 text-xs mt-2 ml-[60px] flex flex-wrap gap-x-3 gap-y-1">
-        <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-[#1db854]"></span>Cálculos automáticos</span>
-        <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-[#5eb5ff]"></span>Câmbio em tempo real</span>
-        <span class="flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-[#a78bfa]"></span>Gestão completa</span>
-      </p>
+      <p class="text-gray-400 text-sm font-light ml-[60px] -mt-2">Calculadora de Importação</p>
     </div>
     <div class="flex flex-wrap gap-2 items-center">
-      <span class="px-3 py-1.5 rounded-full border border-[#1db854]/20 text-[#22dd66] text-[10px] uppercase tracking-[.2em] bg-[#1db854]/5 font-medium">v5.0</span>
-      <button id="theme-toggle" onclick="GV.toggleTheme()" class="px-3 py-1.5 rounded-full border border-white/10 text-gray-400 text-[10px] uppercase tracking-[.2em] bg-gv-card/60 font-medium hover:border-white/20 hover:text-gray-300 transition flex items-center gap-1.5">
-        <span id="theme-icon">🌙</span>
-        <span id="theme-label">Escuro</span>
-      </button>
+      <span class="px-3 py-1.5 rounded-full border border-[#1db854]/20 text-[#22dd66] text-[10px] uppercase tracking-[.2em] bg-[#1db854]/5 font-medium">v8.4</span>
+      <span id="rateStatus" class="px-3 py-1.5 rounded-full border border-white/8 text-gray-500 text-[10px] uppercase tracking-[.15em] bg-black/30 font-medium">Câmbio: offline</span>
     </div>
   </div>
 </header>
@@ -470,13 +340,13 @@ html.light-mode .divider-glow {
       </div>
       <div>
         <h2 class="text-xl font-display font-bold tracking-tight" id="intl_countryLabel">Portugal</h2>
-        <p class="text-xs text-gray-500 font-light">Escolhe o país à esquerda para alterar o destino</p>
+        <p class="text-xs text-gray-500 font-light">Destino da entrega</p>
       </div>
     </div>
 
     <!-- Input grid -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-      <div class="col-span-2"><label class="lbl">Preço da casa</label><input type="text" id="intl_price" value="5000" placeholder="5000" class="ci"/></div>
+      <div class="col-span-2"><label class="lbl">Quanto custa a casa?</label><input type="text" id="intl_price" value="5000" placeholder="ex: 5000" class="ci text-lg"/></div>
       <div><label class="lbl">Moeda</label>
         <select id="intl_currency" onchange="GV.updateTierPreview()" class="ci">
           <option value="EUR">EUR €</option><option value="GBP">GBP £</option><option value="BRL">BRL R$</option>
@@ -485,46 +355,21 @@ html.light-mode .divider-glow {
       </div>
     </div>
 
-    <!-- Tier indicator -->
-    <div class="mb-5 rounded-2xl border border-white/[.05] bg-gradient-to-r from-gv-soft/50 to-transparent px-5 py-4 flex items-center gap-4">
-      <span id="intl_tierPill" class="shrink-0 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[.15em] border tier-low">Low Budget</span>
-      <span id="intl_tierDesc" class="text-xs text-gray-400 leading-relaxed font-light">Casas até 5.000€. Lucro GV + Comissão base. Transporte normal.</span>
-    </div>
+    <!-- Tier (hidden but functional) -->
+    <div class="hidden"><span id="intl_tierPill"></span><span id="intl_tierDesc"></span></div>
 
     <!-- Origin + Route -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-      <div><label class="lbl">Origem</label><select id="intl_origin" onchange="GV.onOriginChange()" class="ci"></select></div>
-      <div><label class="lbl">Rota</label><select id="intl_route" onchange="GV.showRouteNote()" class="ci"></select>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+      <div><label class="lbl">De onde vem a casa?</label><select id="intl_origin" class="ci"></select></div>
+      <div><label class="lbl">Rota de transporte</label><select id="intl_route" onchange="GV.onRouteChange()" class="ci"></select>
         <div id="intl_routeNote" class="hidden mt-3 p-4 rounded-xl bg-amber-500/[.06] border border-amber-500/15 text-amber-300/90 text-xs leading-relaxed backdrop-blur-sm"></div>
       </div>
     </div>
 
-    <!-- Quick Reference Table -->
-    <div class="mt-6 p-5 rounded-2xl border border-white/5 bg-gradient-to-br from-blue-500/5 to-purple-500/5">
-      <h4 class="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
-        <span class="text-lg">📋</span> Tabela de Referência Rápida
-      </h4>
-      <div id="intl_refTable" class="overflow-x-auto">
-        <table class="w-full text-xs">
-          <thead>
-            <tr class="border-b border-white/10">
-              <th class="text-left py-2 px-3 text-gray-400 font-medium">Preço Origem</th>
-              <th class="text-right py-2 px-3 text-gray-400 font-medium">Total Destino (c/ IVA)</th>
-            </tr>
-          </thead>
-          <tbody id="intl_refBody">
-            <tr><td colspan="2" class="text-center py-4 text-gray-500 text-xs">Selecione país, origem e rota para ver valores de referência</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
     <!-- Calculate button -->
-    <div class="flex flex-wrap gap-3 mt-5">
-      <button onclick="GV.calcInternational()" class="flex-1 sm:flex-initial px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">
-        Calcular Importação
-      </button>
-    </div>
+    <button onclick="GV.calcInternational()" class="w-full sm:w-auto px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">
+      Calcular
+    </button>
 
     <!-- Results -->
     <div id="intl_results" class="hidden mt-6">
@@ -534,83 +379,11 @@ html.light-mode .divider-glow {
           Resultado
         </h3>
         <div class="flex gap-2">
-          <button onclick="GV.showAnalytics('international')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-blue-400/30 hover:text-blue-400 transition">📊 Análise</button>
-          <button onclick="GV.generateShareableURL()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-green-400/30 hover:text-green-400 transition">🔗 Compartilhar</button>
           <button onclick="GV.copyIntl()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📋 Copiar</button>
           <button onclick="GV.exportPDF('intl_grid','Internacional')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📄 PDF</button>
         </div>
       </div>
       <div id="intl_grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 fade-in"></div>
-
-      <!-- Margin Simulator -->
-      <button onclick="GV.toggleMarginSimulator()" id="btn-toggle-margin" class="mt-6 w-full px-5 py-3 rounded-2xl border border-white/8 bg-gradient-to-r from-purple-900/20 to-transparent text-gray-300 text-sm font-semibold uppercase tracking-wider hover:border-purple-400/30 hover:text-purple-300 transition">
-        💰 Simular Margens Diferentes
-      </button>
-
-      <div id="margin-simulator" class="hidden mt-6 sec">
-        <h4 class="text-xs font-semibold uppercase tracking-wider text-purple-400 mb-4 flex items-center gap-2">
-          <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>Simulador de Margens
-        </h4>
-
-        <!-- Lucro Slider -->
-        <div class="mb-5">
-          <div class="flex justify-between items-center mb-2">
-            <label class="lbls text-gray-300">Lucro Green Village</label>
-            <span id="margin-profit-value" class="font-mono text-sm text-purple-300">€0</span>
-          </div>
-          <input type="range" id="margin-profit-slider" min="0" max="20000" step="100" value="0"
-            class="w-full h-2 rounded-lg appearance-none cursor-pointer bg-gradient-to-r from-purple-900/30 to-purple-600/30"
-            oninput="GV.updateMarginSimulation()"
-            style="accent-color: #a78bfa">
-          <div class="flex justify-between text-[10px] text-gray-600 mt-1">
-            <span>€0</span>
-            <span>€20.000</span>
-          </div>
-        </div>
-
-        <!-- Comissão Slider -->
-        <div class="mb-5">
-          <div class="flex justify-between items-center mb-2">
-            <label class="lbls text-gray-300">Comissão Vendedor</label>
-            <span id="margin-commission-value" class="font-mono text-sm text-blue-300">€0</span>
-          </div>
-          <input type="range" id="margin-commission-slider" min="0" max="5000" step="50" value="0"
-            class="w-full h-2 rounded-lg appearance-none cursor-pointer bg-gradient-to-r from-blue-900/30 to-blue-600/30"
-            oninput="GV.updateMarginSimulation()"
-            style="accent-color: #5eb5ff">
-          <div class="flex justify-between text-[10px] text-gray-600 mt-1">
-            <span>€0</span>
-            <span>€5.000</span>
-          </div>
-        </div>
-
-        <!-- Comparison Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-          <div class="p-4 rounded-2xl border border-white/5 bg-gv-bg/60">
-            <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Total Original</div>
-            <div id="margin-original-total" class="text-2xl font-bold text-gray-400">€0</div>
-          </div>
-          <div class="p-4 rounded-2xl border border-white/5 bg-gradient-to-r from-purple-900/20 to-blue-900/20">
-            <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Total Simulado</div>
-            <div id="margin-simulated-total" class="text-2xl font-bold text-[#00ff88]">€0</div>
-          </div>
-        </div>
-
-        <!-- Difference Indicator -->
-        <div id="margin-difference" class="p-3 rounded-xl bg-white/5 text-center mb-5">
-          <span class="text-sm text-gray-400">Diferença: <span id="margin-diff-value" class="font-bold text-gray-200">€0</span></span>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="flex gap-3">
-          <button onclick="GV.applyMarginChanges()" class="flex-1 px-6 py-3 rounded-2xl text-sm font-bold uppercase tracking-wider text-gv-bg btn-main">
-            ✓ Aplicar Mudanças
-          </button>
-          <button onclick="GV.resetMarginSimulation()" class="px-6 py-3 rounded-2xl border border-white/8 text-gray-400 text-sm font-semibold uppercase tracking-wider hover:border-red-400/30 hover:text-red-400 transition">
-            ↺ Resetar
-          </button>
-        </div>
-      </div>
     </div>
 
   </div>
@@ -627,7 +400,6 @@ html.light-mode .divider-glow {
       <p class="text-xs text-gray-500 font-light">Cálculo detalhado com tributos brasileiros • ICMS gross-up • Formação de preço</p>
     </div>
   </div>
-
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
     <div class="sec">
       <h4 class="text-[10px] font-semibold uppercase tracking-[.2em] text-[#00ff88] mb-4 flex items-center gap-2">
@@ -652,11 +424,7 @@ html.light-mode .divider-glow {
         <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Custos Brasil
       </h4>
       <div class="space-y-3" id="br_cost_fields"></div>
-      <div class="mt-5 flex flex-wrap gap-3">
-        <button onclick="GV.calcBrazil()" class="flex-1 sm:flex-initial px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.12em] text-gv-bg btn-main">
-          Calcular
-        </button>
-      </div>
+      <button onclick="GV.calcBrazil()" class="mt-5 w-full px-6 py-3 rounded-2xl text-sm font-bold uppercase tracking-[.12em] text-gv-bg btn-main">Calcular</button>
     </div>
   </div>
 
@@ -667,8 +435,6 @@ html.light-mode .divider-glow {
         Resultado Detalhado
       </h3>
       <div class="flex gap-2">
-        <button onclick="GV.showAnalytics('brazil')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-blue-400/30 hover:text-blue-400 transition">📊 Análise</button>
-        <button onclick="GV.generateShareableURL()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider hover:border-green-400/30 hover:text-green-400 transition">🔗 Compartilhar</button>
         <button onclick="GV.copyBrazil()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📋 Copiar</button>
         <button onclick="GV.exportPDF('br_resultGrid','Brasil')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📄 PDF</button>
       </div>
@@ -691,7 +457,7 @@ html.light-mode .divider-glow {
 </div>
 </div>
 
-<!-- TAB 2: CONFIGURAÇÕES -->
+<!-- TAB 3: CONFIGURAÇÕES -->
 <div id="panel-settings" class="hidden fade-in">
 <div class="glass rounded-3xl p-6 sm:p-8 glow-card">
   <div class="flex items-center gap-3 mb-1">
@@ -707,16 +473,12 @@ html.light-mode .divider-glow {
 
   <div class="divider-glow"></div>
 
-  <div class="flex flex-wrap items-center gap-4">
-    <button onclick="GV.applySettings()" class="px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">
-      ✓ Guardar Configurações
-    </button>
-    <button onclick="GV.validateCalculation()" class="px-6 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] border border-blue-400/30 text-blue-400 hover:bg-blue-400/10 transition">
-      🔍 Diagnóstico (Console)
-    </button>
+  <div class="flex flex-wrap items-center gap-3">
+    <button onclick="GV.applySettings()" class="px-10 py-3.5 rounded-2xl text-sm font-bold uppercase tracking-[.15em] text-gv-bg btn-main">✓ Guardar Configurações</button>
+    <button onclick="GV.exportJSON()" class="small-btn px-4 py-2.5 rounded-xl border border-white/8 text-gray-400 text-[11px] uppercase tracking-wider">📥 Exportar JSON</button>
+    <button onclick="GV.importJSON()" class="small-btn px-4 py-2.5 rounded-xl border border-white/8 text-gray-400 text-[11px] uppercase tracking-wider">📤 Importar JSON</button>
     <span id="cfg_saved" class="text-sm text-[#00ff88] hidden font-medium">✓ Guardado com sucesso!</span>
   </div>
-  <p class="text-xs text-gray-600 mt-3 ml-1">💡 Use "Diagnóstico" para verificar taxas de câmbio e margens. Abra o Console (F12) para ver resultados detalhados.</p>
 </div>
 </div>
 
@@ -724,187 +486,20 @@ html.light-mode .divider-glow {
 
 <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5"></div>
 
-<!-- MODAL: ANALYTICS DASHBOARD -->
-<div id="analytics-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-  <div class="glass rounded-3xl p-6 sm:p-8 max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-    <div class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-900/40 to-purple-900/30 flex items-center justify-center text-2xl">
-          📊
-        </div>
-        <div>
-          <h3 class="text-2xl font-display font-bold text-gray-100">Dashboard de Análise</h3>
-          <p class="text-xs text-gray-500">Visualização detalhada da distribuição de custos</p>
-        </div>
-      </div>
-      <button onclick="GV.closeAnalytics()" class="text-gray-400 hover:text-gray-200 text-2xl transition">×</button>
-    </div>
-
-    <!-- Key Metrics -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-      <div class="sec">
-        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Total Final</div>
-        <div id="metric-total" class="text-xl font-bold text-[#00ff88]">€0</div>
-      </div>
-      <div class="sec">
-        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Margem GV</div>
-        <div id="metric-margin" class="text-xl font-bold text-[#5eb5ff]">€0</div>
-      </div>
-      <div class="sec">
-        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Transporte</div>
-        <div id="metric-transport" class="text-xl font-bold text-amber-400">€0</div>
-      </div>
-      <div class="sec">
-        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Tributos (IVA)</div>
-        <div id="metric-tax" class="text-xl font-bold text-purple-400">€0</div>
-      </div>
-    </div>
-
-    <!-- Charts -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
-      <div class="sec">
-        <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Distribuição de Custos</h4>
-        <canvas id="chart-pie" width="400" height="400"></canvas>
-      </div>
-      <div class="sec">
-        <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Composição Detalhada</h4>
-        <canvas id="chart-bar" width="400" height="400"></canvas>
-      </div>
-    </div>
-
-    <!-- Detailed Table -->
-    <div class="sec">
-      <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">Detalhamento Completo</h4>
-      <div id="analytics-table" class="overflow-x-auto">
-        <!-- Table will be generated dynamically -->
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- MODAL: COMPARTILHAR VIA URL -->
-<div id="share-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-  <div class="glass rounded-3xl p-6 sm:p-8 max-w-lg w-full mx-4">
-    <div class="flex items-center justify-between mb-6">
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-900/40 to-green-900/30 flex items-center justify-center text-2xl">
-          🔗
-        </div>
-        <div>
-          <h3 class="text-xl font-display font-bold text-gray-100">Compartilhar Cálculo</h3>
-          <p class="text-xs text-gray-500">Link único com todos os dados</p>
-        </div>
-      </div>
-      <button onclick="GV.closeShareModal()" class="text-gray-400 hover:text-gray-200 text-2xl transition">×</button>
-    </div>
-
-    <!-- URL Display -->
-    <div class="mb-5">
-      <label class="lbls mb-2">Link de Compartilhamento</label>
-      <div class="flex gap-2">
-        <input type="text" id="share-url-input" readonly
-          class="ci flex-1 bg-gv-bg/80 text-gray-300 text-xs font-mono cursor-text select-all"
-          value=""/>
-        <button onclick="GV.copyShareLink()" class="px-4 py-2 rounded-xl border border-white/8 text-gray-400 text-sm hover:border-gv-accent/30 hover:text-gv-accent transition">
-          📋 Copiar
-        </button>
-      </div>
-    </div>
-
-    <!-- Share Options -->
-    <div class="sec mb-5">
-      <h4 class="lbls mb-3 text-gray-400">Compartilhar via</h4>
-      <div class="grid grid-cols-2 gap-2">
-        <button onclick="GV.shareViaEmail()" class="px-4 py-3 rounded-xl border border-white/5 bg-gv-bg/60 text-gray-300 text-sm hover:bg-white/5 transition flex items-center gap-2">
-          <span>📧</span> Email
-        </button>
-        <button onclick="GV.shareViaWhatsApp()" class="px-4 py-3 rounded-xl border border-white/5 bg-gv-bg/60 text-gray-300 text-sm hover:bg-white/5 transition flex items-center gap-2">
-          <span>💬</span> WhatsApp
-        </button>
-      </div>
-    </div>
-
-    <div class="text-center text-xs text-gray-600">
-      <p>O link contém todos os dados do cálculo codificados.</p>
-      <p>Qualquer pessoa com o link poderá visualizar o cálculo.</p>
-    </div>
-  </div>
-</div>
-
-<!-- BANNER: CÁLCULO COMPARTILHADO -->
-<div id="shared-banner" class="hidden max-w-[1440px] mx-auto px-4 sm:px-6 mb-4">
-  <div class="p-4 rounded-2xl border border-blue-500/30 bg-gradient-to-r from-blue-900/20 to-transparent">
-    <div class="flex items-center gap-3">
-      <span class="text-2xl">🔗</span>
-      <div class="flex-1">
-        <div class="font-semibold text-blue-300 text-sm">Visualizando Cálculo Compartilhado</div>
-        <div class="text-xs text-gray-500">Este cálculo foi compartilhado via link</div>
-      </div>
-      <button onclick="GV.closeSharedBanner()" class="text-gray-500 hover:text-gray-300 transition">×</button>
-    </div>
-  </div>
-</div>
-
-<!-- BANNER: INSTALAR PWA -->
-<div id="pwa-install-banner" class="hidden max-w-[1440px] mx-auto px-4 sm:px-6 mb-4">
-  <div class="p-4 rounded-2xl border border-green-500/30 bg-gradient-to-r from-green-900/20 to-transparent">
-    <div class="flex items-center gap-3">
-      <span class="text-2xl">📱</span>
-      <div class="flex-1">
-        <div class="font-semibold text-green-300 text-sm">Instalar Aplicativo</div>
-        <div class="text-xs text-gray-500">Acesso rápido e funcionamento offline</div>
-      </div>
-      <div class="flex gap-2">
-        <button onclick="installPWA()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-gv-accent to-green-600 text-gv-bg text-xs font-bold uppercase tracking-wider hover:opacity-90 transition">
-          Instalar
-        </button>
-        <button onclick="dismissInstallBanner()" class="text-gray-500 hover:text-gray-300 transition text-xl">×</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 const GV=(()=>{
 let AC="portugal";
 const $=id=>document.getElementById(id),$$=(s,p)=>(p||document).querySelectorAll(s);
-// FUNÇÃO CORRIGIDA: Parse de números com suporte PT-BR/PT-PT e EN-US
-const pn=id=>{
-  const e=$(id);
-  if(!e)return 0;
-  let v=e.value.trim();
-  if(!v)return 0;
-
-  // Remove espaços
-  v=v.replace(/\s/g,'');
-
-  // Detecta formato EN: termina com .XX (1-2 dígitos após ponto)
-  // Exemplo: 5,500.00 ou 1500.5 ou 5500.00
-  const isENFormat=/\.\d{1,2}$/.test(v);
-
-  if(isENFormat){
-    // Formato EN-US: 5,500.00 → remove vírgulas (separador de milhar)
-    v=v.replace(/,/g,'');
-  } else {
-    // Formato PT: 5.500,00 ou 5500,00
-    // Remove pontos (separador de milhar) e troca vírgula por ponto
-    v=v.replace(/\./g,'').replace(',','.');
-  }
-
-  const r=parseFloat(v);
-
-  // Validação robusta
-  if(isNaN(r)||!isFinite(r)){
-    console.warn(`[Parse] Valor inválido em ${id}: "${e.value}" → 0`);
-    return 0;
-  }
-
-  return Math.max(r,0);
-};
-const fmt=(v,l="pt-PT",d=0)=>new Intl.NumberFormat(l,{minimumFractionDigits:d,maximumFractionDigits:d}).format(v||0);
-const fc=(v,s="€",l="pt-PT",d=2)=>`${s}${fmt(v,l,d)}`;
-const LAND=()=>pn('cfg_landBase')||2000, CRANE=()=>pn('cfg_craneFrPt')||1000;
+const pn=id=>{const e=$(id);if(!e)return 0;let v=e.value.trim();
+  if(/,\d{1,2}$/.test(v)){v=v.replace(/\./g,'').replace(',','.');}// PT: 1.234,56→1234.56
+  else if(/^\d{1,3}(\.\d{3})+$/.test(v)){v=v.replace(/\./g,'');}// Milhares: 3.450→3450
+  else{v=v.replace(/,/g,'');}// EN: 0.84, 3,450→3450
+  return parseFloat(v)||0;};
+const fmt=(v,l="pt-PT")=>new Intl.NumberFormat(l,{minimumFractionDigits:0,maximumFractionDigits:0}).format(Math.round(v||0));
+const fc=(v,s="€",l="pt-PT")=>`${s}${fmt(v,l)}`;
+const LAND=()=>pn('cfg_landBase')||2000, CRANE=()=>pn('cfg_craneFrPt')||1000, CUSTOMS=()=>pn('cfg_customsFee')||500, INSURANCE=()=>pn('cfg_insurance')||200;
+const DOCFEE=()=>pn('cfg_docFee')||0; // Já incluído no despacho (Across cobra tudo junto)
+const NON_EU_ORIGINS=new Set(['uk','china']);
 
 function toast(msg,ok=true){
   const t=document.createElement('div');
@@ -916,49 +511,12 @@ const csym={EUR:"€",GBP:"£",BRL:"R$",CNY:"¥",USD:"$",PLN:"zł"};
 const oLabels={uk:"🇬🇧 Inglaterra",netherlands:"🇳🇱 Holanda",france:"🇫🇷 França",portugal:"🇵🇹 Portugal",belgium:"🇧🇪 Bélgica",china:"🇨🇳 China"};
 const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"]);
 
-// ═══════════════════════════════════════════════════════════════
-// TAXAS DE CÂMBIO FIXAS - SEM API - SEM RISCO!
-// ═══════════════════════════════════════════════════════════════
-// Baseado em MÁXIMOS HISTÓRICOS (2019-2026) + margem de segurança
-// Empresa NUNCA perde dinheiro - taxas conservadoras garantidas!
-// Última atualização: 2026-02-11
-// ═══════════════════════════════════════════════════════════════
 function rates(){
-  const FIXED_RATES = {
-    EUR: 1.0000,     // Base (Euro)
-
-    // LIBRA ESTERLINA (GBP → EUR)
-    // Histórico: 1 GBP variou de €1.10 a €1.20
-    // Conservador: €1.22 (favorável para empresa)
-    // Exemplo: £5,000 × 1.22 = €6,100 (margem segura)
-    GBP: 1.2200,
-
-    // DÓLAR AMERICANO (USD → EUR)
-    // Histórico: 1 USD variou de €0.83 a €0.95
-    // Conservador: €0.83 (piso histórico - seguro)
-    // Exemplo: $10,000 × 0.83 = €8,300
-    USD: 0.8300,
-
-    // REAL BRASILEIRO (BRL → EUR)
-    // Histórico: 1 BRL variou de €0.14 a €0.19
-    // Conservador: €0.14 (piso histórico - seguro)
-    // Exemplo: R$50,000 × 0.14 = €7,000
-    BRL: 0.1400,
-
-    // YUAN CHINÊS (CNY → EUR)
-    // Histórico: 1 CNY variou de €0.12 a €0.14
-    // Conservador: €0.12 (piso histórico - seguro)
-    // Exemplo: ¥100,000 × 0.12 = €12,000
-    CNY: 0.1200,
-
-    // ZLOTY POLONÊS (PLN → EUR)
-    // Histórico: 1 PLN variou de €0.20 a €0.24
-    // Conservador: €0.20 (piso histórico - seguro)
-    // Exemplo: 20,000zł × 0.20 = €4,000
-    PLN: 0.2000
-  };
-
-  return FIXED_RATES;
+  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;};
+  // Margem de segurança cambial (default 3%) — protege contra flutuação
+  const sm=(100-(g('safetyMargin')||3))/100; // ex: 3% → multiplica rate por 0.97
+  const gbp=(g('gbp')||.84)*sm, brl=(g('brl')||6.5)*sm, cny=(g('cny')||8)*sm, usd=(g('usd')||1.1)*sm, pln=(g('pln')||4.5)*sm;
+  return{EUR:1,GBP:gbp>0?1/gbp:1.19,BRL:brl>0?1/brl:0.154,CNY:cny>0?1/cny:0.125,USD:usd>0?1/usd:0.909,PLN:pln>0?1/pln:0.222};
 }
 function localRates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), cny=(g('cny')||8), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
@@ -968,120 +526,50 @@ function localRates(){
     china:{rate:cny>0?cny:8,symbol:"¥",code:"CNY"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
 }
 
-// FUNÇÃO CORRIGIDA: Tiers com valores padrão consistentes
 function tiers(){
   const g=id=>pn(id);
-
-  // VALORES PADRÃO FIXOS (garantem consistência entre vendedores)
-  const DEFAULTS = {
-    low: {
-      profit: 3000,
-      commission: 500,
-      landMult: 1,
-      seaMult: 1,
-      crane: 0
-    },
-    medium: {
-      profit: 5000,
-      commission: 1000,
-      landMult: 1,
-      seaMult: 1,
-      crane: 0
-    },
-    luxury: {
-      profit: 12000,
-      commission: 2000,
-      landMult: 2,
-      seaMult: 2,
-      crane: 2000
-    }
-  };
-
-  return {
-    low: {
-      id: "low",
-      label: "Low Budget",
-      description: "Casas até 5.000€. Lucro GV + Comissão base. Transporte normal.",
-      companyProfit: g('cfg_low_profit') || DEFAULTS.low.profit,
-      commission: g('cfg_low_comm') || DEFAULTS.low.commission,
-      landMultiplier: DEFAULTS.low.landMult,
-      seaMultiplier: DEFAULTS.low.seaMult,
-      craneCost: DEFAULTS.low.crane,
-      max: 5000  // Limite do tier
-    },
-    medium: {
-      id: "medium",
-      label: "Valor Médio",
-      description: "Casas entre 5.000€ e 20.000€. Lucro GV reforçado + Comissão intermédia.",
-      companyProfit: g('cfg_med_profit') || DEFAULTS.medium.profit,
-      commission: g('cfg_med_comm') || DEFAULTS.medium.commission,
-      landMultiplier: DEFAULTS.medium.landMult,
-      seaMultiplier: DEFAULTS.medium.seaMult,
-      craneCost: DEFAULTS.medium.crane,
-      max: 20000  // Limite do tier
-    },
-    luxury: {
-      id: "luxury",
-      label: "Luxo",
-      description: "Casas acima de 20.000€. Lucro máximo, marítimo x2, terrestre x2 + autogrua.",
-      companyProfit: g('cfg_lux_profit') || DEFAULTS.luxury.profit,
-      commission: g('cfg_lux_comm') || DEFAULTS.luxury.commission,
-      landMultiplier: g('cfg_lux_land') || DEFAULTS.luxury.landMult,
-      seaMultiplier: g('cfg_lux_sea') || DEFAULTS.luxury.seaMult,
-      craneCost: g('cfg_lux_crane') || DEFAULTS.luxury.crane,
-      max: Infinity
-    }
+  // LOCKED: lucros e comissões fixos — não editáveis (decisão Matheus 2026-05-01)
+  return{
+    low:{id:"low",label:"Low Budget",description:"Casas até 5.000€. Lucro GV + Comissão base. Transporte normal.",
+      companyProfit:6000,commission:500,landMultiplier:1,seaMultiplier:1,craneCost:0},
+    medium:{id:"medium",label:"Valor Médio",description:"Casas entre 5.000€ e 20.000€. Lucro GV reforçado + Comissão intermédia.",
+      companyProfit:6000,commission:1000,landMultiplier:1,seaMultiplier:1,craneCost:0},
+    luxury:{id:"luxury",label:"Luxo",description:"Casas acima de 20.000€. Lucro máximo, marítimo x2, terrestre x2 + autogrua.",
+      companyProfit:12000,commission:2000,
+      landMultiplier:g('cfg_lux_land')||2,seaMultiplier:g('cfg_lux_sea')||2,craneCost:g('cfg_lux_crane')||2000}
   };
 }
 
-// Determina tier baseado no preço em EUR (limites fixos)
-const tierOf = p => {
-  if(p <= 5000) return "low";
-  if(p > 20000) return "luxury";
-  return "medium";
-};
-
-// VALIDAÇÃO E DIAGNÓSTICO
-function validateCalculation() {
-  const cr = rates();
-  const ts = tiers();
-
-  console.log('╔═══════════════════════════════════════╗');
-  console.log('║  DIAGNÓSTICO DE CONFIGURAÇÃO         ║');
-  console.log('╚═══════════════════════════════════════╝');
-  console.log('\n[1] TAXAS DE CÂMBIO (Outra moeda → EUR):');
-  console.log(`    1 GBP = €${cr.GBP.toFixed(4)}`);
-  console.log(`    1 USD = €${cr.USD.toFixed(4)}`);
-  console.log(`    1 BRL = €${cr.BRL.toFixed(4)}`);
-  console.log(`    1 CNY = €${cr.CNY.toFixed(4)}`);
-  console.log(`    1 PLN = €${cr.PLN.toFixed(4)}`);
-
-  console.log('\n[2] TIERS E MARGENS:');
-  console.log(`    LOW (≤€5.000):`);
-  console.log(`      Lucro GV: €${ts.low.companyProfit}`);
-  console.log(`      Comissão: €${ts.low.commission}`);
-  console.log(`    MEDIUM (€5.001-€20.000):`);
-  console.log(`      Lucro GV: €${ts.medium.companyProfit}`);
-  console.log(`      Comissão: €${ts.medium.commission}`);
-  console.log(`    LUXURY (>€20.000):`);
-  console.log(`      Lucro GV: €${ts.luxury.companyProfit}`);
-  console.log(`      Comissão: €${ts.luxury.commission}`);
-  console.log(`      Mult Mar: ${ts.luxury.seaMultiplier}x`);
-  console.log(`      Mult Terr: ${ts.luxury.landMultiplier}x`);
-  console.log(`      Grua: €${ts.luxury.craneCost}`);
-
-  console.log('\n[3] CUSTOS BASE:');
-  console.log(`    Terrestre: €${LAND()}`);
-  console.log(`    Grua FR→PT: €${CRANE()}`);
-  console.log('\n═══════════════════════════════════════\n');
-}
+const tierOf=p=>p<=5000?"low":p>20000?"luxury":"medium";
 
 // === ROUTES DATA ===
 let R={
   portugal:{label:"Portugal",flag:"🇵🇹",vatRate:.23,routes:{
-    uk:[{from:"Purfleet",to:"Leixões",cost:3625,type:"RO-RO"},{from:"Killingholme",to:"Leixões",cost:3975,type:"RO-RO"},{from:"Portbury",to:"Setúbal",cost:5950,type:"RO-RO"},{from:"Felixstowe",to:"Leixões",cost:6780,type:"Flat Rack"}],
-    netherlands:[{from:"Rotterdam",to:"Leixões",cost:2400,type:"RO-RO"}],
-    france:[{from:"França",to:"Portugal",cost:6000,type:"Camião"}],
+    uk:[
+      {from:"Purfleet",to:"Leixões (direto)",cost:3800,type:"RoRo",recommended:true,note:"⭐ RECOMENDADO para Portugal. Porto direto, sem transbordo. Tarifa base xlsx oficial."},
+      {from:"Purfleet",to:"Leixões (direto)",cost:4150,type:"RoRo",note:"Tarifa alta época / extras — porto direto Leixões. Across real ~€4,110."},
+      {from:"Killingholme",to:"Leixões (direto)",cost:4150,type:"RoRo",note:"Porto direto Leixões."},
+      {from:"UK (camião direto)",to:"Portugal",cost:2800,type:"Low-loader",note:"Potteries Heavy Haulage / WS Transportation — low-loader specialist. Mais lento (~5 dias)."},
+      {from:"Portbury",to:"Vigo → PT (UECC)",cost:2334,type:"UECC RoRo",portIncl:true,note:"⚠️ Chega a VIGO (Espanha) — necessário camião Vigo→PT (~€500-800). UECC LINER IN/OUT. 11×3.7m / 7t. Válido Jun 2026."},
+      {from:"Portbury",to:"Vigo → PT (UECC)",cost:2514,type:"UECC RoRo",portIncl:true,note:"⚠️ Vigo (ES) + camião para PT. UECC LINER IN/OUT. 11×4.0m / 7t."},
+      {from:"Portbury",to:"Vigo → PT (UECC)",cost:2696,type:"UECC RoRo",portIncl:true,note:"⚠️ Vigo (ES) + camião para PT. UECC LINER IN/OUT. 11×4.3m / 7t."},
+      {from:"Portbury",to:"Setúbal",cost:5950,type:"RoRo",note:"Porto direto Setúbal — zona Lisboa/Alentejo."},
+      {from:"Felixstowe",to:"Leixões",cost:6780,type:"Flat Rack",note:"Container flat rack — casas maiores/irregulares."}
+    ],
+    netherlands:[
+      {from:"Rotterdam",to:"Leixões",cost:2400,type:"RoRo",recommended:true,note:"⭐ RECOMENDADO — Tarifa base recorrente, 16+ pagamentos confirmados."},
+      {from:"Rotterdam",to:"Leixões",cost:2900,type:"RoRo",note:"Tarifa alta época / OOG"}
+    ],
+    belgium:[
+      {from:"BE (stacaravan)",to:"Portugal",cost:1100,type:"Specialist",recommended:true,note:"⭐ Transcaravan bv — BeNeLux stacaravan specialist. Mais barato para casas standard."},
+      {from:"Zeebrugge",to:"Vigo → PT (UECC)",cost:2663,type:"UECC RoRo",portIncl:true,note:"⚠️ Chega a Vigo (ES) — necessário camião Vigo→PT. UECC LINER IN/OUT. 11×3.7m / 7t."},
+      {from:"Zeebrugge",to:"Vigo → PT (UECC)",cost:2870,type:"UECC RoRo",portIncl:true,note:"⚠️ Vigo (ES) + camião para PT. UECC LINER IN/OUT. 11×4.0m."},
+      {from:"Zeebrugge",to:"Vigo → PT (UECC)",cost:3079,type:"UECC RoRo",portIncl:true,note:"⚠️ Vigo (ES) + camião para PT. UECC LINER IN/OUT. 11×4.3m."}
+    ],
+    france:[
+      {from:"França (camião)",to:"Portugal",cost:2000,type:"Camião",portIncl:true,note:"Patinter / Luis Simoes — transporte terrestre direto"},
+      {from:"França (camião)",to:"Portugal",cost:6000,type:"Camião Full",portIncl:true,note:"Serviço completo com grua e posicionamento"}
+    ],
     portugal:[
       {from:"Leixões",to:"Caniçal (Madeira)",cost:2960,type:"Flat Rack",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa. Valor ref. casa grande (11,58×3,66×3,50m / 5t) em transporte convencional."},
       {from:"Leixões",to:"Caniçal (Madeira)",cost:5550,type:"Breakbulk",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."},
@@ -1092,13 +580,15 @@ let R={
       {from:"Leixões",to:"Ilha do Pico (Açores)",cost:6650,type:"Flat Rack",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."}],
     china:[{from:"Shanghai",to:"Leixões",cost:23244,type:"Flat Rack"},{from:"Shanghai",to:"Leixões",cost:2655,type:"Container 20'"},{from:"Shanghai",to:"Leixões",cost:3528,type:"Container 40'"}]}},
   spain:{label:"Espanha",flag:"🇪🇸",vatRate:.21,routes:{
-    uk:[{from:"Purfleet",to:"Santander",cost:4950,type:"RO-RO"},{from:"Felixstowe",to:"Algeciras",cost:5980,type:"Flat Rack"},{from:"Felixstowe",to:"Valencia",cost:9650,type:"Flat Rack"},{from:"Portbury",to:"Vigo",cost:11050,type:"RO-RO"},{from:"Portbury",to:"Vigo",cost:11300,type:"RO-RO"},{from:"Southampton",to:"Valencia",cost:11950,type:"RO-RO"},{from:"Southampton",to:"Santander",cost:12950,type:"RO-RO"},{from:"Portbury",to:"Sagunto",cost:16570,type:"RO-RO"}],
+    uk:[{from:"Portbury",to:"Vigo (UECC)",cost:2334,type:"UECC RoRo",portIncl:true,note:"⭐ MELHOR PREÇO. UECC LINER IN/OUT. 11×3.7m / 7t. Válido Jun 2026."},{from:"Portbury",to:"Vigo (UECC)",cost:2514,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×4.0m."},{from:"Portbury",to:"Vigo (UECC)",cost:2696,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×4.3m."},{from:"Purfleet",to:"Santander",cost:4950,type:"RO-RO"},{from:"Felixstowe",to:"Algeciras",cost:5980,type:"Flat Rack"},{from:"Felixstowe",to:"Valencia",cost:9650,type:"Flat Rack"},{from:"Portbury",to:"Vigo",cost:11050,type:"RO-RO",note:"Outro operador (full service)"},{from:"Portbury",to:"Vigo",cost:11300,type:"RO-RO",note:"Outro operador (full service)"},{from:"Southampton",to:"Valencia",cost:11950,type:"RO-RO"},{from:"Southampton",to:"Santander",cost:12950,type:"RO-RO"},{from:"Portbury",to:"Sagunto",cost:16570,type:"RO-RO"}],
     netherlands:[{from:"Rotterdam",to:"Valencia",cost:3500,type:"RO-RO"},{from:"Rotterdam",to:"Santander",cost:3200,type:"RO-RO"}],
-    france:[{from:"Calais",to:"Santander",cost:2800,type:"RO-RO"},{from:"Marseille",to:"Valencia",cost:2500,type:"RO-RO"}],
+    france:[{from:"Calais",to:"Santander",cost:2800,type:"Camião"},{from:"Marseille",to:"Valencia",cost:2500,type:"RO-RO"}],
+    belgium:[{from:"Zeebrugge",to:"Vigo (UECC)",cost:2663,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×3.7m."},{from:"Zeebrugge",to:"Vigo (UECC)",cost:2870,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×4.0m."},{from:"Zeebrugge",to:"Vigo (UECC)",cost:3079,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×4.3m."}],
     portugal:[{from:"Leixões",to:"Las Palmas (Canárias)",cost:6200,type:"Flat Rack"}]}},
   france:{label:"França",flag:"🇫🇷",vatRate:.20,routes:{
     uk:[{from:"Purfleet",to:"Calais",cost:2950,type:"RO-RO"},{from:"Tilbury",to:"Le Havre",cost:3250,type:"RO-RO"},{from:"Southampton",to:"Le Havre",cost:3750,type:"RO-RO"}],
-    france:[{from:"Calais",to:"Le Havre",cost:2500,type:"Camião"},{from:"Le Havre",to:"Marseille",cost:3500,type:"Camião"}]}},
+    france:[{from:"Calais",to:"Le Havre",cost:2500,type:"Camião"},{from:"Le Havre",to:"Marseille",cost:3500,type:"Camião"}],
+    belgium:[{from:"Zeebrugge",to:"Le Havre (UECC)",cost:2251,type:"RO-RO",note:"UECC LINER IN/FAS OUT. 11×3.7m. Custos portuários Le Havre NÃO incluídos (Manucar)."},{from:"Zeebrugge",to:"Le Havre (UECC)",cost:2426,type:"RO-RO",note:"UECC FAS OUT. 11×4.0m."},{from:"Zeebrugge",to:"Le Havre (UECC)",cost:2600,type:"RO-RO",note:"UECC FAS OUT. 11×4.3m."}]}},
   italy:{label:"Itália",flag:"🇮🇹",vatRate:.22,routes:{uk:[{from:"Southampton",to:"Salerno",cost:11950,type:"RO-RO"},{from:"Portbury",to:"Livorno",cost:16010,type:"RO-RO"},{from:"Portbury",to:"Livorno",cost:16520,type:"RO-RO"}]}},
   greece:{label:"Grécia",flag:"🇬🇷",vatRate:.24,routes:{uk:[{from:"Southampton",to:"Pireu",cost:14900,type:"RO-RO"},{from:"Portbury",to:"Pireu",cost:18300,type:"RO-RO"},{from:"Portbury",to:"Pireu",cost:19100,type:"RO-RO"},{from:"Southampton",to:"Thessaloniki",cost:14500,type:"RO-RO"}]}},
   malta:{label:"Malta",flag:"🇲🇹",vatRate:.18,routes:{uk:[{from:"Southampton",to:"Malta Free Port",cost:4560,type:"Flat Rack"},{from:"Southampton",to:"La Valleta",cost:11200,type:"RO-RO"}]}},
@@ -1111,11 +601,10 @@ let R={
   croatia:{label:"Croácia",flag:"🇭🇷",vatRate:.25,routes:{uk:[{from:"Felixstowe",to:"Rijeka",cost:7150,type:"Flat Rack"},{from:"Southampton",to:"Rijeka",cost:11950,type:"RO-RO"},{from:"Southampton",to:"Split",cost:12950,type:"RO-RO"}]}},
   bulgaria:{label:"Bulgária",flag:"🇧🇬",vatRate:.20,routes:{netherlands:[{from:"Rotterdam",to:"Sófia",cost:17167,type:"Camião",note:"Transporte por camião — 12×4×4m / 5t"}]}},
   brazil:{label:"Brasil",flag:"🇧🇷",vatRate:0,taxII:.126,taxIPI:0,taxPIS:.021,taxCOFINS:.0965,taxICMS:.18,fobRate:.10,routes:{
-    uk:[{from:"Felixstowe",to:"Santos",cost:5850,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"},{from:"London Gateway",to:"Santos",cost:13500,type:"Flat Rack"},{from:"Tilbury",to:"Santos",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
-    netherlands:[{from:"Rotterdam",to:"Santos",cost:5450,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"},{from:"Rotterdam",to:"Santos",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
+    uk:[{from:"Felixstowe",to:"Santos",cost:4950,type:"Flat Rack",note:"⭐ Oficial 2026. HS 8716.10.98. Inclui desp. portuárias, BL e despacho exportação"},{from:"London Gateway",to:"Santos",cost:13500,type:"Flat Rack"},{from:"Tilbury",to:"Santos",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
+    netherlands:[{from:"Rotterdam",to:"Santos",cost:4750,type:"Flat Rack",note:"⭐ Oficial 2026. Inclui desp. portuárias, BL e despacho exportação"},{from:"Rotterdam",to:"Santos",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
     portugal:[{from:"Leixões",to:"Santos",cost:8850,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"}],
     china:[{from:"Shanghai",to:"Santos",cost:21000,type:"Flat Rack"},{from:"Shanghai",to:"Santos",cost:2880,type:"Container 20HQ"},{from:"Shanghai",to:"Santos",cost:5760,type:"Container 40HQ"}]}},
-  china:{label:"China",flag:"🇨🇳",vatRate:.23,vatExtra:.027,routes:{china:[{from:"Shanghai",to:"Leixões",cost:23244,type:"Flat Rack"},{from:"Shanghai",to:"Leixões",cost:2655,type:"Container 20'"},{from:"Shanghai",to:"Leixões",cost:3528,type:"Container 40'"}]}},
   usa:{label:"EUA",flag:"🇺🇸",vatRate:0,routes:{uk:[{from:"Southampton",to:"New York, NY",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Brunswick, GA",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Galveston, TX",cost:34370,type:"RO-RO"}]}}
 };
 
@@ -1125,12 +614,12 @@ function switchTab(t){
     $('panel-'+x).classList.toggle('hidden',x!==t);
     $('tab-'+x).classList.toggle('tab-active',x===t);
   });
-  if(t==='settings'){buildCfgSections();buildRouteEditor();}
+  if(t==='settings'){if(!$('cfg_gbp'))buildCfgSections();buildRouteEditor();}
 }
 
 // === COUNTRY BUTTONS ===
 function buildCountryButtons(){
-  const euK=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"],nonK=["brazil","china","usa"];
+  const euK=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"],nonK=["brazil","usa"];
   const mk=(k,el)=>{const c=R[k];if(!c)return;const b=document.createElement('button');
     b.className='country-btn flex items-center gap-1.5 px-3 py-2 rounded-xl border border-white/[.06] bg-gv-bg/60 text-gray-400 text-[13px] cursor-pointer';
     b.dataset.country=k;b.innerHTML=`<span class="text-lg">${c.flag}</span><span class="font-medium">${c.label}</span>`;b.onclick=()=>selectCountry(k);el.appendChild(b);};
@@ -1138,19 +627,11 @@ function buildCountryButtons(){
   euK.forEach(k=>mk(k,eu));nonK.forEach(k=>mk(k,ne));
 }
 
-function selectCountry(id,isInit=false){
+function selectCountry(id){
   const c=R[id];if(!c)return;AC=id;
   $$('[data-country]').forEach(b=>b.classList.toggle('country-active',b.dataset.country===id));
   $('intl_flag').textContent=c.flag;$('intl_countryLabel').textContent=c.label;
-  popOrigins(id);
-  updateRoutes();
-  // Garante que moeda seja atualizada após DOM estar pronto
-  setTimeout(()=>{
-    autoSelectCurrency(!isInit);
-    updateTierPreview();
-    updateRefTable();
-  },10);
-  $('intl_results').classList.add('hidden');
+  popOrigins(id);updateRoutes();autoSelectCurrency();updateTierPreview();autoCalc();$('intl_results').classList.add('hidden');
 }
 
 function popOrigins(id){
@@ -1161,7 +642,18 @@ function popOrigins(id){
 function updateRoutes(){
   const c=R[AC],o=$('intl_origin').value,sel=$('intl_route'),ne=$('intl_routeNote');
   sel.innerHTML='';ne&&ne.classList.add('hidden');if(!c?.routes?.[o])return;
-  c.routes[o].forEach((r,i)=>{const op=document.createElement('option');op.value=i;op.textContent=`${r.from} → ${r.to} • ${r.type} • €${r.cost.toLocaleString("pt-PT")}`;sel.appendChild(op);});
+  // Sort: recommended first, then by cost
+  const indexed=c.routes[o].map((r,i)=>({r,i})).sort((a,b)=>{
+    if(a.r.recommended&&!b.r.recommended)return -1;
+    if(!a.r.recommended&&b.r.recommended)return 1;
+    return a.r.cost-b.r.cost;
+  });
+  indexed.forEach(({r,i},pos)=>{
+    const op=document.createElement('option');op.value=i;
+    const star=r.recommended?'⭐ ':pos===0?'💰 ':'';
+    op.textContent=`${star}€${r.cost.toLocaleString("pt-PT")} — ${r.from} → ${r.to} (${r.type})`;
+    sel.appendChild(op);
+  });
   showRouteNote();
 }
 
@@ -1171,352 +663,289 @@ function showRouteNote(){
   if(rt?.note){ne.textContent=rt.note;ne.classList.remove('hidden');}else ne.classList.add('hidden');
 }
 
-function autoSelectCurrency(showToast=true){
+function autoSelectCurrency(){
   const origin=$('intl_origin').value;
-  if(!origin)return;  // Segurança: só atualiza se origem existir
-
-  const oldCurrency=$('intl_currency').value;
-
-  // Mapa completo: origem → moeda esperada
-  const currencyMap={
-    uk:'GBP',           // Inglaterra → Libras
-    netherlands:'EUR',  // Holanda → Euros
-    france:'EUR',       // França → Euros
-    portugal:'EUR',     // Portugal → Euros
-    belgium:'EUR',      // Bélgica → Euros
-    china:'CNY'         // China → Yuan (casas vendidas em CNY normalmente)
-  };
-
+  const currencyMap={uk:'GBP',netherlands:'EUR',france:'EUR',portugal:'EUR',belgium:'EUR',china:'CNY',brazil:'USD'};
   const currency=currencyMap[origin]||'EUR';
-  const currencySelect=$('intl_currency');
-
-  if(!currencySelect)return;  // Segurança
-
-  // Define a moeda
-  currencySelect.value=currency;
-
-  // Debug log (pode remover depois)
-  console.log(`[AutoCurrency] Origem: ${origin} → Moeda: ${currency} (era: ${oldCurrency})`);
-
-  // Notifica mudança apenas se houve alteração E showToast=true
-  if(showToast&&oldCurrency!==currency&&oldCurrency){
-    const symbols={EUR:'€',GBP:'£',CNY:'¥',USD:'$',BRL:'R$',PLN:'zł'};
-    toast(`✓ Moeda ajustada: ${currency} ${symbols[currency]||''}`,true);
-  }
-
-  // Atualiza preview do tier após mudar moeda
-  updateTierPreview();
+  $('intl_currency').value=currency;
 }
 
-function onOriginChange(){updateRoutes();autoSelectCurrency();updateTierPreview();updateRefTable();}
+function onOriginChange(){updateRoutes();autoSelectCurrency();updateTierPreview();autoCalc();}
+function onRouteChange(){showRouteNote();autoCalc();}
+function autoCalc(){
+  const c=R[AC],o=$('intl_origin')?.value,ri=parseInt($('intl_route')?.value,10);
+  if(!c||!c.routes?.[o]||isNaN(ri)||ri>=c.routes[o].length)return;
+  calcInternational();
+}
 
 function updateTierPreview(){
-  const p=parseFloat($('intl_price').value)||0,cur=$('intl_currency').value,r=rates(),pe=p*(r[cur]||1);
+  const p=pn('intl_price'),cur=$('intl_currency').value,r=rates(),pe=p*(r[cur]||1);
   const tid=tierOf(pe),t=tiers()[tid];
   const pill=$('intl_tierPill');
   pill.textContent=t.label;$('intl_tierDesc').textContent=t.description;
   pill.className=`shrink-0 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[.15em] border tier-${tid}`;
 }
 
-// === TABELA DE REFERÊNCIA RÁPIDA ===
-function updateRefTable(){
-  const tbody=$('intl_refBody');
-  if(!tbody)return;
-
-  const cur=$('intl_currency').value||'EUR';
-  const ok=$('intl_origin').value;
-  const ri=parseInt($('intl_route').value)||0;
-  const c=R[AC];
-
-  if(!c||!ok||!c.routes||!c.routes[ok]||!c.routes[ok][ri]){
-    tbody.innerHTML='<tr><td colspan="2" class="text-center py-4 text-gray-500 text-xs">Selecione país, origem e rota válidos</td></tr>';
-    return;
-  }
-
-  const rt=rates();
-  const tr=tiers();
-  const route=c.routes[ok][ri];
-  const seaCostBase=route.cost||0; // Custo marítimo BASE da rota
-  const landCostBase=LAND(); // Custo terrestre BASE (2000 padrão)
-  const csym={EUR:'€',GBP:'£',CNY:'¥',USD:'$',BRL:'R$',PLN:'zł'};
-  const symbol=csym[cur]||cur;
-  const isEU=EU.has(AC);
-  const isBR=AC==="brazil";
-
-  // Valores de referência (ajustados para cada moeda)
-  const baseValues = cur==='GBP'?[1000,2000,5000,10000,20000,50000,100000]
-                    :cur==='EUR'?[1000,2500,5000,10000,25000,50000,100000]
-                    :cur==='USD'?[1000,2500,5000,10000,25000,50000,100000]
-                    :cur==='BRL'?[5000,10000,25000,50000,100000,250000,500000]
-                    :cur==='CNY'?[10000,20000,50000,100000,200000,500000,1000000]
-                    :[1000,2500,5000,10000,25000,50000,100000];
-
-  const rows=baseValues.map(price=>{
-    // CONVERSÃO PARA EUR (igual ao cálculo principal)
-    const pe=price*(rt[cur]||1);
-
-    // TIER baseado no preço EUR
-    const tid=tierOf(pe);
-    const t=tr[tid];
-
-    // CUSTOS MULTIPLICADOS (igual ao cálculo principal)
-    let sea=seaCostBase*t.seaMultiplier;
-    let land=landCostBase*t.landMultiplier;
-    let crane=t.craneCost||0;
-
-    // EXCEÇÃO: França → Portugal usa camião (sem terrestre, com grua extra)
-    if(AC==="portugal"&&ok==="france"){
-      land=0;
-      crane=crane+CRANE();
-    }
-
-    // CÁLCULO ESPECÍFICO POR PAÍS (igual ao cálculo principal)
-    let sub=0;
-    if(isBR){
-      // Brasil: cálculo com tributos
-      const fob=pe*(c.fobRate||0);
-      const cif=pe+fob+sea;
-      const vII=cif*(c.taxII||0);
-      const vIPI=(cif+vII)*(c.taxIPI||0);
-      const bPC=cif+vII+vIPI;
-      const vPIS=bPC*(c.taxPIS||0);
-      const vCOF=bPC*(c.taxCOFINS||0);
-      const icR=c.taxICMS||0;
-      const bICMS=(cif+vII+vIPI+vPIS+vCOF)/(1-icR);
-      const vICMS=bICMS*icR;
-      const tT=vII+vIPI+vPIS+vCOF+vICMS;
-      sub=cif+tT+land+crane+t.companyProfit+t.commission;
-    }else if(AC==="china"){
-      // China: taxa extra de IVA
-      const b=pe+sea;
-      const extraTax=b*(c.vatExtra||0);
-      sub=b+land+crane+t.companyProfit+t.commission+extraTax;
-    }else{
-      // Outros países: cálculo padrão
-      sub=pe+sea+land+crane+t.companyProfit+t.commission;
-    }
-
-    // IVA (apenas UE)
-    const ivaR=isEU?(c.vatRate||0.23):0;
-    const iva=sub*ivaR;
-    const tot=sub+iva;
-
-    return`<tr class="border-b border-white/5 hover:bg-white/[.02]">
-      <td class="py-2 px-3 text-gray-300">${symbol}${fmt(price,'pt-PT',0)}</td>
-      <td class="text-right py-2 px-3 font-mono font-semibold text-gv-accent">€${fmt(tot,'pt-PT',2)}</td>
-    </tr>`;
-  }).join('');
-
-  tbody.innerHTML=rows;
-}
-
 // === CALC INTERNATIONAL ===
+// Estrutura fiscal completa:
+// Non-EU → EU: CIF → Direitos Aduaneiros → IVA Aduaneiro (dedutível) → Custos → Margem → IVA Venda
+// EU → EU: Preço → Transporte → Margem → IVA Venda (aquisição intracomunitária = reverse charge, net 0)
+// Qualquer → Brasil: CIF → II + IPI + PIS + COFINS + ICMS gross-up
 function calcInternational(){
   const c=R[AC];if(!c)return;
-
-  // Parse de inputs com validação
-  const priceInput=$('intl_price');
-  const ip=parseFloat(priceInput.value)||0;
-  const cur=$('intl_currency').value;
-  const ok=$('intl_origin').value;
-  const ri=parseInt($('intl_route').value,10);
-
-  // VALIDAÇÃO: Preço não pode ser zero ou negativo
-  if(ip<=0){
-    priceInput.classList.add('border-red-500','border-2');
-    setTimeout(()=>priceInput.classList.remove('border-red-500','border-2'),3000);
-    toast('⚠️ O preço deve ser maior que zero',false);
-    priceInput.focus();
-    return;
-  }
-
-  // Remove borda de erro se existir
-  priceInput.classList.remove('border-red-500','border-2');
-
-  // Validação de rota
-  const rts=c.routes?.[ok]||[];
-  if(isNaN(ri)||ri>=rts.length){
-    toast('⚠️ Selecione uma rota válida',false);
-    return;
-  }
-
-  const rt=rts[ri];
-  const lr=localRates();
-  const cr=rates();
-  const ts=tiers();
-  const isEU=EU.has(AC);
-  const isBR=AC==="brazil";
-
-  // CONVERSÃO PARA EUR (crítico para consistência)
-  const exchangeRate = cr[cur] || 1;
-  const pe = ip * exchangeRate;
-
-  // Determinar tier baseado no preço em EUR
-  const tid=tierOf(pe);
-  const tier=ts[tid];
-
-  // LOG DETALHADO para debug
-  console.log('═══════════════════════════════════════');
-  console.log('[CALC] Inputs:', {
-    país: AC,
-    origem: ok,
-    rota: ri,
-    preçoOriginal: `${ip} ${cur}`,
-    taxaCâmbio: exchangeRate.toFixed(4),
-    preçoEUR: pe.toFixed(2),
-    tier: tid
-  });
-  console.log('[CALC] Tier:', {
-    id: tid,
-    label: tier.label,
-    lucroGV: tier.companyProfit,
-    comissão: tier.commission,
-    multMar: tier.seaMultiplier,
-    multTerr: tier.landMultiplier
-  });
-  // Atualizar UI do tier
+  const ip=pn('intl_price'),cur=$('intl_currency').value,ok=$('intl_origin').value,ri=parseInt($('intl_route').value,10);
+  const rts=c.routes?.[ok]||[];if(isNaN(ri)||ri>=rts.length){toast('Seleciona uma rota.',false);return;}
+  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isBR=AC==="brazil";
+  const pe=ip*(cr[cur]||1),tid=tierOf(pe),tier=ts[tid];
   const pill=$('intl_tierPill');
-  pill.textContent=tier.label;
-  $('intl_tierDesc').textContent=tier.description;
+  pill.textContent=tier.label;$('intl_tierDesc').textContent=tier.description;
   pill.className=`shrink-0 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[.15em] border tier-${tid}`;
+  const PROF=tier.companyProfit,COM=tier.commission;
 
-  // VALORES DO TIER (garantir consistência)
-  const PROF = tier.companyProfit;
-  const COM = tier.commission;
+  // --- TRANSPORTE ---
+  let sea=rt.cost*tier.seaMultiplier,land=LAND()*tier.landMultiplier,xCrane=0;
+  if(AC==="portugal"&&ok==="france"){land=0;xCrane=CRANE();}
+  const crane=tier.craneCost+xCrane;
 
-  // CÁLCULO DE CUSTOS
-  let sea = rt.cost * tier.seaMultiplier;
-  let land = LAND() * tier.landMultiplier;
-  let xCrane = 0;
+  // --- CUSTOMS (apenas origens non-EU com destino UE) ---
+  const isNonEUOrigin=NON_EU_ORIGINS.has(ok);
+  const isEUDest=EU.has(AC);
+  const needsCustoms=isNonEUOrigin&&isEUDest&&!isBR;
+  const vatR=c.vatRate||0;
 
-  // Exceção: França → Portugal usa camião (sem terrestre, com grua)
-  if(AC==="portugal" && ok==="france"){
-    land = 0;
-    xCrane = CRANE();
+  // Seguro: 0.5% do valor da casa ou mínimo configurável
+  const insPct=(pn('cfg_insurancePct')||0.5)/100;
+  const insMin=INSURANCE(); // mínimo da config (default 200€)
+  const insuranceFee=needsCustoms?Math.max(pe*insPct,insMin):0;
+  // CIF = preço + frete marítimo + seguro (base tributável aduaneira)
+  const cifVal=pe+sea+insuranceFee;
+
+  // Direitos aduaneiros — HS 8716.10.98 (reboques para habitação / mobile homes >3.5t)
+  // Verificado: xlsx oficial "Logistica Mobile Homes" + faturas Across FT 2026/226-229
+  // Fórmula xlsx: =(casa+transporte)*0.027 → duty 2.7% confirmado
+  // UK: 0% com TCA (Trade and Cooperation Agreement) + prova de origem EUR.1
+  // UK sem TCA: 2.7% (MFN rate)
+  // China: 2.7% MFN (sem anti-dumping em 8716.10.98)
+  // Outros non-EU: 2.7% MFN genérico
+  let dutyRate=0,antiDumpR=0,dutyNote='';
+  if(ok==='uk'){
+    dutyRate=(pn('cfg_dutyUK')||2.7)/100;
+    dutyNote=dutyRate===0?'HS 8716.10.98 — 0% Acordo TCA UK-UE com prova de origem EUR.1':'HS 8716.10.98 — '+((dutyRate*100).toFixed(1))+'% MFN sem acordo preferencial';
+  }else if(ok==='china'){
+    dutyRate=(pn('cfg_dutyChina')||2.7)/100;
+    antiDumpR=(pn('cfg_antiDumpChina')||0)/100;
+    dutyNote=`HS 8716.10.98 — MFN ${(dutyRate*100).toFixed(1)}%`+(antiDumpR>0?` + anti-dumping ${(antiDumpR*100).toFixed(1)}%`:'');
+  }else if(isNonEUOrigin){
+    dutyRate=0.027; // MFN genérico para outros países non-EU
+    dutyNote='HS 8716.10.98 — 2.7% MFN';
   }
+  const customsDuty=needsCustoms?cifVal*dutyRate:0;
+  const antiDumping=needsCustoms?cifVal*antiDumpR:0;
 
-  const crane = tier.craneCost + xCrane;
+  // IVA Aduaneiro = IVA sobre (CIF + direitos + anti-dumping)
+  // VERIFICADO: 23% x (CIF + duty) = Across FT 2026/338 IVA alfandega confirmado
+  // Este IVA é DEDUTÍVEL — a empresa recupera-o na declaração periódica de IVA
+  const ivaAdBase=cifVal+customsDuty+antiDumping;
+  const ivaAduaneiro=needsCustoms?ivaAdBase*vatR:0;
 
-  console.log('[CALC] Custos base:', {
-    marítimo: sea.toFixed(2),
-    terrestre: land.toFixed(2),
-    grua: crane.toFixed(2),
-    lucroGV: PROF.toFixed(2),
-    comissão: COM.toFixed(2)
-  });
+  // Despacho aduaneiro (despachante) — 280€ flat (config despachantes.json)
+  const despacho=needsCustoms?CUSTOMS():0;
+  // Custos portuários: origem 180€ + destino 220€ = 400€ (se NÃO incluídos no frete)
+  const portOrig=needsCustoms?(pn('cfg_portOrigin')||180):0;
+  const portDest=needsCustoms?(pn('cfg_portDest')||220):0;
+  const portIncl=rt.portIncl||false; // UECC LINER IN/OUT inclui porto
+  const portHandling=portIncl?0:(portOrig+portDest);
+  // Demurrage (dias no porto)
+  const demDays=pn('cfg_demurrageDays')||0;
+  const demRate=pn('cfg_demurrageRate')||65;
+  const demurrage=demDays*demRate;
+  // Armazenamento (warehousing) — Across Leixões: €21/dia (fatura real FT 2026/226)
+  const stoDays=pn('cfg_storageDays');// default 21 in config, 0 = no storage
+  const stoRate=pn('cfg_storageRate')||70;// CLDN Leixões: €70/dia (FT 2026/339: €2,110/30d)
+  const storage=stoDays*stoRate;
 
-  // CÁLCULO ESPECÍFICO POR PAÍS
-  let fob=0, cif=0, brTax={}, sub=0;
+  // Documentação: BL €50 + EUR.1/CMR €50 + certificados €30 = ~€130
+  const docFee=needsCustoms?DOCFEE():0;
+
+  // --- CÁLCULO DO SUBTOTAL ---
+  let sub=0,fob=0,cif=0,brTax={};
 
   if(isBR){
-    // Brasil: cálculo com tributos
-    fob = pe * (c.fobRate||0);
-    cif = pe + fob + sea;
-    const vII = cif * (c.taxII||0);
-    const vIPI = (cif + vII) * (c.taxIPI||0);
-    const bPC = cif + vII + vIPI;
-    const vPIS = bPC * (c.taxPIS||0);
-    const vCOF = bPC * (c.taxCOFINS||0);
-    const icR = c.taxICMS||0;
-    const bICMS = (cif + vII + vIPI + vPIS + vCOF) / (1 - icR);
-    const vICMS = bICMS * icR;
-
-    brTax = {vII, vIPI, vPIS, vCOF, vICMS};
-    const tT = vII + vIPI + vPIS + vCOF + vICMS;
-    sub = cif + tT + land + crane + PROF + COM;
-
-  } else if(AC==="china"){
-    // China: taxa extra de IVA
-    const b = pe + sea;
-    const extraTax = b * (c.vatExtra||0);
-    sub = b + land + crane + PROF + COM + extraTax;
-
+    // Brasil: tributação própria (II + IPI + PIS + COFINS + ICMS gross-up)
+    fob=pe*(c.fobRate||0);cif=pe+fob+sea+(isNonEUOrigin?insuranceFee:0);
+    const vII=cif*(c.taxII||0),vIPI=(cif+vII)*(c.taxIPI||0),bPC=cif+vII+vIPI;
+    const vPIS=bPC*(c.taxPIS||0),vCOF=bPC*(c.taxCOFINS||0);
+    const icR=c.taxICMS||0,bICMS=(cif+vII+vIPI+vPIS+vCOF)/((1-icR)||1),vICMS=bICMS*icR;
+    // AFRMM: 25% sobre frete marítimo (Adicional ao Frete para Renovação da Marinha Mercante)
+    const afrmm=sea*0.25;
+    // SISCOMEX: taxa fixa R$214.50 por DI (Declaração de Importação)
+    const siscomex=214.50/(lr.brazil?.rate||6.5); // converte R$ para EUR
+    brTax={vII,vIPI,vPIS,vCOF,vICMS,afrmm,siscomex};
+    const tT=vII+vIPI+vPIS+vCOF+vICMS;
+    sub=cif+tT+afrmm+siscomex+land+crane+despacho+portHandling+PROF+COM;
+  } else if(needsCustoms){
+    // Non-EU → UE: custo total = preço + transporte + seguro + direitos + despacho + porto + demurrage + terrestre + grua
+    // NOTA: IVA aduaneiro NÃO entra no custo (é dedutível — recuperado na declaração IVA)
+    const totalAcq=pe+sea+insuranceFee+customsDuty+antiDumping+despacho+docFee+portHandling+demurrage+storage+land+crane;
+    sub=totalAcq+PROF+COM;
   } else {
-    // Outros países: cálculo padrão
-    sub = pe + sea + land + crane + PROF + COM;
+    // UE → UE (intracomunitário) ou destinos sem IVA
+    // Sem alfândega, sem IVA aduaneiro. Aquisição intracomunitária = reverse charge (net 0)
+    sub=pe+sea+land+crane+PROF+COM;
   }
 
-  // IVA (apenas para países da UE)
-  const ivaR = isEU ? (c.vatRate || 0.23) : 0;
-  const iva = sub * ivaR;
-  const tot = sub + iva;
+  // IVA Venda (cobrado ao cliente final)
+  const ivaVenda=isBR?0:sub*vatR;
+  const total=sub+ivaVenda;
 
-  // Conversão para moeda local (se diferente de EUR)
-  const lc = lr[AC] || {rate:1, symbol:"€", code:"EUR"};
-  const totL = tot * lc.rate;
+  // Cash flow real (inclui IVA aduaneiro como desembolso temporário)
+  const cashOut=needsCustoms?(sub+ivaAduaneiro):sub;
 
-  console.log('[CALC] Resultado:', {
-    subtotal: sub.toFixed(2),
-    IVA: `${(ivaR*100).toFixed(0)}% = €${iva.toFixed(2)}`,
-    total: tot.toFixed(2),
-    moedaLocal: lc.code !== 'EUR' ? `${lc.code} ${totL.toFixed(2)}` : 'N/A'
-  });
-  console.log('═══════════════════════════════════════');
+  // Moeda local
+  const lc=lr[AC]||{rate:1,symbol:"€",code:"EUR"},totL=total*lc.rate;
 
+  // ==================== RENDER ====================
   const g=$('intl_grid');g.innerHTML='';
-  const card=(l,v,o={})=>{g.innerHTML+=`<div class="result-card text-sm ${o.full?'sm:col-span-2':''} ${o.hl?'result-highlight':''}"><div class="text-[10px] uppercase tracking-[.15em] text-gray-500 mb-1.5">${l}</div><div class="font-semibold font-mono ${o.fin?'text-base':'text-sm'}">${v}</div></div>`;};
   const s=csym[cur]||'';
-  card("Escala aplicada",`<span class="tier-${tid} px-2 py-0.5 rounded-lg text-xs font-bold">${tier.label}</span>`,{full:1});
-  if(ip>0){card("Preço casa (origem)",`${s}${ip.toLocaleString("pt-PT")}`);if(cur!=="EUR")card("Preço em EUR",fc(pe));}
-  card(ok==="france"&&AC==="portugal"?"Camião França → Portugal":`Marítimo (${rt.type})`,fc(sea));
-  if(!(AC==="portugal"&&ok==="france"))card("Terrestre no destino",fc(land));
-  if(crane>0)card("Grua / Autogrua",fc(crane));
-  if(AC==="china"&&c.vatExtra>0){const extraTax=(pe+sea)*(c.vatExtra||0);card(`Taxa extra China (${(c.vatExtra*100).toFixed(1)}%)`,fc(extraTax));}
-  if(isBR){card("FOB ("+((c.fobRate||0)*100).toFixed(0)+"%)",fc(fob));card("CIF (Casa+FOB+Mar.)",fc(cif));card(`II (${((c.taxII||0)*100).toFixed(1)}%)`,fc(brTax.vII));if(brTax.vIPI>0)card(`IPI (${((c.taxIPI||0)*100).toFixed(1)}%)`,fc(brTax.vIPI));card(`PIS (${((c.taxPIS||0)*100).toFixed(1)}%)`,fc(brTax.vPIS));card(`COFINS (${((c.taxCOFINS||0)*100).toFixed(1)}%)`,fc(brTax.vCOF));card(`ICMS gross-up (${((c.taxICMS||0)*100).toFixed(0)}%)`,fc(brTax.vICMS));}
-  card("Lucro Green Village",fc(PROF));card("Comissão vendedor",fc(COM));
-  const subLabel=isBR?"Custo Nacionalizado (sem IVA)":isEU?"Subtotal (sem IVA)":"Subtotal";
-  card(subLabel,fc(sub),{full:1,fin:1});
-  if(ivaR>0)card(`IVA (${(ivaR*100).toFixed(0)}%)`,fc(iva));
-  card("TOTAL COM IVA",fc(tot),{full:1,hl:1,fin:1});
-  if(lc.code!=="EUR")card(`Total em ${lc.code}`,`${lc.symbol}${fmt(totL,"pt-PT",2)}`,{full:1,hl:1,fin:1});
-  card("Rota",`${rt.from} → ${rt.to} (${rt.type})`,{full:1});
-  if(rt.note)card("⚠️ Observação",rt.note,{full:1});
-  $('intl_results').classList.remove('hidden');
+  const ivaNet=needsCustoms?(ivaVenda-ivaAduaneiro):ivaVenda;
 
-  // Capturar dados para analytics
-  lastCalculationData = {
-    type: 'international',
-    priceEur: pe,
-    maritime: sea,
-    land: land + crane,
-    profit: PROF,
-    commission: COM,
-    subtotal: sub,
-    iva,
-    total: tot
-  };
+  // ============ SUMMARY BOX (big numbers, always visible) ============
+  g.innerHTML+=`
+  <div class="sm:col-span-2 rounded-2xl border-2 border-[#1db854]/30 bg-gradient-to-r from-[#1db854]/10 to-[#1db854]/5 p-6 text-center">
+    <div class="text-[10px] uppercase tracking-[.2em] text-[#1db854]/70 mb-2">Cobra ao cliente (c/ IVA)</div>
+    <div class="text-4xl sm:text-5xl font-bold font-mono text-[#00ff88] tracking-tight">${fc(total)}</div>
+    ${lc.code!=="EUR"?`<div class="text-lg font-mono text-gray-400 mt-1">${lc.symbol}${fmt(totL)}</div>`:''}
+  </div>
+  <div class="rounded-2xl border border-white/[.06] bg-gv-soft/40 p-5 text-center">
+    <div class="text-[10px] uppercase tracking-[.2em] text-gray-500 mb-1">Teu custo</div>
+    <div class="text-2xl font-bold font-mono text-white">${fc(sub-PROF-COM)}</div>
+    <div class="text-[10px] text-gray-500 mt-1">${needsCustoms?'Casa + frete + alfândega + docs':'Casa + frete'}</div>
+  </div>
+  <div class="rounded-2xl border border-[#00ff88]/15 bg-[#00ff88]/[.04] p-5 text-center">
+    <div class="text-[10px] uppercase tracking-[.2em] text-[#00ff88]/60 mb-1">Teu lucro</div>
+    <div class="text-2xl font-bold font-mono text-[#00ff88]">${fc(PROF+COM)}</div>
+    <div class="text-[10px] text-gray-500 mt-1">GV ${fc(PROF)} + Comissão ${fc(COM)}</div>
+  </div>`;
+
+  // ============ KEY NUMBERS ============
+  g.innerHTML+=`<div class="sm:col-span-2 grid grid-cols-2 sm:grid-cols-4 gap-2">
+    <div class="rounded-xl border border-white/[.05] bg-gv-bg/60 p-3 text-center">
+      <div class="text-[9px] uppercase tracking-[.15em] text-gray-600 mb-1">Casa</div>
+      <div class="text-sm font-mono font-semibold">${ip>0&&cur!=='EUR'?s+ip.toLocaleString("pt-PT")+' = ':''}${fc(pe)}</div>
+    </div>
+    <div class="rounded-xl border border-white/[.05] bg-gv-bg/60 p-3 text-center">
+      <div class="text-[9px] uppercase tracking-[.15em] text-gray-600 mb-1">Frete</div>
+      <div class="text-sm font-mono font-semibold">${fc(sea)}</div>
+    </div>
+    <div class="rounded-xl border border-white/[.05] bg-gv-bg/60 p-3 text-center">
+      <div class="text-[9px] uppercase tracking-[.15em] text-gray-600 mb-1">${vatR>0?'IVA '+((vatR*100).toFixed(0))+'%':'IVA'}</div>
+      <div class="text-sm font-mono font-semibold">${fc(ivaVenda)}</div>
+    </div>
+    <div class="rounded-xl border border-white/[.05] bg-gv-bg/60 p-3 text-center">
+      <div class="text-[9px] uppercase tracking-[.15em] text-gray-600 mb-1">Margem</div>
+      <div class="text-sm font-mono font-semibold text-[#00ff88]">${fc(PROF+COM)}</div>
+    </div>
+  </div>`;
+
+  // ============ CASH FLOW ALERT (non-EU only) ============
+  if(needsCustoms&&ivaAduaneiro>0){
+    g.innerHTML+=`<div class="sm:col-span-2 rounded-xl border border-amber-500/20 bg-amber-500/[.05] p-4">
+      <div class="text-[10px] uppercase tracking-[.15em] text-amber-400 mb-2 font-semibold">Cash Flow (desembolso real)</div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div><div class="text-[9px] text-amber-400/60 mb-1">Pagas na alfândega</div><div class="text-sm font-mono font-semibold text-amber-300">${fc(cashOut)}</div></div>
+        <div><div class="text-[9px] text-amber-400/60 mb-1">IVA a recuperar</div><div class="text-sm font-mono font-semibold text-[#00ff88]">-${fc(ivaAduaneiro)}</div></div>
+        <div><div class="text-[9px] text-amber-400/60 mb-1">IVA ao Estado</div><div class="text-sm font-mono font-semibold">${fc(ivaNet>0?ivaNet:0)}</div></div>
+        <div><div class="text-[9px] text-amber-400/60 mb-1">Custo real</div><div class="text-sm font-mono font-semibold">${fc(sub)}</div></div>
+      </div>
+      <div class="text-[10px] text-amber-400/40 mt-2">IVA aduaneiro ${fc(ivaAduaneiro)} pago na alfândega, recuperado na declaração periódica de IVA</div>
+    </div>`;
+  } else if(!isNonEUOrigin&&isEUDest&&!isBR){
+    g.innerHTML+=`<div class="sm:col-span-2 rounded-xl border border-[#5eb5ff]/15 bg-[#5eb5ff]/[.04] p-3 text-center">
+      <div class="text-[10px] text-[#5eb5ff]/70">Intracomunitário (UE-UE): IVA reverse charge, efeito zero. Sem alfândega.</div>
+    </div>`;
+  }
+
+  // ============ COLLAPSIBLE DETAIL ============
+  let dtl='';
+  const dr=(l,v,cl='')=>{dtl+=`<div class="flex justify-between items-center py-1.5 ${cl}"><span class="text-[11px] text-gray-500">${l}</span><span class="text-[11px] font-mono font-medium">${v}</span></div>`;};
+  const ds=(t)=>{dtl+=`<div class="text-[9px] uppercase tracking-[.2em] text-gray-600 pt-3 pb-1 font-semibold border-t border-white/[.04] mt-2">${t}</div>`;};
+
+  ds("Aquisição");
+  if(ip>0)dr("Preço da casa",`${ip>0&&cur!=='EUR'?s+ip.toLocaleString("pt-PT")+' = ':''}${fc(pe)}`);
+  dr(`Frete (${rt.type})`,fc(sea));
+  if(insuranceFee>0)dr(`Seguro (${(insPct*100).toFixed(1)}%)`,fc(insuranceFee));
+
+  if(needsCustoms){
+    ds("Alfândega");
+    dr("Valor CIF",fc(cifVal));
+    dr(`Direitos (${(dutyRate*100).toFixed(1)}%)`,dutyRate===0?'€0':fc(customsDuty));
+    if(dutyNote)dtl+=`<div class="text-[9px] text-gray-600 -mt-0.5 mb-1">${dutyNote}</div>`;
+    if(antiDumping>0)dr(`Anti-dumping (${(antiDumpR*100).toFixed(1)}%)`,fc(antiDumping));
+    dr(`IVA Aduaneiro (${(vatR*100).toFixed(0)}%)`,fc(ivaAduaneiro),'text-amber-400');
+    dr("Despachante",fc(despacho));
+    if(portIncl)dtl+=`<div class="text-[9px] text-[#00ff88]/60 py-0.5">Porto incluído no frete (LINER IN/OUT)</div>`;
+    else dr(`Porto (${portOrig}+${portDest})`,fc(portHandling));
+    if(demurrage>0)dr(`Demurrage (${demDays}d × €${demRate})`,fc(demurrage));
+    if(storage>0)dr(`Armazenamento (${stoDays}d × €${stoRate})`,fc(storage));
+    if(docFee>0)dr("Documentação (BL+EUR.1+cert.)",fc(docFee));
+  } else if(isBR){
+    ds("Tributos Brasil");
+    dr("FOB",fc(fob));dr("CIF",fc(cif));
+    dr(`II (${((c.taxII||0)*100).toFixed(1)}%)`,fc(brTax.vII));
+    if(brTax.vIPI>0)dr("IPI",fc(brTax.vIPI));
+    dr(`PIS (${((c.taxPIS||0)*100).toFixed(1)}%)`,fc(brTax.vPIS));
+    dr(`COFINS (${((c.taxCOFINS||0)*100).toFixed(1)}%)`,fc(brTax.vCOF));
+    dr(`ICMS (${((c.taxICMS||0)*100).toFixed(0)}%)`,fc(brTax.vICMS));
+    ds("Taxas Portuárias Brasil");
+    dr("AFRMM (25% frete)",fc(brTax.afrmm));
+    dr("SISCOMEX (taxa fixa)",fc(brTax.siscomex));
+  }
+
+  ds("Transporte + Instalação");
+  if(!(AC==="portugal"&&ok==="france"))dr("Terrestre",fc(land));
+  if(crane>0)dr("Grua",fc(crane));
+
+  ds("Margem");
+  dr("Lucro GV",fc(PROF));
+  dr("Comissão",fc(COM));
+  dr("Subtotal (s/ IVA)",fc(sub),'font-semibold');
+
+  if(vatR>0&&!isBR){
+    ds("IVA Venda");
+    dr(`IVA ${(vatR*100).toFixed(0)}% (${c.label})`,fc(ivaVenda));
+  }
+
+  dr("TOTAL",fc(total),'font-bold text-[#00ff88] text-sm border-t border-[#00ff88]/20 pt-2 mt-2');
+
+  g.innerHTML+=`<div class="sm:col-span-2">
+    <details class="rounded-xl border border-white/[.06] overflow-hidden">
+      <summary class="px-4 py-3 cursor-pointer text-[11px] uppercase tracking-[.15em] text-gray-500 hover:text-gray-300 hover:bg-white/[.02] transition select-none flex items-center gap-2">
+        <span class="chevron text-[10px]">&#9654;</span> Ver decomposição completa
+      </summary>
+      <div class="px-4 pb-4">${dtl}</div>
+    </details>
+  </div>`;
+
+  // Route info
+  g.innerHTML+=`<div class="sm:col-span-2 text-[10px] text-gray-600 text-center">${oLabels[ok]||ok} → ${c.flag} ${c.label}: ${rt.from} → ${rt.to} (${rt.type})</div>`;
+
+  $('intl_results').classList.remove('hidden');
 }
 
 // === CALC BRAZIL ===
 function calcBrazil(){
   const fU=pn('br_fobUsd'),frU=pn('br_freightUsd'),iU=pn('br_insuranceUsd'),ex=pn('br_exchangeRate')||pn('cfg_usdbrl')||6;
-
-  // VALIDAÇÃO: Valores FOB e Frete não podem ser zero
-  if(fU<=0){
-    const fobInput=$('br_fobUsd');
-    fobInput.classList.add('border-red-500','border-2');
-    setTimeout(()=>fobInput.classList.remove('border-red-500','border-2'),3000);
-    toast('⚠️ O valor FOB deve ser maior que zero',false);
-    fobInput.focus();
-    return;
-  }
-  if(frU<=0){
-    const freightInput=$('br_freightUsd');
-    freightInput.classList.add('border-red-500','border-2');
-    setTimeout(()=>freightInput.classList.remove('border-red-500','border-2'),3000);
-    toast('⚠️ O valor do frete deve ser maior que zero',false);
-    freightInput.focus();
-    return;
-  }
-
   const fB=fU*ex,frB=frU*ex,iB=iU*ex,cif=fB+frB+iB;
   const bk=$('br_isBk').checked,ii=(bk?pn('br_iiRateBk'):pn('br_iiRateNonBk'))/100;
   const ipi=pn('br_ipiRate')/100,pis=pn('br_pisRate')/100,cof=pn('br_cofinsRate')/100,icms=pn('br_icmsRate')/100;
-  if(icms>=1||icms<0){toast('ERRO: ICMS deve estar entre 0% e 99%',false);return;}
   const vII=cif*ii,bIPI=cif+vII,vIPI=bIPI*ipi,bPC=cif+vII+vIPI,vPIS=bPC*pis,vCOF=bPC*cof;
-  const div=1-icms,bICMS=(cif+vII+vIPI+vPIS+vCOF)/div,vICMS=bICMS*icms;
+  const div=(1-icms)||1,bICMS=(cif+vII+vIPI+vPIS+vCOF)/div,vICMS=bICMS*icms;
   const tTrib=vII+vIPI+vPIS+vCOF+vICMS,cEf=cif>0?(tTrib/cif)*100:0;
-  const pc=pn('br_portCosts'),it=pn('br_inlandTransport'),custoT=cif+tTrib+pc+it;
+  // AFRMM: 25% sobre frete marítimo
+  const afrmm=frB*0.25;
+  // SISCOMEX: R$214.50 por DI
+  const siscomex=214.50;
+  const pc=pn('br_portCosts'),it=pn('br_inlandTransport'),custoT=cif+tTrib+afrmm+siscomex+pc+it;
   const mg=pn('br_marginPercent'),lucro=custoT*(mg/100),pFinal=custoT+lucro;
   const f=v=>fc(v,"R$","pt-BR");
   const row=(l,v,b=false)=>`<div class="flex justify-between items-center py-2 ${b?'pt-3 mt-2 border-t border-white/[.06]':''}"><span class="text-gray-500 text-xs">${l}</span><span class="${b?'text-[#00ff88] font-bold':'font-medium'} text-sm font-mono">${v}</span></div>`;
@@ -1524,25 +953,13 @@ function calcBrazil(){
   $('br_importSummary').innerHTML=row("FOB (BRL)",f(fB))+row("Frete Marítimo (BRL)",f(frB))+row("Seguro (BRL)",f(iB))+row("Valor CIF (BRL)",f(cif),1)+
     '<div class="my-3 border-t border-white/[.04]"></div>'+
     row("II",f(vII))+row("IPI",f(vIPI))+row("PIS",f(vPIS))+row("COFINS",f(vCOF))+row("ICMS (gross-up)",f(vICMS))+
-    row("Total Tributos",f(tTrib),1)+row("Carga tributária efetiva",`${cEf.toFixed(1).replace('.',',')}%`);
-  $('br_priceFormation').innerHTML=row("Valor CIF",f(cif))+row("Total Tributos",f(tTrib))+row("Custos Portuários",f(pc))+row("Transporte Terrestre",f(it))+
+    row("Total Tributos",f(tTrib),1)+row("Carga tributária efetiva",`${cEf.toFixed(1).replace('.',',')}%`)+
+    '<div class="my-3 border-t border-white/[.04]"></div>'+
+    row("AFRMM (25% frete)",f(afrmm))+row("SISCOMEX (taxa fixa)",f(siscomex));
+  $('br_priceFormation').innerHTML=row("Valor CIF",f(cif))+row("Total Tributos",f(tTrib))+row("AFRMM",f(afrmm))+row("SISCOMEX",f(siscomex))+row("Custos Portuários",f(pc))+row("Transporte Terrestre",f(it))+
     row("Custo Nacionalizado",f(custoT),1)+'<div class="my-3 border-t border-white/[.04]"></div>'+
     row(`Mark-up (${mg}%)`,f(lucro))+row("PREÇO DE VENDA",f(pFinal),1);
   $('br_results').classList.remove('hidden');
-
-  // Capturar dados para analytics
-  lastCalculationData = {
-    type: 'brazil',
-    price: fB,
-    maritime: frB,
-    land: it,
-    profit: lucro,
-    commission: 0,
-    priceEur: fB, // Using BRL as base for Brazil
-    iva: tTrib, // In Brazil context, showing total taxes as "iva"
-    subtotal: custoT,
-    total: pFinal
-  };
 }
 
 // === BUILD BRAZIL FIELDS ===
@@ -1565,28 +982,55 @@ function buildCfgSections(){
   const tierCard=(color,title,span,fields)=>`<div class="rounded-2xl border border-white/[.05] bg-gradient-to-br from-gv-soft/50 to-gv-bg/80 p-5"><h4 class="text-sm font-display font-semibold text-${color} mb-3">${title} <span class="text-gray-600 font-light text-xs">${span}</span></h4><div class="grid grid-cols-2 gap-3">${fields}</div></div>`;
 
   $('cfg_sections').innerHTML=
-    sec('[#00ff88]','Taxas de Câmbio',`<span class="text-gray-600 text-xs font-light ml-1">(Valores fixos conservadores)</span>`)+
-    `<div class="flex items-center gap-3 mb-4 p-4 rounded-2xl border border-[#00ff88]/10 bg-[#00ff88]/5">
-      <div class="flex-1">
-        <div class="text-sm font-medium text-gray-300 mb-1">💰 Taxas Fixas com Margem de Segurança</div>
-        <div class="text-xs text-gray-500">Valores baseados em máximos históricos para garantir margem de lucro. Sem variação automática.</div>
-      </div>
-    </div>` +
+    sec('[#00ff88]','Taxas de Câmbio',`<span class="text-gray-600 text-xs font-light ml-1">(1 EUR =)</span><button onclick="GV.fetchRates()" class="ml-auto px-4 py-1.5 rounded-xl border border-[#00ff88]/20 text-[10px] text-[#00ff88] uppercase tracking-[.15em] hover:bg-[#00ff88]/10 transition font-medium">🔄 Atualizar</button>`)+
     `<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">${
-      inp('cfg_gbp','GBP (£)','0.88','1€ = £X')+inp('cfg_brl','BRL (R$)','6.83')+inp('cfg_cny','CNY (¥)','8.40')+
-      inp('cfg_usd','USD ($)','1.16')+inp('cfg_pln','PLN (zł)','4.73')+inp('cfg_usdbrl','USD/BRL','6.30','Para a aba Brasil')
+      inp('cfg_gbp','GBP (£)','0.84','1€ = £X')+inp('cfg_brl','BRL (R$)','6.50')+inp('cfg_cny','CNY (¥)','8.00')+
+      inp('cfg_usd','USD ($)','1.10')+inp('cfg_pln','PLN (zł)','4.50')+inp('cfg_usdbrl','USD/BRL','6.00','Para a aba Brasil')
     }</div>`+
-    sec('[#5eb5ff]','Escalas de Margem (Tiers)')+
+    sec('[#5eb5ff]','Escalas de Margem (Tiers)',`<span class="ml-2 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[9px] uppercase tracking-[.15em] font-semibold">🔒 Bloqueado</span>`)+
     `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">${
-      tierCard('[#00ff88]','Low Budget','até 5.000€',inps('cfg_low_profit','Lucro GV (€)','3000')+inps('cfg_low_comm','Comissão (€)','500'))+
-      tierCard('[#5eb5ff]','Valor Médio','5k–20k€',inps('cfg_med_profit','Lucro GV (€)','5000')+inps('cfg_med_comm','Comissão (€)','1000'))+
-      tierCard('amber-400','Luxo','+20.000€',inps('cfg_lux_profit','Lucro GV (€)','12000')+inps('cfg_lux_comm','Comissão (€)','2000')+
+      tierCard('[#00ff88]','Low Budget','até 5.000€',
+        `<div><label class="lbls">Lucro GV (€)</label><div class="rounded-lg border border-white/[.04] bg-gv-bg/40 text-white/60 text-xs px-2.5 py-2 font-mono cursor-not-allowed">🔒 6.000</div></div>`+
+        `<div><label class="lbls">Comissão (€)</label><div class="rounded-lg border border-white/[.04] bg-gv-bg/40 text-white/60 text-xs px-2.5 py-2 font-mono cursor-not-allowed">🔒 500</div></div>`)+
+      tierCard('[#5eb5ff]','Valor Médio','5k–20k€',
+        `<div><label class="lbls">Lucro GV (€)</label><div class="rounded-lg border border-white/[.04] bg-gv-bg/40 text-white/60 text-xs px-2.5 py-2 font-mono cursor-not-allowed">🔒 6.000</div></div>`+
+        `<div><label class="lbls">Comissão (€)</label><div class="rounded-lg border border-white/[.04] bg-gv-bg/40 text-white/60 text-xs px-2.5 py-2 font-mono cursor-not-allowed">🔒 1.000</div></div>`)+
+      tierCard('amber-400','Luxo','+20.000€',
+        `<div><label class="lbls">Lucro GV (€)</label><div class="rounded-lg border border-white/[.04] bg-gv-bg/40 text-white/60 text-xs px-2.5 py-2 font-mono cursor-not-allowed">🔒 12.000</div></div>`+
+        `<div><label class="lbls">Comissão (€)</label><div class="rounded-lg border border-white/[.04] bg-gv-bg/40 text-white/60 text-xs px-2.5 py-2 font-mono cursor-not-allowed">🔒 2.000</div></div>`+
         inps('cfg_lux_sea','Multi. Marít.','2')+inps('cfg_lux_land','Multi. Terr.','2')+
         `<div class="col-span-2">${inps('cfg_lux_crane','Autogrua (€)','2000')}</div>`)
     }</div>`+
-    sec('amber-400','Outros Parâmetros')+
+    sec('amber-400','Transporte + Instalação')+
     `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">${
-      inp('cfg_landBase','Transporte terrestre base (€)','2000')+inp('cfg_craneFrPt','Grua extra FR→PT (€)','1000')
+      inp('cfg_landBase','Transporte terrestre base (€)','2000','Vigo/Leixões → local de entrega')+
+      inp('cfg_craneFrPt','Grua extra FR→PT (€)','1000','Autogrua para posicionamento')+
+      inp('cfg_truckingPerKm','Custo por km terrestre (€)','1.85','Média europeia — referência')
+    }</div>`+
+    sec('#fbbf24','Alfândega (non-EU → UE)')+
+    `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">${
+      inp('cfg_customsFee','Despacho aduaneiro (€)','500','Across real FT 2026/226: €497 — inclui docs')+
+      inp('cfg_insurance','Seguro mínimo non-EU (€)','200','Mínimo aplicado se % < este valor')+
+      inp('cfg_insurancePct','Seguro % do valor','0.5','Percentagem sobre valor da casa')+
+      inp('cfg_portOrigin','Porto origem THC (€)','180','Loading/handling porto de embarque')
+    }</div>`+
+    `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">${
+      inp('cfg_portDest','Porto destino THC (€)','220','Unloading/handling porto de chegada')+
+      inp('cfg_demurrageRate','Demurrage (€/dia)','65','Custo por dia extra no porto')+
+      inp('cfg_demurrageDays','Dias de demurrage','0','Dias extra no porto (0 = sem atraso)')+
+      inp('cfg_storageDays','Dias de armazenamento','21','CLDN Leixões: típico 21 dias — ajustar conforme caso')+
+      inp('cfg_storageRate','Armazenamento (€/dia)','70','CLDN Leixões: €70/dia (real FT 2026/339: €2,110/30d)')
+    }</div>`+
+    sec('#fbbf24','Direitos Aduaneiros — HS 8716.10.98',`<span class="text-[10px] text-amber-400/60 ml-2">Reboques para habitação / Mobile homes >3.5t</span>`)+
+    `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">${
+      inp('cfg_dutyUK','Direitos UK (%)','2.7','MFN 2.7% — reduz a 0% com EUR.1')+
+      inp('cfg_dutyChina','Direitos China — MFN (%)','2.7','HS 8716.10.98 — verificado TARIC + xlsx oficial')+
+      inp('cfg_antiDumpChina','Anti-dumping China (%)','0','Sem anti-dumping em 8716.10.98')+
+      inp('cfg_docFee','Docs extra (€)','0','Já incluído no despacho — só preencher se cobrado à parte')
+    }</div>`+
+    sec('#fbbf24','Margem de Segurança Cambial')+
+    `<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">${
+      inp('cfg_safetyMargin','Margem de segurança (%)','3','Protege contra flutuação cambial — reduz taxa em X%')
     }</div>`+
     sec('[#a78bfa]','Gestão de Rotas por País',`<span class="ml-auto text-[10px] text-gray-600 bg-gv-bg/80 px-3 py-1 rounded-full border border-white/[.04]">Clica para expandir</span>`)+
     `<p class="text-[11px] text-gray-500 mb-5 font-light">Edita os custos de transporte, taxa IVA, e informações de cada rota. Alterações refletidas automaticamente ao guardar.</p>`;
@@ -1595,7 +1039,7 @@ function buildCfgSections(){
 // === ROUTE EDITOR ===
 function rrHTML(ck,ok,i,r){
   const p=`re_${ck}_${ok}_${i}`;
-  return`<div class="route-row space-y-1.5" id="${p}_row"><div class="grid grid-cols-[1fr_1fr_90px_110px_28px] gap-1.5 items-center">
+  return`<div class="route-row space-y-1.5" id="${p}_row" data-recommended="${r.recommended?'1':''}" data-port-incl="${r.portIncl?'1':''}"><div class="grid grid-cols-[1fr_1fr_90px_110px_28px] gap-1.5 items-center">
 <input type="text" data-role="from" value="${r.from}" placeholder="De" class="cfg-input rounded-lg border border-white/[.06] bg-gv-bg/80 text-white text-[11px] px-2.5 py-2 font-mono"/>
 <input type="text" data-role="to" value="${r.to}" placeholder="Para" class="cfg-input rounded-lg border border-white/[.06] bg-gv-bg/80 text-white text-[11px] px-2.5 py-2 font-mono"/>
 <input type="text" data-role="cost" value="${r.cost}" placeholder="€" class="cfg-input rounded-lg border border-white/[.06] bg-gv-bg/80 text-white text-[11px] px-2.5 py-2 font-mono text-right"/>
@@ -1606,7 +1050,7 @@ function rrHTML(ck,ok,i,r){
 
 function buildRouteEditor(){
   const ctn=$('routeEditor');ctn.innerHTML='';
-  const order=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","brazil","china","usa"];
+  const order=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","brazil","usa"];
   [...new Set([...order,...Object.keys(R)])].forEach(ck=>{
     const c=R[ck];if(!c)return;
     const tot=Object.values(c.routes||{}).reduce((s,a)=>s+a.length,0);
@@ -1681,7 +1125,7 @@ function saveRoutes(){
         const from=row.querySelector('[data-role="from"]')?.value?.trim()||'',to=row.querySelector('[data-role="to"]')?.value?.trim()||'';
         const cost=parseFloat(row.querySelector('[data-role="cost"]')?.value?.replace(/\./g,'').replace(',','.')||'0')||0;
         const type=row.querySelector('[data-role="type"]')?.value?.trim()||'RO-RO';
-        if(from||to||cost>0){const o={from,to,cost,type};const note=row.querySelector('[data-role="note"]')?.value?.trim()||'';if(note)o.note=note;nw.push(o);}
+        if(from||to||cost>0){const o={from,to,cost,type};const note=row.querySelector('[data-role="note"]')?.value?.trim()||'';if(note)o.note=note;if(row.dataset.recommended==='1')o.recommended=true;if(row.dataset.portIncl==='1')o.portIncl=true;nw.push(o);}
       });R[ck].routes[ok]=nw;
     });
     Object.keys(R[ck].routes).forEach(ok=>{if(R[ck].routes[ok].length===0)delete R[ck].routes[ok];});
@@ -1689,14 +1133,32 @@ function saveRoutes(){
 }
 
 function applySettings(){
-  saveRoutes();buildCountryButtons();selectCountry(AC);updateTierPreview();
+  saveRoutes();buildCountryButtons();selectCountry(AC);updateTierPreview();saveToLS();
   const m=$('cfg_saved');m.classList.remove('hidden');setTimeout(()=>m.classList.add('hidden'),3000);toast('Todas as configurações guardadas!');
 }
 
 // === COPY ===
 function copyIntl(){
-  const g=$('intl_grid');if(!g)return;const l=[];
-  g.querySelectorAll('.result-card').forEach(c=>{const a=c.querySelector('.text-gray-500'),b=c.querySelector('.font-semibold');if(a&&b)l.push(`${a.textContent}: ${b.textContent}`);});
+  const g=$('intl_grid');if(!g)return;const l=['=== GREEN VILLAGE — CÁLCULO IMPORTAÇÃO ==='];
+  // Extract text from all elements
+  g.querySelectorAll('[class*="text-center"]').forEach(n=>{
+    const label=n.querySelector('[class*="tracking-"]');
+    const value=n.querySelector('.font-mono,.font-semibold,.font-bold');
+    if(label&&value)l.push(`${label.textContent.trim()}: ${value.textContent.trim()}`);
+  });
+  // Get detail section if open
+  const det=g.querySelector('details');
+  if(det){
+    l.push('\n--- DECOMPOSIÇÃO ---');
+    det.querySelectorAll('.flex.justify-between').forEach(r=>{
+      const spans=r.querySelectorAll('span');
+      if(spans.length>=2)l.push(`${spans[0].textContent.trim()}: ${spans[1].textContent.trim()}`);
+    });
+  }
+  // Route info
+  const ri=g.querySelector('.text-gray-600.text-center');
+  if(ri)l.push(`\nRota: ${ri.textContent.trim()}`);
+  l.push(`Calculado: ${new Date().toLocaleString("pt-PT")}`);
   navigator.clipboard.writeText(l.join('\n')).then(()=>toast('Copiado!'));
 }
 function copyBrazil(){
@@ -1707,623 +1169,36 @@ function copyBrazil(){
   navigator.clipboard.writeText(t).then(()=>toast('Copiado!'));
 }
 
-// === CÂMBIO (API COM FALLBACK OFFLINE) ===
-// === API DE CÂMBIO REMOVIDA ===
-// DECISÃO DE NEGÓCIO: Taxas fixas conservadoras baseadas em máximos históricos
-// Removido: fetchExchangeRates(), updateRateStatus(), forceUpdateRates()
-// Razão: Garantir margem de lucro consistente sem variações de mercado
-// A função rates() agora retorna apenas valores fixos (ver acima)
-
-// === HISTÓRICO E COMPARADOR REMOVIDOS ===
-// Removido a pedido do usuário - funcionalidades não eram necessárias
-// Substituído por tabelas de referência rápida embutidas
-
-// === DASHBOARD DE ANÁLISE ===
-let lastCalculationData = null;
-let chartInstances = { pie: null, bar: null };
-
-function showAnalytics(type) {
-  if (!lastCalculationData || lastCalculationData.type !== type) {
-    toast('Execute um cálculo primeiro', false);
-    return;
-  }
-
-  const modal = $('analytics-modal');
-  if (!modal) return;
-
-  modal.classList.remove('hidden');
-  buildAnalyticsDashboard(lastCalculationData);
-}
-
-function closeAnalytics() {
-  const modal = $('analytics-modal');
-  if (modal) modal.classList.add('hidden');
-
-  // Destroy chart instances to prevent memory leaks
-  if (chartInstances.pie) {
-    chartInstances.pie.destroy();
-    chartInstances.pie = null;
-  }
-  if (chartInstances.bar) {
-    chartInstances.bar.destroy();
-    chartInstances.bar = null;
-  }
-}
-
-function buildAnalyticsDashboard(data) {
-  // Update key metrics
-  $('metric-total').textContent = fc(data.total, '€');
-  $('metric-margin').textContent = fc(data.profit + data.commission, '€');
-  $('metric-transport').textContent = fc(data.maritime + data.land, '€');
-  $('metric-tax').textContent = fc(data.iva, '€');
-
-  // Build charts
-  createCostPieChart(data);
-  createCostBarChart(data);
-
-  // Build detailed table
-  buildAnalyticsTable(data);
-}
-
-function createCostPieChart(data) {
-  const canvas = $('chart-pie');
-  if (!canvas) return;
-
-  // Destroy existing chart
-  if (chartInstances.pie) {
-    chartInstances.pie.destroy();
-  }
-
-  const ctx = canvas.getContext('2d');
-
-  const chartData = {
-    labels: ['Produto', 'Transporte Marítimo', 'Transporte Terrestre', 'Lucro GV', 'Comissão', 'IVA 23%'],
-    datasets: [{
-      data: [
-        data.priceEur || data.price,
-        data.maritime,
-        data.land,
-        data.profit,
-        data.commission,
-        data.iva
-      ],
-      backgroundColor: [
-        'rgba(29, 184, 84, 0.8)',   // Verde GV
-        'rgba(94, 181, 255, 0.8)',  // Azul
-        'rgba(251, 191, 36, 0.8)',  // Amarelo
-        'rgba(167, 139, 250, 0.8)', // Roxo
-        'rgba(248, 113, 113, 0.8)', // Vermelho
-        'rgba(156, 163, 175, 0.8)'  // Cinza
-      ],
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      borderWidth: 2
-    }]
-  };
-
-  chartInstances.pie = new Chart(ctx, {
-    type: 'pie',
-    data: chartData,
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            color: 'rgba(229, 231, 235, 0.9)',
-            font: { size: 11 },
-            padding: 12
-          }
-        },
-        tooltip: {
-          backgroundColor: 'rgba(12, 18, 32, 0.95)',
-          titleColor: 'rgba(229, 231, 235, 1)',
-          bodyColor: 'rgba(229, 231, 235, 0.9)',
-          borderColor: 'rgba(29, 184, 84, 0.3)',
-          borderWidth: 1,
-          padding: 12,
-          callbacks: {
-            label: function(context) {
-              const value = context.parsed;
-              const total = context.dataset.data.reduce((a, b) => a + b, 0);
-              const percentage = ((value / total) * 100).toFixed(1);
-              return `${context.label}: ${fc(value, '€')} (${percentage}%)`;
-            }
-          }
-        }
-      }
-    }
-  });
-}
-
-function createCostBarChart(data) {
-  const canvas = $('chart-bar');
-  if (!canvas) return;
-
-  // Destroy existing chart
-  if (chartInstances.bar) {
-    chartInstances.bar.destroy();
-  }
-
-  const ctx = canvas.getContext('2d');
-
-  const chartData = {
-    labels: ['Produto', 'Marítimo', 'Terrestre', 'Lucro', 'Comissão', 'IVA'],
-    datasets: [{
-      label: 'Valor (€)',
-      data: [
-        data.priceEur || data.price,
-        data.maritime,
-        data.land,
-        data.profit,
-        data.commission,
-        data.iva
-      ],
-      backgroundColor: [
-        'rgba(29, 184, 84, 0.8)',
-        'rgba(94, 181, 255, 0.8)',
-        'rgba(251, 191, 36, 0.8)',
-        'rgba(167, 139, 250, 0.8)',
-        'rgba(248, 113, 113, 0.8)',
-        'rgba(156, 163, 175, 0.8)'
-      ],
-      borderColor: 'rgba(255, 255, 255, 0.1)',
-      borderWidth: 2
-    }]
-  };
-
-  chartInstances.bar = new Chart(ctx, {
-    type: 'bar',
-    data: chartData,
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: 'rgba(12, 18, 32, 0.95)',
-          titleColor: 'rgba(229, 231, 235, 1)',
-          bodyColor: 'rgba(229, 231, 235, 0.9)',
-          borderColor: 'rgba(29, 184, 84, 0.3)',
-          borderWidth: 1,
-          padding: 12,
-          callbacks: {
-            label: function(context) {
-              return `Valor: ${fc(context.parsed.y, '€')}`;
-            }
-          }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            color: 'rgba(156, 163, 175, 0.8)',
-            font: { size: 10 },
-            callback: function(value) {
-              return fc(value, '€', 'pt-PT', 0);
-            }
-          },
-          grid: {
-            color: 'rgba(255, 255, 255, 0.05)',
-            drawBorder: false
-          }
-        },
-        x: {
-          ticks: {
-            color: 'rgba(156, 163, 175, 0.8)',
-            font: { size: 10 }
-          },
-          grid: {
-            display: false
-          }
-        }
-      }
-    }
-  });
-}
-
-function buildAnalyticsTable(data) {
-  const tableDiv = $('analytics-table');
-  if (!tableDiv) return;
-
-  const subtotal = data.subtotal || (data.priceEur + data.maritime + data.land + data.profit + data.commission);
-  const total = data.total;
-
-  const components = [
-    { name: 'Produto Base', value: data.priceEur || data.price, color: 'text-[#1db854]' },
-    { name: 'Transporte Marítimo', value: data.maritime, color: 'text-[#5eb5ff]' },
-    { name: 'Transporte Terrestre', value: data.land, color: 'text-amber-400' },
-    { name: 'Lucro Green Village', value: data.profit, color: 'text-purple-400' },
-    { name: 'Comissão Vendedor', value: data.commission, color: 'text-red-400' },
-    { name: 'IVA 23%', value: data.iva, color: 'text-gray-400' }
-  ];
-
-  const tableHTML = `
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="border-b border-white/5">
-          <th class="text-left py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider text-xs">Componente</th>
-          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider text-xs">Valor</th>
-          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider text-xs">% Total</th>
-          <th class="text-right py-3 px-3 text-gray-400 font-semibold uppercase tracking-wider text-xs">% Subtotal</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${components.map((comp, idx) => {
-          const pctTotal = ((comp.value / total) * 100).toFixed(1);
-          const pctSubtotal = idx < 5 ? ((comp.value / subtotal) * 100).toFixed(1) : '-';
-          return `
-            <tr class="border-b border-white/5 hover:bg-white/[.02]">
-              <td class="py-3 px-3 font-medium ${comp.color}">${comp.name}</td>
-              <td class="text-right py-3 px-3 text-gray-300">${fc(comp.value, '€')}</td>
-              <td class="text-right py-3 px-3 text-gray-400">${pctTotal}%</td>
-              <td class="text-right py-3 px-3 text-gray-400">${pctSubtotal}${pctSubtotal !== '-' ? '%' : ''}</td>
-            </tr>
-          `;
-        }).join('')}
-        <tr class="border-t-2 border-white/10 font-bold">
-          <td class="py-3 px-3 text-[#00ff88]">TOTAL FINAL</td>
-          <td class="text-right py-3 px-3 text-[#00ff88]">${fc(total, '€')}</td>
-          <td class="text-right py-3 px-3 text-gray-400">100%</td>
-          <td class="text-right py-3 px-3 text-gray-400">-</td>
-        </tr>
-      </tbody>
-    </table>
-  `;
-
-  tableDiv.innerHTML = tableHTML;
-}
-
-// === SIMULADOR DE MARGENS ===
-let marginSimulatorState = {
-  isOpen: false,
-  originalProfit: 0,
-  originalCommission: 0,
-  originalTotal: 0,
-  baseSubtotal: 0, // Subtotal without profit and commission
-  ivaRate: 0.23
-};
-
-function toggleMarginSimulator() {
-  const simulator = $('margin-simulator');
-  const button = $('btn-toggle-margin');
-
-  if (!simulator || !button) return;
-
-  marginSimulatorState.isOpen = !marginSimulatorState.isOpen;
-
-  if (marginSimulatorState.isOpen) {
-    simulator.classList.remove('hidden');
-    button.textContent = '▲ Ocultar Simulador de Margens';
-    initializeMarginSimulator();
-  } else {
-    simulator.classList.add('hidden');
-    button.textContent = '💰 Simular Margens Diferentes';
-  }
-}
-
-function initializeMarginSimulator() {
-  if (!lastCalculationData || lastCalculationData.type !== 'international') {
-    toast('Disponível apenas para cálculo internacional', false);
-    return;
-  }
-
-  const data = lastCalculationData;
-
-  // Store original values
-  marginSimulatorState.originalProfit = data.profit;
-  marginSimulatorState.originalCommission = data.commission;
-  marginSimulatorState.originalTotal = data.total;
-  marginSimulatorState.baseSubtotal = data.subtotal - data.profit - data.commission;
-  marginSimulatorState.ivaRate = data.iva / data.subtotal;
-
-  // Set slider values
-  const profitSlider = $('margin-profit-slider');
-  const commissionSlider = $('margin-commission-slider');
-
-  if (profitSlider) profitSlider.value = data.profit;
-  if (commissionSlider) commissionSlider.value = data.commission;
-
-  // Update displays
-  updateMarginSimulation();
-}
-
-function updateMarginSimulation() {
-  const profitSlider = $('margin-profit-slider');
-  const commissionSlider = $('margin-commission-slider');
-
-  if (!profitSlider || !commissionSlider) return;
-
-  const newProfit = parseFloat(profitSlider.value);
-  const newCommission = parseFloat(commissionSlider.value);
-
-  // Update value displays
-  $('margin-profit-value').textContent = fc(newProfit, '€');
-  $('margin-commission-value').textContent = fc(newCommission, '€');
-
-  // Calculate new total
-  const newSubtotal = marginSimulatorState.baseSubtotal + newProfit + newCommission;
-  const newIva = newSubtotal * marginSimulatorState.ivaRate;
-  const newTotal = newSubtotal + newIva;
-
-  // Update comparison cards
-  $('margin-original-total').textContent = fc(marginSimulatorState.originalTotal, '€');
-  $('margin-simulated-total').textContent = fc(newTotal, '€');
-
-  // Calculate and display difference
-  const diff = newTotal - marginSimulatorState.originalTotal;
-  const diffElem = $('margin-diff-value');
-
-  if (diffElem) {
-    const diffText = fc(Math.abs(diff), '€');
-    const sign = diff >= 0 ? '+' : '-';
-    diffElem.textContent = `${sign}${diffText}`;
-    diffElem.className = diff >= 0 ? 'font-bold text-[#00ff88]' : 'font-bold text-red-400';
-  }
-}
-
-function resetMarginSimulation() {
-  const profitSlider = $('margin-profit-slider');
-  const commissionSlider = $('margin-commission-slider');
-
-  if (profitSlider) profitSlider.value = marginSimulatorState.originalProfit;
-  if (commissionSlider) commissionSlider.value = marginSimulatorState.originalCommission;
-
-  updateMarginSimulation();
-  toast('Valores resetados', true);
-}
-
-function applyMarginChanges() {
-  const profitSlider = $('margin-profit-slider');
-  const commissionSlider = $('margin-commission-slider');
-
-  if (!profitSlider || !commissionSlider) return;
-
-  const newProfit = parseFloat(profitSlider.value);
-  const newCommission = parseFloat(commissionSlider.value);
-
-  // Update the tier configuration temporarily for this calculation
-  const data = lastCalculationData;
-  const newSubtotal = marginSimulatorState.baseSubtotal + newProfit + newCommission;
-  const newIva = newSubtotal * marginSimulatorState.ivaRate;
-  const newTotal = newSubtotal + newIva;
-
-  // Update lastCalculationData
-  lastCalculationData.profit = newProfit;
-  lastCalculationData.commission = newCommission;
-  lastCalculationData.subtotal = newSubtotal;
-  lastCalculationData.iva = newIva;
-  lastCalculationData.total = newTotal;
-
-  // Update original values in simulator state
-  marginSimulatorState.originalProfit = newProfit;
-  marginSimulatorState.originalCommission = newCommission;
-  marginSimulatorState.originalTotal = newTotal;
-
-  // Trigger recalculation (calling calcInternational with updated tier values would be complex)
-  // Instead, we'll manually update the result cards
-  const grid = $('intl_grid');
-  if (grid) {
-    // Find and update specific result cards
-    const cards = grid.querySelectorAll('.result-card');
-    cards.forEach(card => {
-      const label = card.querySelector('div:first-child')?.textContent.toLowerCase();
-
-      if (label?.includes('lucro green village')) {
-        card.querySelector('div:last-child').textContent = fc(newProfit, '€');
-      } else if (label?.includes('comissão')) {
-        card.querySelector('div:last-child').textContent = fc(newCommission, '€');
-      } else if (label?.includes('subtotal')) {
-        card.querySelector('div:last-child').textContent = fc(newSubtotal, '€');
-      } else if (label?.includes('iva')) {
-        card.querySelector('div:last-child').textContent = fc(newIva, '€');
-      } else if (label?.includes('total com iva')) {
-        card.querySelector('div:last-child').textContent = fc(newTotal, '€');
-      }
+// === EXCHANGE RATE ===
+async function fetchRates(){
+  const s=$('rateStatus');s.textContent="Câmbio: a carregar...";s.classList.add('pulse-rate');
+  const fallback={USDEUR:1.1,GBPEUR:0.84,BRLEUR:6.5,CNYEUR:8,PLNEUR:4.5,USDBRL:5.9};
+  try{
+    const pairs=["USD-EUR","GBP-EUR","BRL-EUR","CNY-EUR","PLN-EUR","USD-BRL"];
+    const url=`https://economia.awesomeapi.com.br/json/last/${pairs.join(',')}`;
+    const res=await fetch(url,{method:'GET',headers:{'Accept':'application/json'},signal:AbortSignal.timeout(5000)});
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const d=await res.json();
+    const pairMap={'USD-EUR':'USDEUR','GBP-EUR':'GBPEUR','BRL-EUR':'BRLEUR','CNY-EUR':'CNYEUR','PLN-EUR':'PLNEUR','USD-BRL':'USDBRL'};
+    let ok=true;
+    Object.entries(pairMap).forEach(([key,label])=>{
+      if(d[key]?.bid){
+        const v=parseFloat(d[key].bid);
+        const val=(label==='USDBRL'?v:(1/v)).toFixed(label==='USDBRL'?2:4);
+        const id=label==='USDEUR'?'cfg_usd':label==='GBPEUR'?'cfg_gbp':label==='BRLEUR'?'cfg_brl':label==='CNYEUR'?'cfg_cny':label==='PLNEUR'?'cfg_pln':'cfg_usdbrl';
+        $(id).value=val;
+      }else ok=false;
     });
-  }
-
-  toast('✓ Margens aplicadas com sucesso!', true);
-
-  // Update simulator displays
-  updateMarginSimulation();
-}
-
-// === COMPARTILHAR VIA URL ===
-function generateShareableURL() {
-  if (!lastCalculationData) {
-    toast('Execute um cálculo primeiro', false);
-    return;
-  }
-
-  try {
-    // Build payload with calculation data
-    const payload = {
-      v: 1, // schema version
-      type: lastCalculationData.type,
-      timestamp: Date.now(),
-      data: lastCalculationData
-    };
-
-    // If international, add input details
-    if (lastCalculationData.type === 'international') {
-      const country = AC;
-      const price = parseFloat($('intl_price')?.value || 0);
-      const currency = $('intl_currency')?.value || 'EUR';
-      const origin = $('intl_origin')?.value || 'uk';
-      const route = parseInt($('intl_route')?.value || 0, 10);
-
-      payload.inputs = { country, price, currency, origin, route };
-    }
-
-    // Encode to Base64
-    const jsonStr = JSON.stringify(payload);
-    const base64 = btoa(unescape(encodeURIComponent(jsonStr)));
-
-    // Generate URL
-    const baseUrl = window.location.origin + window.location.pathname;
-    const shareUrl = `${baseUrl}?calc=${base64}`;
-
-    // Show modal with URL
-    showShareModal(shareUrl);
-
-    console.log('[Share] URL generated:', shareUrl.length, 'chars');
-  } catch (error) {
-    console.error('[Share] Erro ao gerar URL:', error);
-    toast('Erro ao gerar link de compartilhamento', false);
-  }
-}
-
-function showShareModal(url) {
-  const modal = $('share-modal');
-  const input = $('share-url-input');
-
-  if (!modal || !input) return;
-
-  input.value = url;
-  modal.classList.remove('hidden');
-}
-
-function closeShareModal() {
-  const modal = $('share-modal');
-  if (modal) modal.classList.add('hidden');
-}
-
-function copyShareLink() {
-  const input = $('share-url-input');
-  if (!input) return;
-
-  input.select();
-  input.setSelectionRange(0, 99999); // For mobile
-
-  try {
-    navigator.clipboard.writeText(input.value).then(() => {
-      toast('✓ Link copiado!', true);
-    }).catch(() => {
-      // Fallback
-      document.execCommand('copy');
-      toast('✓ Link copiado!', true);
+    if(ok){s.textContent=`Câmbio: ✓ atualizado (${new Date().toLocaleTimeString("pt-PT")})`;s.style.borderColor='rgba(29,184,84,.25)';s.style.color='#1db854';}else throw new Error("Dados incompletos");
+    s.classList.remove('pulse-rate');
+  }catch(e){
+    Object.entries(fallback).forEach(([id,val])=>{
+      const el=id==='USDBRL'?$('cfg_usdbrl'):id==='USDEUR'?$('cfg_usd'):id==='GBPEUR'?$('cfg_gbp'):id==='BRLEUR'?$('cfg_brl'):id==='CNYEUR'?$('cfg_cny'):id==='PLNEUR'?$('cfg_pln'):null;
+      if(el)el.value=val;
     });
-  } catch (error) {
-    toast('Erro ao copiar link', false);
+    s.textContent="Câmbio: ⚠️ usando valores padrão";s.classList.remove('pulse-rate');s.style.color='#fbbf24';
+    const br=$('br_exchangeRate');if(br)br.value=fallback.USDBRL;
   }
-}
-
-function shareViaEmail() {
-  const url = $('share-url-input')?.value;
-  if (!url) return;
-
-  const subject = encodeURIComponent('Green Village - Cálculo de Importação');
-  const body = encodeURIComponent(`Confira este cálculo de importação:\n\n${url}\n\nGerado via Green Village Calculator`);
-
-  window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
-}
-
-function shareViaWhatsApp() {
-  const url = $('share-url-input')?.value;
-  if (!url) return;
-
-  const text = encodeURIComponent(`*Green Village - Cálculo de Importação*\n\n${url}\n\nGerado via Green Village Calculator`);
-
-  window.open(`https://wa.me/?text=${text}`, '_blank');
-}
-
-function loadFromURL() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const calcParam = urlParams.get('calc');
-
-  if (!calcParam) return;
-
-  try {
-    // Decode from Base64
-    const jsonStr = decodeURIComponent(escape(atob(calcParam)));
-    const payload = JSON.parse(jsonStr);
-
-    console.log('[Share] Loading shared calculation:', payload);
-
-    // Show banner
-    const banner = $('shared-banner');
-    if (banner) banner.classList.remove('hidden');
-
-    // Load calculation based on type
-    if (payload.type === 'international' && payload.inputs) {
-      const { country, price, currency, origin, route } = payload.inputs;
-
-      // Switch to international tab
-      switchTab('international');
-
-      // Wait for UI to load, then populate fields
-      setTimeout(() => {
-        selectCountry(country);
-
-        setTimeout(() => {
-          if ($('intl_price')) $('intl_price').value = price;
-          if ($('intl_currency')) $('intl_currency').value = currency;
-          if ($('intl_origin')) $('intl_origin').value = origin;
-
-          updateRoutes();
-
-          setTimeout(() => {
-            if ($('intl_route')) $('intl_route').value = route;
-            updateTierPreview();
-
-            // Auto-calculate
-            setTimeout(() => {
-              calcInternational();
-              toast('✓ Cálculo compartilhado carregado!', true);
-            }, 200);
-          }, 100);
-        }, 100);
-      }, 300);
-    }
-
-  } catch (error) {
-    console.error('[Share] Erro ao carregar URL:', error);
-    toast('Link de compartilhamento inválido', false);
-  }
-}
-
-function closeSharedBanner() {
-  const banner = $('shared-banner');
-  if (banner) banner.classList.add('hidden');
-
-  // Remove query parameter from URL
-  const url = new URL(window.location);
-  url.searchParams.delete('calc');
-  window.history.replaceState({}, '', url);
-}
-
-// === MODO CLARO/ESCURO ===
-function loadTheme() {
-  const savedTheme = localStorage.getItem('gv_theme') || 'dark';
-  applyTheme(savedTheme);
-}
-
-function toggleTheme() {
-  const currentTheme = localStorage.getItem('gv_theme') || 'dark';
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  applyTheme(newTheme);
-  localStorage.setItem('gv_theme', newTheme);
-  toast(`Tema ${newTheme === 'dark' ? 'escuro' : 'claro'} ativado`, true);
-}
-
-function applyTheme(theme) {
-  const html = document.documentElement;
-  const icon = $('theme-icon');
-  const label = $('theme-label');
-
-  if (theme === 'light') {
-    html.classList.add('light-mode');
-    if (icon) icon.textContent = '☀️';
-    if (label) label.textContent = 'Claro';
-  } else {
-    html.classList.remove('light-mode');
-    if (icon) icon.textContent = '🌙';
-    if (label) label.textContent = 'Escuro';
-  }
-
-  console.log('[Theme] Applied:', theme);
 }
 
 // === PDF ===
@@ -2340,120 +1215,63 @@ async function exportPDF(id,title){
   }catch(e){alert("Erro ao gerar PDF.");console.error(e);}
 }
 
-// === INIT ===
-function init(){
-  // Carregar tema salvo
-  loadTheme();
-
-  buildBrFields();buildCountryButtons();selectCountry("portugal",true);
-  $('intl_price').addEventListener('input',updateTierPreview);
-  $('intl_currency').addEventListener('change',()=>{updateTierPreview();updateRefTable();});
-  $('intl_origin').addEventListener('change',()=>{updateRoutes();autoSelectCurrency();updateTierPreview();updateRefTable();});
-  $('intl_route')&&$('intl_route').addEventListener('change',updateRefTable);
-
-  // Verificar se há cálculo compartilhado na URL
-  loadFromURL();
+// === LOCALSTORAGE ===
+const LS_KEY='gv_dashboard_v8_4';
+function saveToLS(){
+  try{
+    saveRoutes();
+    const cfg={};
+    ['cfg_gbp','cfg_brl','cfg_cny','cfg_usd','cfg_pln','cfg_usdbrl',
+     'cfg_lux_sea','cfg_lux_land','cfg_lux_crane',
+     'cfg_landBase','cfg_craneFrPt','cfg_truckingPerKm','cfg_customsFee','cfg_insurance',
+     'cfg_insurancePct','cfg_portOrigin','cfg_portDest','cfg_demurrageRate','cfg_demurrageDays',
+     'cfg_dutyUK','cfg_dutyChina','cfg_antiDumpChina',
+     'cfg_docFee','cfg_safetyMargin',
+     'cfg_storageDays','cfg_storageRate'].forEach(id=>{const e=$(id);if(e)cfg[id]=e.value;});
+    localStorage.setItem(LS_KEY,JSON.stringify({routes:R,cfg,ts:Date.now()}));
+  }catch(e){console.warn('LS save failed',e);}
+}
+function loadFromLS(){
+  try{
+    const raw=localStorage.getItem(LS_KEY);if(!raw)return false;
+    const d=JSON.parse(raw);
+    if(d.routes)R=d.routes;
+    return d.cfg||false;
+  }catch(e){return false;}
+}
+function restoreCfg(cfg){
+  if(!cfg)return;
+  Object.entries(cfg).forEach(([id,val])=>{const e=$(id);if(e)e.value=val;});
+}
+function exportJSON(){
+  saveRoutes();
+  const blob=new Blob([JSON.stringify(R,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`GV_Routes_${Date.now()}.json`;a.click();toast('JSON exportado!');
+}
+function importJSON(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='.json';
+  inp.onchange=e=>{const f=e.target.files[0];if(!f)return;
+    const reader=new FileReader();reader.onload=ev=>{try{R=JSON.parse(ev.target.result);buildCountryButtons();selectCountry(AC);buildRouteEditor();saveToLS();toast('Rotas importadas!');}catch(err){toast('JSON inválido',false);}};reader.readAsText(f);};
+  inp.click();
 }
 
-return{switchTab,calcInternational,calcBrazil,applySettings,exportPDF,init,
-  updateTierPreview,onOriginChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,
-  showAnalytics,closeAnalytics,
-  toggleMarginSimulator,updateMarginSimulation,resetMarginSimulation,applyMarginChanges,
-  generateShareableURL,copyShareLink,shareViaEmail,shareViaWhatsApp,closeShareModal,closeSharedBanner,
-  toggleTheme,validateCalculation};
+// === INIT ===
+function init(){
+  const savedCfg=loadFromLS();
+  buildBrFields();buildCfgSections();buildCountryButtons();selectCountry("portugal");
+  let _priceTimer;
+  $('intl_price').addEventListener('input',()=>{updateTierPreview();clearTimeout(_priceTimer);_priceTimer=setTimeout(autoCalc,600);});
+  $('intl_currency').addEventListener('change',()=>{updateTierPreview();autoCalc();});
+  $('intl_origin').addEventListener('change',()=>{updateRoutes();autoSelectCurrency();updateTierPreview();autoCalc();});
+  $('intl_price').addEventListener('keydown',e=>{if(e.key==='Enter')calcInternational();});
+  if(savedCfg){restoreCfg(savedCfg);toast('Configurações restauradas');}
+  else fetchRates();
+}
+
+return{switchTab,calcInternational,calcBrazil,applySettings,fetchRates,exportPDF,init,
+  updateTierPreview,onOriginChange,onRouteChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,exportJSON,importJSON};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
-
-<!-- Service Worker Registration -->
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/green-village-calculadora/service-worker.js')
-      .then((registration) => {
-        console.log('[PWA] Service Worker registered successfully:', registration.scope);
-
-        // Check for updates every hour
-        setInterval(() => {
-          registration.update();
-        }, 60 * 60 * 1000);
-      })
-      .catch((error) => {
-        console.error('[PWA] Service Worker registration failed:', error);
-      });
-  });
-}
-
-// Handle install prompt
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  console.log('[PWA] beforeinstallprompt event fired');
-  e.preventDefault();
-  deferredPrompt = e;
-
-  // Show install banner
-  const installBanner = document.getElementById('pwa-install-banner');
-  if (installBanner) {
-    installBanner.classList.remove('hidden');
-  }
-});
-
-window.addEventListener('appinstalled', () => {
-  console.log('[PWA] App installed successfully');
-  deferredPrompt = null;
-
-  // Hide install banner
-  const installBanner = document.getElementById('pwa-install-banner');
-  if (installBanner) {
-    installBanner.classList.add('hidden');
-  }
-
-  // Show success toast
-  if (window.GV && window.GV.toast) {
-    window.GV.toast('✓ App instalado com sucesso!', true);
-  }
-});
-
-function installPWA() {
-  if (!deferredPrompt) {
-    console.log('[PWA] No install prompt available');
-    return;
-  }
-
-  deferredPrompt.prompt();
-
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('[PWA] User accepted the install prompt');
-    } else {
-      console.log('[PWA] User dismissed the install prompt');
-    }
-    deferredPrompt = null;
-  });
-}
-
-function dismissInstallBanner() {
-  const installBanner = document.getElementById('pwa-install-banner');
-  if (installBanner) {
-    installBanner.classList.add('hidden');
-  }
-
-  // Store dismissal in localStorage
-  localStorage.setItem('gv_install_banner_dismissed', 'true');
-}
-
-// Check if banner was previously dismissed
-window.addEventListener('DOMContentLoaded', () => {
-  const dismissed = localStorage.getItem('gv_install_banner_dismissed');
-  if (dismissed === 'true') {
-    const installBanner = document.getElementById('pwa-install-banner');
-    if (installBanner) {
-      installBanner.style.display = 'none';
-    }
-  }
-});
-</script>
-
 </body>
 </html>
