@@ -8,6 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script>
 tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif'],display:['Sora','sans-serif'],mono:['Space Mono','monospace']},colors:{gv:{bg:'#060a12',card:'#0c1220',soft:'#111a2e',accent:'#00ff88',accentDim:'#00cc6e',blue:'#5eb5ff',purple:'#a78bfa',border:'rgba(255,255,255,0.06)'}}}}}
 </script>
@@ -186,6 +187,31 @@ select{
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
 }
 
+/* === MARITIME TAB === */
+#maritime-map{width:100%;height:500px;border-radius:16px;overflow:hidden;position:relative;z-index:1}
+#maritime-map .leaflet-tile-pane{filter:hue-rotate(10deg) saturate(1.1)}
+#maritime-map .leaflet-control-zoom{border:none!important}
+#maritime-map .leaflet-control-zoom a{background:rgba(8,14,30,0.96)!important;color:#2196f3!important;border:1px solid rgba(60,140,220,0.12)!important;width:28px!important;height:28px!important;line-height:26px!important;font-size:14px!important;font-family:'Space Mono'!important;border-radius:6px!important;margin-bottom:2px!important}
+#maritime-canvas{position:absolute;inset:0;z-index:450;pointer-events:none;border-radius:16px}
+.mar-rc{padding:10px 12px;border-radius:10px;margin-bottom:4px;cursor:pointer;position:relative;
+  transition:all .2s;border:1px solid transparent;background:rgba(6,10,18,.4)}
+.mar-rc:hover{background:rgba(33,150,243,.04);border-color:rgba(33,150,243,.08)}
+.mar-rc.on{background:rgba(33,150,243,.06);border-color:rgba(60,140,220,.22)}
+.mar-rc .bar{position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:2px;opacity:.7}
+.mar-rc .cn{font-size:11px;font-weight:700;letter-spacing:.3px}
+.mar-rc .price{font-family:'Space Mono';font-size:16px;font-weight:800;line-height:1}
+.mar-rc .route{font-size:11px;color:rgba(156,163,175,.6);margin-bottom:4px}
+.mar-rc .meta{display:flex;gap:4px;flex-wrap:wrap}
+.mar-rc .tag{font-size:8px;padding:2px 6px;border-radius:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;background:rgba(255,255,255,.03);color:rgba(156,163,175,.5)}
+.mar-det{background:linear-gradient(135deg,rgba(17,26,46,.8),rgba(12,18,32,.9));border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;transition:all .3s;max-height:0;overflow:hidden;opacity:0}
+.mar-det.show{max-height:500px;opacity:1;padding:16px;margin-top:8px}
+.mar-det .ir{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
+.mar-det .ir .k{color:rgba(156,163,175,.5)}
+.mar-det .ir .v{font-family:'Space Mono';font-weight:500;text-align:right;max-width:160px;font-size:11px}
+.mar-det .nt{margin-top:8px;font-size:10px;color:rgba(156,163,175,.5);line-height:1.5;padding:8px;background:rgba(33,150,243,.03);border-radius:8px;border:1px solid rgba(33,150,243,.06)}
+@keyframes mar-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+@keyframes mar-ring{0%{transform:scale(1);opacity:.6}100%{transform:scale(3);opacity:0}}
+
 /* === PRINT === */
 @media print{body{background:#fff!important;color:#000!important}}
 
@@ -291,7 +317,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       <p class="text-gray-400 text-sm font-light ml-[60px] -mt-2">Calculadora de Importação</p>
     </div>
     <div class="flex flex-wrap gap-2 items-center">
-      <span class="px-3 py-1.5 rounded-full border border-[#1db854]/20 text-[#22dd66] text-[10px] uppercase tracking-[.2em] bg-[#1db854]/5 font-medium">v8.4</span>
+      <span class="px-3 py-1.5 rounded-full border border-[#1db854]/20 text-[#22dd66] text-[10px] uppercase tracking-[.2em] bg-[#1db854]/5 font-medium">v8.5</span>
       <span id="rateStatus" class="px-3 py-1.5 rounded-full border border-white/8 text-gray-500 text-[10px] uppercase tracking-[.15em] bg-black/30 font-medium">Câmbio: offline</span>
     </div>
   </div>
@@ -306,6 +332,9 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   </button>
   <button onclick="GV.switchTab('settings')" id="tab-settings" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
     <span class="mr-1.5">⚙️</span> Configurações
+  </button>
+  <button onclick="GV.switchTab('maritime')" id="tab-maritime" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
+    <span class="mr-1.5">🚢</span> Rotas Maritimas
   </button>
 </nav>
 
@@ -482,6 +511,42 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
 </div>
 </div>
 
+<!-- TAB 4: ROTAS MARITIMAS -->
+<div id="panel-maritime" class="hidden fade-in">
+<div class="glass rounded-3xl p-6 sm:p-8 glow-card">
+  <div class="flex items-center gap-3 mb-1">
+    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2196f3] to-[#00bcd4] border border-white/[.06] flex items-center justify-center text-xl shadow-lg shadow-[#2196f3]/20">🚢</div>
+    <div>
+      <h2 class="text-xl font-display font-bold tracking-tight">Rotas Maritimas Confirmadas</h2>
+      <p class="text-xs text-gray-500 font-light">7 rotas activas · 10 portos · 5 transportadoras · Precos verificados 2026-04-30</p>
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="flex flex-wrap gap-4 mt-4 mb-5">
+    <div class="flex items-baseline gap-1.5"><span class="font-mono text-lg font-bold text-[#00e676]">7</span><span class="text-[9px] uppercase tracking-wider text-gray-500">rotas</span></div>
+    <div class="flex items-baseline gap-1.5"><span class="font-mono text-lg font-bold text-[#00e676]">&euro;2.153</span><span class="text-[9px] uppercase tracking-wider text-gray-500">melhor</span></div>
+    <div class="flex items-baseline gap-1.5"><span class="font-mono text-lg font-bold text-white">&euro;347K</span><span class="text-[9px] uppercase tracking-wider text-gray-500">poupanca/ano</span></div>
+    <div class="flex items-baseline gap-1.5"><span class="font-mono text-lg font-bold text-white">186</span><span class="text-[9px] uppercase tracking-wider text-gray-500">enviados</span></div>
+    <div class="flex items-center gap-1.5 ml-auto"><span class="w-2 h-2 rounded-full bg-[#00e676] shadow-[0_0_6px_#00e676] animate-pulse"></span><span class="text-[8px] uppercase tracking-widest text-[#00e676] font-bold">Live</span></div>
+  </div>
+
+  <!-- Map + Routes layout -->
+  <div class="flex flex-col lg:flex-row gap-5">
+    <!-- Route cards -->
+    <div class="lg:w-[280px] space-y-1 max-h-[520px] overflow-y-auto" id="mar-routes" style="scrollbar-width:none"></div>
+    <!-- Map container -->
+    <div class="flex-1 relative" style="min-height:500px">
+      <div id="maritime-map"></div>
+      <canvas id="maritime-canvas"></canvas>
+    </div>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="mar-det" id="mar-detail"></div>
+</div>
+</div>
+
 </div>
 
 <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5"></div>
@@ -609,11 +674,12 @@ let R={
 
 // === TABS ===
 function switchTab(t){
-  ['international','brazil','settings'].forEach(x=>{
+  ['international','brazil','settings','maritime'].forEach(x=>{
     $('panel-'+x).classList.toggle('hidden',x!==t);
     $('tab-'+x).classList.toggle('tab-active',x===t);
   });
   if(t==='settings'){if(!$('cfg_gbp'))buildCfgSections();buildRouteEditor();}
+  if(t==='maritime')initMaritime();
 }
 
 // === COUNTRY BUTTONS ===
@@ -1245,6 +1311,150 @@ function importJSON(){
   inp.click();
 }
 
+// === MARITIME DASHBOARD ===
+let marInit=false,marMap=null,marCv=null,marCx=null,marLys={},marShips=[],marActive=null;
+const MAR_C={best:'#00e676',good:'#29b6f6',mid:'#ff9100',bad:'#ff1744'};
+function marTier(p){if(p<2500)return{t:'BEST RATE',c:MAR_C.best};if(p<4000)return{t:'GOOD',c:MAR_C.good};if(p<7000)return{t:'PREMIUM',c:MAR_C.mid};return{t:'AVOID',c:MAR_C.bad}}
+const MAR_R=[
+{id:'brittany',c:'Brittany Ferries',f:'Portsmouth',t:'Santander',p:2153,tp:'RoRo Ferry',tr:'24h',cl:'#00e676',cf:'2026-04-30',ct:'Juncal Crespo',n:'Best UK→ES rate. Direct ferry Portsmouth→Santander. No transshipment.',
+wp:[[50.819,-1.087],[50.795,-1.120],[50.770,-1.160],[50.745,-1.200],[50.720,-1.245],[50.695,-1.295],[50.665,-1.350],[50.635,-1.410],[50.600,-1.480],[50.565,-1.560],[50.525,-1.650],[50.480,-1.750],[50.435,-1.860],[50.385,-1.980],[50.330,-2.110],[50.275,-2.250],[50.215,-2.400],[50.150,-2.560],[50.080,-2.730],[50.005,-2.910],[49.925,-3.100],[49.840,-3.300],[49.750,-3.510],[49.650,-3.730],[49.545,-3.960],[49.430,-4.180],[49.310,-4.390],[49.185,-4.580],[49.050,-4.750],[48.905,-4.890],[48.750,-5.010],[48.585,-5.100],[48.410,-5.160],[48.225,-5.190],[48.030,-5.200],[47.830,-5.180],[47.620,-5.140],[47.400,-5.080],[47.170,-5.010],[46.935,-4.930],[46.695,-4.850],[46.450,-4.770],[46.200,-4.690],[45.945,-4.610],[45.690,-4.530],[45.430,-4.450],[45.170,-4.380],[44.910,-4.310],[44.650,-4.240],[44.390,-4.170],[44.130,-4.100],[43.880,-4.030],[43.670,-3.950],[43.520,-3.890],[43.462,-3.810]]},
+{id:'uecc-pb',c:'UECC',f:'Portbury',t:'Vigo',p:2334,tp:'RoRo Carrier',tr:'4-5 days',cl:'#29b6f6',cf:'2026-04-29',ct:'Sales Madrid',n:'Best UK→Galicia. Max width 3.70m on deck. Account opening submitted.',
+wp:[[51.493,-2.724],[51.465,-2.790],[51.435,-2.870],[51.400,-2.960],[51.360,-3.060],[51.315,-3.170],[51.265,-3.300],[51.210,-3.440],[51.150,-3.590],[51.080,-3.750],[51.005,-3.920],[50.920,-4.100],[50.830,-4.280],[50.735,-4.460],[50.630,-4.640],[50.520,-4.820],[50.405,-5.000],[50.285,-5.170],[50.160,-5.330],[50.030,-5.480],[49.895,-5.620],[49.755,-5.750],[49.610,-5.870],[49.460,-5.980],[49.305,-6.080],[49.145,-6.175],[48.980,-6.265],[48.810,-6.350],[48.630,-6.435],[48.445,-6.515],[48.255,-6.595],[48.055,-6.675],[47.850,-6.755],[47.640,-6.840],[47.425,-6.925],[47.200,-7.015],[46.970,-7.105],[46.735,-7.200],[46.495,-7.300],[46.250,-7.400],[46.000,-7.505],[45.745,-7.610],[45.485,-7.720],[45.220,-7.830],[44.955,-7.940],[44.685,-8.050],[44.410,-8.160],[44.135,-8.270],[43.860,-8.380],[43.585,-8.490],[43.320,-8.590],[43.070,-8.690],[42.840,-8.790],[42.650,-8.870],[42.500,-8.920],[42.380,-8.910],[42.300,-8.860],[42.237,-8.715]]},
+{id:'uecc-zb',c:'UECC',f:'Zeebrugge',t:'Vigo',p:2663,tp:'RoRo Carrier',tr:'5-6 days',cl:'#42a5f5',cf:'2026-04-29',ct:'Bjorn (Zeebrugge)',n:'NL/BE-origin units. Via Dover Strait + Channel. Width limit 3.70m.',
+wp:[[51.354,3.175],[51.340,2.950],[51.325,2.720],[51.310,2.490],[51.295,2.260],[51.275,2.030],[51.255,1.800],[51.230,1.570],[51.200,1.350],[51.170,1.140],[51.135,0.940],[51.095,0.750],[51.050,0.570],[51.000,0.400],[50.945,0.235],[50.885,0.075],[50.820,-0.085],[50.750,-0.245],[50.680,-0.405],[50.605,-0.570],[50.525,-0.740],[50.445,-0.915],[50.360,-1.095],[50.275,-1.280],[50.185,-1.475],[50.090,-1.680],[49.990,-1.895],[49.885,-2.120],[49.775,-2.360],[49.660,-2.610],[49.540,-2.870],[49.415,-3.140],[49.285,-3.415],[49.150,-3.695],[49.010,-3.975],[48.865,-4.250],[48.710,-4.520],[48.550,-4.780],[48.385,-5.030],[48.210,-5.260],[48.030,-5.470],[47.840,-5.660],[47.645,-5.830],[47.440,-5.990],[47.230,-6.140],[47.015,-6.280],[46.790,-6.420],[46.560,-6.560],[46.325,-6.700],[46.085,-6.840],[45.840,-6.980],[45.590,-7.120],[45.335,-7.265],[45.075,-7.410],[44.810,-7.555],[44.545,-7.700],[44.275,-7.840],[44.005,-7.975],[43.730,-8.105],[43.460,-8.230],[43.200,-8.350],[42.950,-8.470],[42.720,-8.590],[42.520,-8.710],[42.380,-8.800],[42.300,-8.830],[42.237,-8.715]]},
+{id:'across-so',c:'Across',f:'Southampton',t:'Leixoes',p:3800,tp:'RoRo',tr:'4-5 days',cl:'#ff9100',cf:'186 invoices 2024-26',ct:'Operations',n:'Primary carrier. 186 shipments, EUR 268K invoiced. Avg margin 17.4%.',
+wp:[[50.899,-1.395],[50.870,-1.440],[50.840,-1.490],[50.805,-1.545],[50.770,-1.605],[50.730,-1.670],[50.690,-1.740],[50.645,-1.815],[50.595,-1.895],[50.545,-1.985],[50.490,-2.080],[50.430,-2.185],[50.365,-2.300],[50.295,-2.425],[50.220,-2.560],[50.140,-2.705],[50.055,-2.860],[49.965,-3.025],[49.870,-3.200],[49.770,-3.385],[49.665,-3.575],[49.555,-3.770],[49.440,-3.965],[49.320,-4.160],[49.195,-4.350],[49.065,-4.530],[48.930,-4.700],[48.790,-4.860],[48.645,-5.010],[48.495,-5.150],[48.340,-5.280],[48.180,-5.395],[48.010,-5.500],[47.835,-5.595],[47.655,-5.685],[47.470,-5.770],[47.280,-5.850],[47.085,-5.930],[46.885,-6.010],[46.680,-6.095],[46.470,-6.185],[46.255,-6.280],[46.035,-6.380],[45.810,-6.485],[45.580,-6.595],[45.345,-6.710],[45.105,-6.830],[44.860,-6.955],[44.610,-7.085],[44.360,-7.215],[44.105,-7.350],[43.845,-7.490],[43.585,-7.630],[43.325,-7.770],[43.070,-7.910],[42.815,-8.045],[42.570,-8.175],[42.330,-8.300],[42.100,-8.420],[41.885,-8.530],[41.690,-8.620],[41.520,-8.690],[41.380,-8.730],[41.280,-8.730],[41.220,-8.720],[41.185,-8.705]]},
+{id:'across-pb',c:'Across',f:'Portbury',t:'Leixoes',p:3800,tp:'RoRo',tr:'4-5 days',cl:'#ffa726',cf:'2024-2026',ct:'Operations',n:'Alternative loading from Bristol. Same pricing as Southampton route.',
+wp:[[51.493,-2.724],[51.460,-2.810],[51.420,-2.910],[51.375,-3.020],[51.325,-3.145],[51.270,-3.280],[51.210,-3.420],[51.145,-3.570],[51.075,-3.720],[51.000,-3.880],[50.920,-4.040],[50.835,-4.200],[50.745,-4.360],[50.650,-4.520],[50.550,-4.670],[50.445,-4.820],[50.335,-4.960],[50.220,-5.100],[50.100,-5.230],[49.975,-5.360],[49.845,-5.480],[49.710,-5.600],[49.570,-5.710],[49.425,-5.815],[49.275,-5.915],[49.120,-6.010],[48.960,-6.100],[48.795,-6.185],[48.625,-6.270],[48.450,-6.350],[48.270,-6.430],[48.085,-6.510],[47.895,-6.590],[47.700,-6.670],[47.500,-6.750],[47.295,-6.830],[47.085,-6.915],[46.870,-7.000],[46.650,-7.090],[46.425,-7.185],[46.195,-7.280],[45.960,-7.380],[45.720,-7.485],[45.475,-7.590],[45.225,-7.700],[44.970,-7.810],[44.710,-7.920],[44.445,-8.030],[44.175,-8.140],[43.900,-8.250],[43.625,-8.355],[43.350,-8.455],[43.075,-8.550],[42.805,-8.640],[42.545,-8.725],[42.300,-8.800],[42.070,-8.860],[41.860,-8.910],[41.670,-8.940],[41.505,-8.940],[41.365,-8.910],[41.260,-8.860],[41.200,-8.810],[41.185,-8.705]]},
+{id:'savino',c:'Savino Del Bene',f:'Leixoes',t:'Ponta Delgada',p:6650,tp:'Container (FCL)',tr:'5-7 days',cl:'#ab47bc',cf:'2024 (inv SDB52SP043230)',ct:'Savino PT',n:'Azores route. MASSIVAMENTE caro — GS Lines target EUR 650 = 90% saving potential.',
+wp:[[41.185,-8.705],[41.150,-8.900],[41.110,-9.100],[41.065,-9.320],[41.015,-9.560],[40.960,-9.820],[40.900,-10.100],[40.835,-10.400],[40.770,-10.720],[40.700,-11.060],[40.625,-11.420],[40.545,-11.800],[40.460,-12.200],[40.370,-12.620],[40.280,-13.060],[40.185,-13.520],[40.090,-14.000],[39.990,-14.500],[39.890,-15.010],[39.785,-15.540],[39.680,-16.080],[39.570,-16.630],[39.460,-17.190],[39.345,-17.760],[39.230,-18.340],[39.115,-18.920],[39.000,-19.510],[38.885,-20.100],[38.770,-20.690],[38.655,-21.280],[38.540,-21.860],[38.430,-22.430],[38.325,-22.990],[38.225,-23.530],[38.130,-24.050],[38.040,-24.540],[37.960,-24.990],[37.895,-25.380],[37.840,-25.560],[37.740,-25.670]]},
+{id:'express',c:'Express Freight',f:'Purfleet',t:'Aveiro',p:9760,tp:'Flat Rack (40ft)',tr:'10-14 days',cl:'#ff1744',cf:'2026-04-30',ct:'Berenado',n:'NAO competitivo — 4x preco RoRo. Flat rack inherentemente caro. Ultimo recurso APENAS.',
+wp:[[51.482,0.230],[51.472,0.310],[51.460,0.395],[51.448,0.485],[51.434,0.575],[51.418,0.665],[51.400,0.755],[51.380,0.840],[51.358,0.920],[51.332,0.995],[51.304,1.065],[51.272,1.125],[51.238,1.175],[51.200,1.215],[51.160,1.240],[51.118,1.250],[51.072,1.245],[51.025,1.225],[50.975,1.190],[50.922,1.140],[50.868,1.080],[50.812,1.010],[50.754,0.930],[50.694,0.840],[50.632,0.740],[50.570,0.630],[50.505,0.510],[50.440,0.385],[50.375,0.250],[50.308,0.110],[50.240,-0.040],[50.170,-0.200],[50.100,-0.365],[50.028,-0.540],[49.955,-0.725],[49.880,-0.920],[49.802,-1.120],[49.722,-1.330],[49.640,-1.550],[49.555,-1.775],[49.468,-2.010],[49.378,-2.250],[49.285,-2.500],[49.190,-2.755],[49.092,-3.015],[48.990,-3.280],[48.885,-3.545],[48.775,-3.810],[48.662,-4.075],[48.545,-4.335],[48.425,-4.590],[48.300,-4.840],[48.170,-5.080],[48.035,-5.310],[47.895,-5.530],[47.750,-5.735],[47.600,-5.930],[47.445,-6.110],[47.285,-6.280],[47.120,-6.440],[46.950,-6.595],[46.775,-6.740],[46.595,-6.880],[46.410,-7.015],[46.220,-7.145],[46.025,-7.270],[45.825,-7.390],[45.620,-7.505],[45.410,-7.615],[45.195,-7.720],[44.975,-7.820],[44.750,-7.920],[44.520,-8.015],[44.285,-8.105],[44.045,-8.190],[43.800,-8.270],[43.550,-8.345],[43.300,-8.415],[43.045,-8.480],[42.790,-8.540],[42.535,-8.595],[42.280,-8.645],[42.030,-8.690],[41.785,-8.725],[41.545,-8.750],[41.320,-8.760],[41.110,-8.750],[40.920,-8.720],[40.860,-8.650]]}
+];
+const MAR_PORTS={Portsmouth:{lat:50.819,lng:-1.087,c:'UK'},Portbury:{lat:51.493,lng:-2.724,c:'UK'},Southampton:{lat:50.899,lng:-1.395,c:'UK'},Purfleet:{lat:51.482,lng:0.230,c:'UK'},Zeebrugge:{lat:51.354,lng:3.175,c:'BE'},Santander:{lat:43.462,lng:-3.810,c:'ES'},Vigo:{lat:42.237,lng:-8.715,c:'ES'},Leixoes:{lat:41.185,lng:-8.705,c:'PT'},Aveiro:{lat:40.860,lng:-8.650,c:'PT'},'Ponta Delgada':{lat:37.740,lng:-25.670,c:'PT'}};
+const MAR_PCOL={UK:'#42a5f5',BE:'#66bb6a',ES:'#ffa726',PT:'#ef5350'};
+
+function initMaritime(){
+  if(marInit)return;marInit=true;
+  // Load Leaflet dynamically
+  const sc=document.createElement('script');sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  sc.onload=()=>buildMaritime();document.head.appendChild(sc);
+}
+
+function buildMaritime(){
+  // Init map
+  marMap=L.map('maritime-map',{center:[46.5,-4],zoom:5,zoomControl:false,attributionControl:false,preferCanvas:true});
+  L.control.zoom({position:'bottomleft'}).addTo(marMap);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,subdomains:'abcd'}).addTo(marMap);
+
+  // Routes — 4-layer glow + dash
+  MAR_R.forEach(r=>{
+    const g3=L.polyline(r.wp,{color:r.cl,weight:16,opacity:.03,smoothFactor:1.2,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const g2=L.polyline(r.wp,{color:r.cl,weight:8,opacity:.08,smoothFactor:1.2,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const g1=L.polyline(r.wp,{color:r.cl,weight:4,opacity:.2,smoothFactor:1.2,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const core=L.polyline(r.wp,{color:r.cl,weight:2,opacity:.85,smoothFactor:1.2,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const dash=L.polyline(r.wp,{color:'#ffffff',weight:1,opacity:.35,smoothFactor:1.2,lineCap:'round',dashArray:'2 8'}).addTo(marMap);
+    marLys[r.id]={g3,g2,g1,core,dash,r};
+    core.on('click',()=>marSel(r.id));g1.on('click',()=>marSel(r.id));
+  });
+
+  // Animated dashes
+  let dO=0;(function aD(){dO-=.3;Object.values(marLys).forEach(({dash})=>{const e=dash.getElement&&dash.getElement();if(e)e.style.strokeDashoffset=dO+'px'});requestAnimationFrame(aD)})();
+
+  // Port markers
+  Object.entries(MAR_PORTS).forEach(([nm,p])=>{
+    const cl=MAR_PCOL[p.c]||'#fff',sz=8;
+    L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',
+      html:'<div style="position:relative;width:'+sz+'px;height:'+sz+'px"><div style="width:'+sz+'px;height:'+sz+'px;background:'+cl+';border-radius:50%;position:relative;z-index:3;box-shadow:0 0 4px '+cl+',0 0 8px '+cl+'60;border:1.5px solid rgba(255,255,255,0.3)"></div><div style="position:absolute;inset:-4px;border-radius:50%;border:1px solid '+cl+';opacity:0.3;animation:mar-ring 2.5s infinite ease-out"></div></div>',
+      iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]})}).addTo(marMap)
+      .bindTooltip('<b>'+nm+'</b> · '+p.c,{direction:'top',offset:[0,-8]});
+  });
+
+  // Ship canvas
+  marCv=$('maritime-canvas');marCx=marCv.getContext('2d');
+  function rsz(){const r=$('maritime-map').getBoundingClientRect();marCv.width=r.width;marCv.height=r.height;marCv.style.width=r.width+'px';marCv.style.height=r.height+'px'}
+  rsz();new ResizeObserver(rsz).observe($('maritime-map'));
+  marShips=MAR_R.map(r=>({r,t:Math.random(),sp:.0001+Math.random()*.00007,d:1}));
+
+  function pp(wp,t){const n=wp.length-1,f=t*n,i=Math.min(Math.floor(f),n-1),s=f-i;
+    const a=wp[i],b=wp[Math.min(i+1,wp.length-1)];
+    return{lat:a[0]+(b[0]-a[0])*s,lng:a[1]+(b[1]-a[1])*s,h:Math.atan2(b[1]-a[1],-(b[0]-a[0]))}}
+
+  function drawShip(x,y,h,cl,sz){
+    marCx.save();marCx.translate(x,y);marCx.rotate(h);
+    marCx.shadowColor=cl;marCx.shadowBlur=18;
+    marCx.beginPath();marCx.moveTo(0,-sz);marCx.lineTo(sz*.5,sz*.5);marCx.lineTo(0,sz*.2);marCx.lineTo(-sz*.5,sz*.5);marCx.closePath();
+    marCx.fillStyle=cl;marCx.globalAlpha=.95;marCx.fill();
+    marCx.shadowBlur=0;marCx.beginPath();marCx.moveTo(0,-sz*.6);marCx.lineTo(0,sz*.1);
+    marCx.strokeStyle='rgba(255,255,255,0.5)';marCx.lineWidth=1;marCx.stroke();
+    marCx.restore()
+  }
+
+  (function frm(){
+    marCx.clearRect(0,0,marCv.width,marCv.height);
+    marShips.forEach(s=>{
+      s.t+=s.sp*s.d;if(s.t>1){s.t=1;s.d=-1}if(s.t<0){s.t=0;s.d=1}
+      const p=pp(s.r.wp,s.t),pt=marMap.latLngToContainerPoint([p.lat,p.lng]);
+      if(pt.x>-60&&pt.x<marCv.width+60&&pt.y>-60&&pt.y<marCv.height+60){
+        for(let i=1;i<=6;i++){
+          const wt=Math.max(0,Math.min(1,s.t-i*.003*s.d));
+          const w=pp(s.r.wp,wt),wp=marMap.latLngToContainerPoint([w.lat,w.lng]);
+          marCx.beginPath();marCx.arc(wp.x,wp.y,Math.max(.5,2.5-i*.35),0,Math.PI*2);
+          marCx.fillStyle=s.r.cl;marCx.globalAlpha=.25-i*.035;marCx.fill()
+        }
+        marCx.globalAlpha=1;drawShip(pt.x,pt.y,p.h,s.r.cl,11);
+      }
+    });
+    requestAnimationFrame(frm)
+  })();
+
+  // Route cards
+  $('mar-routes').innerHTML=MAR_R.map(r=>{
+    const ti=marTier(r.p);
+    return '<div class="mar-rc" data-mid="'+r.id+'" onclick="GV.marSel(\''+r.id+'\')"><div class="bar" style="background:'+r.cl+'"></div><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px"><div class="cn" style="color:'+r.cl+'">'+r.c+'</div><div class="price" style="color:'+r.cl+'">&euro;'+r.p.toLocaleString()+'</div></div><div class="route">'+r.f+' &rarr; '+r.t+'</div><div class="meta"><span class="tag" style="background:'+ti.c+'18;color:'+ti.c+';font-weight:800">'+ti.t+'</span><span class="tag">'+r.tp+'</span><span class="tag">'+r.tr+'</span></div></div>';
+  }).join('');
+
+  // Click on map to deselect
+  marMap.on('click',()=>{if(marActive)marDesel()});
+  // Fix map size after tab switch
+  setTimeout(()=>marMap.invalidateSize(),200);
+}
+
+function marSel(id){
+  $$('[data-mid]').forEach(c=>c.classList.remove('on'));
+  Object.entries(marLys).forEach(([k,{g3,g2,g1,core}])=>{
+    if(k!==id){g3.setStyle({opacity:.005});g2.setStyle({opacity:.015});g1.setStyle({opacity:.04});core.setStyle({opacity:.12,weight:1})}
+    else{g3.setStyle({opacity:.08});g2.setStyle({opacity:.18});g1.setStyle({opacity:.4});core.setStyle({opacity:1,weight:2.5});core.bringToFront();g1.bringToFront()}
+  });
+  document.querySelector('[data-mid="'+id+'"]')?.classList.add('on');
+  const ly=marLys[id];if(ly&&marMap)marMap.fitBounds(L.polyline(ly.r.wp).getBounds().pad(.15),{duration:.6,maxZoom:7});
+  // Detail
+  const r=MAR_R.find(x=>x.id===id);if(!r)return;
+  const ti=marTier(r.p);
+  const sv=r.p<3800?'<span style="color:#00e676">&minus;&euro;'+(3800-r.p).toLocaleString()+' vs Across</span>':
+           r.p>3800?'<span style="color:#ff1744">+&euro;'+(r.p-3800).toLocaleString()+' vs Across</span>':'Baseline carrier';
+  $('mar-detail').innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div><div class="cn" style="color:'+r.cl+';font-size:12px;font-weight:700">'+r.c+'</div><div style="font-family:Space Mono;font-size:24px;font-weight:800;color:'+r.cl+'">&euro;'+r.p.toLocaleString()+'<span style="font-size:10px;color:rgba(156,163,175,.5);font-weight:400"> /unit</span></div></div><span style="padding:3px 8px;border-radius:4px;font-size:9px;font-weight:800;background:'+ti.c+'18;color:'+ti.c+'">'+ti.t+'</span></div>'+
+    '<div class="ir"><span class="k">Rota</span><span class="v">'+r.f+' &rarr; '+r.t+'</span></div>'+
+    '<div class="ir"><span class="k">Tipo</span><span class="v">'+r.tp+'</span></div>'+
+    '<div class="ir"><span class="k">Transito</span><span class="v">'+r.tr+'</span></div>'+
+    '<div class="ir"><span class="k">Confirmado</span><span class="v">'+r.cf+'</span></div>'+
+    '<div class="ir"><span class="k">Contacto</span><span class="v">'+r.ct+'</span></div>'+
+    '<div class="ir"><span class="k">vs Across &euro;3.800</span><span class="v">'+sv+'</span></div>'+
+    '<div class="ir"><span class="k">Precisao</span><span class="v">'+r.wp.length+' waypoints</span></div>'+
+    '<div class="nt">'+r.n+'</div>';
+  $('mar-detail').classList.add('show');
+  marActive=id;
+}
+
+function marDesel(){
+  $$('[data-mid]').forEach(c=>c.classList.remove('on'));
+  Object.values(marLys).forEach(({g3,g2,g1,core})=>{
+    g3.setStyle({opacity:.03});g2.setStyle({opacity:.08});g1.setStyle({opacity:.2});core.setStyle({opacity:.85,weight:2})});
+  $('mar-detail').classList.remove('show');
+  if(marMap)marMap.flyTo([46.5,-4],5,{duration:.6});
+  marActive=null;
+}
+
 // === INIT ===
 function init(){
   const savedCfg=loadFromLS();
@@ -1259,7 +1469,7 @@ function init(){
 }
 
 return{switchTab,calcInternational,calcBrazil,applySettings,fetchRates,exportPDF,init,
-  updateTierPreview,onOriginChange,onRouteChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,exportJSON,importJSON};
+  updateTierPreview,onOriginChange,onRouteChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,exportJSON,importJSON,marSel};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
