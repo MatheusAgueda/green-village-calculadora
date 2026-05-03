@@ -1432,10 +1432,12 @@ const NAV={
   // North Sea
   ns_thames:[51.50,.80],ns_dover:[51.10,1.50],ns_off_nl:[52.00,3.50],
   ns_humber:[53.60,.10],ns_skagen:[57.72,10.60],
-  // Bay of Biscay — follow the coast, not straight line
-  bisc_ushant:[48.45,-5.10],bisc_belle_ile:[47.30,-3.20],bisc_rochelle:[46.10,-1.60],
-  bisc_bordeaux:[45.50,-1.70],bisc_santander:[43.70,-3.70],bisc_cabo_ortegal:[43.77,-7.87],
-  bisc_finisterre:[42.88,-9.27],
+  // Bay of Biscay — ALL POINTS OFFSHORE, hug the coast via sea
+  bisc_ushant:[48.45,-5.10],bisc_belle_ile:[47.20,-3.60],bisc_yeu:[46.70,-2.50],
+  bisc_rochelle:[46.10,-1.80],bisc_arcachon:[44.60,-1.60],
+  bisc_offshore:[44.00,-2.50],bisc_capbreton:[43.60,-2.00],
+  bisc_santander:[43.50,-3.90],bisc_cabo_penas:[43.70,-5.85],
+  bisc_cabo_ortegal:[43.80,-7.90],bisc_finisterre:[42.88,-9.30],
   // Iberian Atlantic coast
   ib_vigo:[42.20,-8.90],ib_porto:[41.15,-8.85],ib_nazare:[39.60,-9.20],
   ib_lisboa:[38.65,-9.30],ib_sines:[37.95,-8.95],ib_sagres:[37.00,-8.95],
@@ -1516,9 +1518,9 @@ const SEA_LANES={
   rotterdam_to_skagen:['ns_off_nl','ns_skagen'],
 
   // === BAY OF BISCAY (hug coast, never cross open ocean) ===
-  ushant_to_biscay_n:['bisc_ushant','bisc_belle_ile','bisc_rochelle'],
-  biscay_n_to_s:['bisc_rochelle','bisc_bordeaux','bisc_santander'],
-  biscay_to_finisterre:['bisc_santander','bisc_cabo_ortegal','bisc_finisterre'],
+  ushant_to_biscay_n:['bisc_ushant','bisc_belle_ile','bisc_yeu','bisc_rochelle'],
+  biscay_n_to_s:['bisc_rochelle','bisc_arcachon','bisc_offshore','bisc_capbreton','bisc_santander'],
+  biscay_to_finisterre:['bisc_santander','bisc_cabo_penas','bisc_cabo_ortegal','bisc_finisterre'],
 
   // === IBERIAN ATLANTIC COAST ===
   finisterre_to_vigo:['bisc_finisterre','ib_vigo'],
@@ -1669,7 +1671,7 @@ function findMaritimeRoute(from, to, fromName, toName){
     addBiscayAndBeyond(waypoints, toRegion);
   }
   else if(fromRegion === 'france_atlantic'){
-    waypoints.push(NAV.bisc_rochelle, NAV.bisc_bordeaux);
+    waypoints.push(NAV.bisc_rochelle, NAV.bisc_arcachon);
     addBiscayAndBeyond(waypoints, toRegion);
   }
   else if(fromRegion === 'france_med'){
@@ -1712,9 +1714,10 @@ function findMaritimeRoute(from, to, fromName, toName){
       addAtlanticIberia(waypoints, toRegion);
     } else if(toRegion === 'nl_be' || toRegion === 'uk_thames'){
       waypoints.push(NAV.gib_east, NAV.gib_strait, NAV.gib_approach, NAV.ib_sagres, NAV.ib_sines,
-        NAV.ib_nazare, NAV.bisc_finisterre, NAV.bisc_cabo_ortegal, NAV.bisc_santander,
-        NAV.bisc_bordeaux, NAV.bisc_rochelle, NAV.bisc_ushant, NAV.ch_ushant,
-        NAV.ch_start, NAV.ch_mid, NAV.ch_dover, NAV.ns_dover);
+        NAV.ib_nazare, NAV.ib_porto, NAV.ib_vigo, NAV.bisc_finisterre, NAV.bisc_cabo_ortegal,
+        NAV.bisc_cabo_penas, NAV.bisc_santander, NAV.bisc_capbreton, NAV.bisc_offshore,
+        NAV.bisc_arcachon, NAV.bisc_rochelle, NAV.bisc_yeu, NAV.bisc_belle_ile,
+        NAV.bisc_ushant, NAV.ch_ushant, NAV.ch_start, NAV.ch_mid, NAV.ch_dover, NAV.ns_dover);
       if(toRegion === 'nl_be') waypoints.push(NAV.ns_off_nl);
       else waypoints.push(NAV.ns_thames);
     } else {
@@ -1756,9 +1759,10 @@ function addMediterraneanRoute(wp, fromRegion, toRegion){
 
 // Route from Biscay/Ushant southward to various destinations
 function addBiscayAndBeyond(wp, toRegion){
-  // Always cross Bay of Biscay along the coast
-  wp.push(NAV.bisc_belle_ile, NAV.bisc_rochelle, NAV.bisc_bordeaux,
-    NAV.bisc_santander, NAV.bisc_cabo_ortegal, NAV.bisc_finisterre);
+  // Cross Bay of Biscay OFFSHORE — never cut across land
+  wp.push(NAV.bisc_belle_ile, NAV.bisc_yeu, NAV.bisc_rochelle,
+    NAV.bisc_arcachon, NAV.bisc_offshore, NAV.bisc_capbreton,
+    NAV.bisc_santander, NAV.bisc_cabo_penas, NAV.bisc_cabo_ortegal, NAV.bisc_finisterre);
 
   if(toRegion === 'spain_north'){ return; } // Santander/Bilbao — already there
   if(toRegion === 'iberian_west' || toRegion === 'portugal'){
