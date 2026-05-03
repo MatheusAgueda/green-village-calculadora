@@ -1424,78 +1424,161 @@ const PDB={
 // Truck routes follow real motorway corridors (E-roads, autoroutes, autobahnen).
 // ══════════════════════════════════════════════════════════════════════════════
 
-// ── NAVIGATION WAYPOINTS — key maritime chokepoints & coastal turns ──
+// ── NAVIGATION WAYPOINTS — granular coastal points every ~30-50km for MarineTraffic quality ──
 const NAV={
-  // English Channel
-  ch_dover:[51.00,1.35],ch_mid:[50.30,.50],ch_ushant:[48.45,-5.10],
-  ch_start:[50.20,-3.60],ch_portland:[50.50,-2.40],ch_wight:[50.60,-1.30],
-  // North Sea
+  // ═══ ENGLISH CHANNEL (W→E, south coast UK + north France) ═══
+  ch_lizard:[49.96,-5.21],ch_falmouth:[50.14,-5.05],ch_eddystone:[50.18,-4.15],
+  ch_start:[50.22,-3.64],ch_berry:[50.40,-3.15],ch_lyme:[50.72,-2.90],
+  ch_portland:[50.51,-2.45],ch_anvil:[50.58,-1.98],ch_wight:[50.58,-1.30],
+  ch_selsey:[50.72,-0.78],ch_beachy:[50.73,0.24],ch_dungeness:[50.91,0.98],
+  ch_dover:[51.12,1.33],ch_mid:[50.30,.50],
+  ch_ushant:[48.47,-5.08],
+
+  // ═══ NORTH SEA ═══
   ns_thames:[51.50,.80],ns_dover:[51.10,1.50],ns_off_nl:[52.00,3.50],
   ns_humber:[53.60,.10],ns_skagen:[57.72,10.60],
-  // Bay of Biscay — ALL POINTS OFFSHORE, hug the coast via sea
-  bisc_ushant:[48.45,-5.10],bisc_belle_ile:[47.20,-3.60],bisc_yeu:[46.70,-2.50],
-  bisc_rochelle:[46.10,-1.80],bisc_arcachon:[44.60,-1.60],
-  bisc_offshore:[44.00,-2.50],bisc_capbreton:[43.60,-2.00],
-  bisc_santander:[43.50,-3.90],bisc_cabo_penas:[43.70,-5.85],
-  bisc_cabo_ortegal:[43.80,-7.90],bisc_finisterre:[42.88,-9.30],
-  // Iberian Atlantic coast
-  ib_vigo:[42.20,-8.90],ib_porto:[41.15,-8.85],ib_nazare:[39.60,-9.20],
-  ib_lisboa:[38.65,-9.30],ib_sines:[37.95,-8.95],ib_sagres:[37.00,-8.95],
-  // Strait of Gibraltar
-  gib_approach:[36.10,-5.90],gib_strait:[35.95,-5.60],gib_east:[36.10,-5.20],
-  // Western Mediterranean
-  wmed_almeria:[36.60,-2.30],wmed_cartagena:[37.50,-0.85],wmed_ibiza:[38.90,1.20],
-  wmed_valencia:[39.40,-0.20],wmed_barcelona:[41.30,2.10],
-  // Balearic passage
-  bal_menorca:[39.90,4.10],
-  // South France / Ligurian
-  lig_marseille:[43.20,5.20],lig_nice:[43.60,7.20],lig_genova:[44.30,8.80],
-  // Tyrrhenian Sea
-  tyr_livorno:[43.40,9.90],tyr_piombino:[42.80,10.20],
+
+  // ═══ BRITTANY COAST (Ushant → Loire) ═══
+  brit_raz:[48.03,-4.73],brit_penmarc:[47.80,-4.37],brit_glenan:[47.70,-4.00],
+  brit_groix:[47.62,-3.50],brit_belle_ile:[47.33,-3.18],brit_quiberon:[47.30,-3.05],
+
+  // ═══ BAY OF BISCAY — granular coast-following, every 30-50km ═══
+  bisc_ushant:[48.47,-5.08],
+  bisc_st_nazaire:[47.12,-2.50],bisc_noirmoutier:[46.95,-2.30],
+  bisc_yeu:[46.72,-2.38],bisc_re:[46.20,-1.50],bisc_oleron:[45.92,-1.38],
+  bisc_royan:[45.62,-1.18],bisc_arcachon:[44.62,-1.38],
+  bisc_capbreton:[43.65,-1.52],bisc_biarritz:[43.48,-1.58],
+  bisc_sanseb:[43.33,-2.00],bisc_getaria:[43.30,-2.20],
+  bisc_bilbao:[43.38,-3.05],bisc_castro:[43.40,-3.22],
+  bisc_laredo:[43.43,-3.42],bisc_santander:[43.47,-3.80],
+  bisc_suances:[43.44,-4.05],bisc_san_vicente:[43.40,-4.40],
+  bisc_llanes:[43.43,-4.75],bisc_ribadesella:[43.47,-5.08],
+  bisc_gijon:[43.57,-5.67],bisc_aviles:[43.60,-5.95],
+  bisc_luarca:[43.55,-6.53],bisc_ribadeo:[43.55,-7.05],
+  bisc_viveiro:[43.67,-7.60],bisc_cabo_ortegal:[43.77,-7.87],
+  bisc_cedeira:[43.68,-8.05],bisc_ferrol:[43.48,-8.25],
+  bisc_coruna:[43.37,-8.42],bisc_malpica:[43.33,-8.82],
+  bisc_muxia:[43.10,-9.25],bisc_finisterre:[42.88,-9.27],
+
+  // ═══ IBERIAN ATLANTIC — Portuguese coast every ~25km ═══
+  ib_baiona:[42.12,-8.85],ib_vigo:[42.24,-8.78],
+  pt_viana:[41.69,-8.85],pt_esposende:[41.53,-8.80],
+  ib_porto:[41.18,-8.75],pt_espinho:[41.00,-8.65],
+  pt_aveiro:[40.65,-8.78],pt_figueira:[40.15,-8.90],
+  pt_sao_martinho:[39.52,-9.12],ib_nazare:[39.60,-9.08],
+  pt_peniche:[39.35,-9.38],pt_ericeira:[38.97,-9.42],
+  pt_cascais:[38.69,-9.42],ib_lisboa:[38.67,-9.22],
+  pt_sesimbra:[38.44,-9.10],pt_setubal:[38.50,-8.95],
+  ib_sines:[37.95,-8.88],pt_milfontes:[37.72,-8.82],
+  pt_aljezur:[37.35,-8.88],pt_lagos:[37.10,-8.70],
+  ib_sagres:[36.99,-8.95],
+
+  // ═══ STRAIT OF GIBRALTAR ═══
+  gib_approach:[36.10,-5.90],gib_tarifa:[36.00,-5.60],gib_strait:[35.98,-5.35],gib_east:[36.15,-5.15],
+
+  // ═══ WESTERN MEDITERRANEAN — Spanish coast granular ═══
+  wmed_estepona:[36.42,-5.15],wmed_malaga:[36.70,-4.40],
+  wmed_motril:[36.70,-3.50],wmed_almeria:[36.82,-2.45],
+  wmed_cabo_gata:[36.72,-2.20],wmed_aguilas:[37.38,-1.60],
+  wmed_cartagena:[37.60,-0.95],wmed_alicante:[38.35,-0.48],
+  wmed_valencia:[39.45,-0.30],wmed_castellon:[39.98,0.02],
+  wmed_tarragona:[41.08,1.20],wmed_barcelona:[41.35,2.15],
+  wmed_ibiza:[38.90,1.20],
+
+  // ═══ BALEARIC ═══
+  bal_menorca:[39.90,4.10],bal_mallorca:[39.55,2.65],
+
+  // ═══ SOUTH FRANCE / LIGURIAN — coast every ~40km ═══
+  lig_port_vendres:[42.52,3.12],lig_agde:[43.30,3.50],lig_sete:[43.38,3.68],
+  lig_marseille:[43.28,5.35],lig_toulon:[43.08,5.92],
+  lig_st_raphael:[43.42,6.78],lig_nice:[43.68,7.28],
+  lig_monaco:[43.73,7.42],lig_sanremo:[43.82,7.78],
+  lig_savona:[44.30,8.48],lig_genova:[44.40,8.92],
+
+  // ═══ TYRRHENIAN — Italian coast every ~40km ═══
+  tyr_spezia:[44.08,9.85],tyr_livorno:[43.55,10.28],
+  tyr_piombino:[42.92,10.52],tyr_elba_s:[42.72,10.25],
+  tyr_argentario:[42.38,11.10],tyr_civitavecchia:[42.08,11.75],
+  tyr_fiumicino:[41.75,12.20],tyr_ponza:[40.90,12.95],
+  tyr_gaeta:[41.20,13.55],tyr_napoli:[40.82,14.15],
+  tyr_salerno:[40.65,14.78],tyr_palinuro:[40.02,15.28],
+  tyr_scalea:[39.80,15.78],tyr_pizzo:[38.72,16.15],
+  tyr_messina:[38.18,15.62],
   tyr_corsica_s:[41.40,9.20],tyr_sardinia_n:[41.10,9.40],
-  tyr_civitavecchia:[41.90,11.40],tyr_ponza:[40.90,12.80],
-  tyr_napoli:[40.70,14.10],tyr_salerno:[40.40,14.80],tyr_messina:[38.20,15.60],
-  // Central Mediterranean
-  cmed_malta:[35.90,14.40],cmed_sicily_s:[36.70,15.10],
-  // Adriatic
+
+  // ═══ CENTRAL MEDITERRANEAN ═══
+  cmed_malta:[35.90,14.40],cmed_sicily_s:[36.70,15.10],cmed_pantelleria:[36.83,11.95],
+
+  // ═══ ADRIATIC ═══
   adr_otranto:[40.10,18.50],adr_bari:[41.10,16.90],adr_ancona:[43.60,13.60],
-  adr_venice:[45.40,12.40],
-  // Eastern Mediterranean / Aegean
+  adr_venice:[45.40,12.40],adr_ravenna:[44.42,12.28],adr_rimini:[44.07,12.58],
+
+  // ═══ EASTERN MEDITERRANEAN / AEGEAN ═══
   emed_crete_w:[35.50,23.50],emed_crete_e:[35.20,26.30],emed_piraeus:[37.90,23.60],
   aegean_dardanelles:[40.10,26.30],aegean_thessaloniki:[40.60,22.90],
-  // Ionian
+
+  // ═══ IONIAN ═══
   ion_corfu:[39.60,19.90],ion_kithira:[36.20,23.00],
-  // Black Sea
+
+  // ═══ BLACK SEA ═══
   bsea_bosphorus:[41.10,29.00],bsea_varna:[43.10,28.00],
-  // Suez route (Asia → Med)
+
+  // ═══ SUEZ ROUTE ═══
   suez_north:[31.27,32.35],suez_south:[29.95,32.55],
   red_bab:[12.60,43.30],red_jeddah:[21.50,39.10],
-  // Indian Ocean
+
+  // ═══ INDIAN OCEAN ═══
   io_aden:[12.80,45.00],io_socotra:[12.50,54.00],io_arabian:[16.00,62.00],
   io_mumbai:[19.00,72.00],io_sri_lanka:[7.00,80.00],io_malacca_w:[5.50,95.00],
   io_malacca_e:[1.30,104.00],
-  // South China Sea
+
+  // ═══ SOUTH CHINA SEA ═══
   scs_singapore:[1.20,103.80],scs_vietnam:[10.00,109.00],scs_hong_kong:[22.30,114.10],
   scs_taiwan:[22.00,120.00],scs_shanghai:[31.00,122.00],
-  // Atlantic — transatlantic
+
+  // ═══ ATLANTIC — transatlantic ═══
   atl_azores:[38.50,-28.00],atl_bermuda:[32.30,-64.80],atl_canary:[28.10,-15.50],
   atl_cabo_verde:[16.00,-23.00],
-  // South Atlantic (BR routes)
+
+  // ═══ SOUTH ATLANTIC (BR routes) ═══
   satl_recife:[-8.00,-34.00],satl_salvador:[-13.00,-38.00],satl_mid:[-15.00,-25.00],
   satl_rio:[-23.00,-43.00],satl_santos:[-24.00,-46.00],
-  // US East Coast
+
+  // ═══ US EAST COAST ═══
   us_florida:[25.80,-80.00],us_savannah:[32.00,-80.50],us_norfolk:[36.85,-76.00],
   us_ny_approach:[40.50,-73.80],
-  // North Atlantic (US/UK corridor)
+
+  // ═══ NORTH ATLANTIC (US/UK corridor) ═══
   natl_ireland:[51.50,-10.00],natl_mid:[48.00,-25.00],natl_newfoundland:[46.00,-48.00],
-  // Baltic
+
+  // ═══ BALTIC ═══
   balt_kiel:[54.30,10.10],balt_bornholm:[55.10,14.80],balt_gdansk:[54.50,18.80],
-  // Truck corridors (land waypoints for road routes)
-  road_calais:[50.95,1.86],road_paris:[48.85,2.35],road_lyon:[45.76,4.83],
-  road_bordeaux:[44.84,-.58],road_irun:[43.34,-1.79],road_burgos:[42.35,-3.70],
-  road_madrid:[40.42,-3.70],road_badajoz:[38.87,-6.97],road_lisboa:[38.72,-9.14],
-  road_porto:[41.15,-8.61],road_salamanca:[40.96,-5.66],road_valladolid:[41.65,-4.72],
-  road_bilbao:[43.26,-2.93],road_barcelona:[41.39,2.17],road_montpellier:[43.61,3.88],
+
+  // ═══ TRUCK CORRIDORS — real highway waypoints every ~40km ═══
+  // Calais→Porto via A26→A1→A10→A63→AP-8→AP-1→A1→A62→N620→IP5→A25→A1
+  road_calais:[50.95,1.86],road_arras:[50.29,2.78],road_peronne:[49.93,2.93],
+  road_paris_n:[49.00,2.52],road_paris:[48.85,2.35],road_paris_s:[48.72,2.24],
+  road_orleans:[47.90,1.90],road_tours:[47.39,0.69],
+  road_poitiers:[46.58,0.34],road_niort:[46.32,-0.46],
+  road_saintes:[45.75,-0.63],road_bordeaux:[44.84,-0.58],
+  road_dax:[43.71,-1.05],road_bayonne:[43.49,-1.48],
+  road_irun:[43.34,-1.79],road_sansebastian:[43.32,-1.98],
+  road_tolosa:[43.13,-2.08],road_vitoria:[42.85,-2.67],
+  road_miranda:[42.69,-2.95],road_burgos:[42.35,-3.70],
+  road_venta_banos:[41.92,-4.48],road_valladolid:[41.65,-4.72],
+  road_tordesillas:[41.50,-5.00],road_salamanca:[40.96,-5.66],
+  road_ciudad_rodrigo:[40.60,-6.53],road_fuentes:[40.58,-6.80],
+  road_vilar_formoso:[40.60,-6.83],road_guarda:[40.54,-7.27],
+  road_celorico:[40.63,-7.39],road_mangualde:[40.60,-7.76],
+  road_viseu:[40.66,-7.91],road_albergaria:[40.69,-8.48],
+  road_porto:[41.15,-8.61],
+  // Lisboa branch (from Salamanca via A62→IP5→A1)
+  road_coimbra:[40.21,-8.43],road_leiria:[39.74,-8.81],
+  road_santarem:[39.24,-8.68],road_lisboa:[38.72,-9.14],
+  // Spain alternatives
+  road_madrid:[40.42,-3.70],road_badajoz:[38.87,-6.97],
+  road_bilbao:[43.26,-2.93],road_barcelona:[41.39,2.17],
+  road_lyon:[45.76,4.83],road_montpellier:[43.61,3.88],
   road_milan:[45.46,9.19],road_munich:[48.14,11.58],road_berlin:[52.52,13.40],
   road_warsaw:[52.23,21.01],road_vienna:[48.21,16.37],road_zagreb:[45.81,15.98],
   road_sofia_road:[42.70,23.32],road_thessaloniki_road:[40.63,22.94],
@@ -1519,16 +1602,16 @@ const SEA_LANES={
   zeebrugge_to_channel:['ns_dover','ch_dover','ch_mid'],
   rotterdam_to_skagen:['ns_off_nl','ns_skagen'],
 
-  // === BAY OF BISCAY (hug coast, never cross open ocean) ===
-  ushant_to_biscay_n:['bisc_ushant','bisc_belle_ile','bisc_yeu','bisc_rochelle'],
-  biscay_n_to_s:['bisc_rochelle','bisc_arcachon','bisc_offshore','bisc_capbreton','bisc_santander'],
-  biscay_to_finisterre:['bisc_santander','bisc_cabo_penas','bisc_cabo_ortegal','bisc_finisterre'],
+  // === BAY OF BISCAY — granular coast-following ===
+  ushant_to_biscay_n:['bisc_ushant','brit_raz','brit_penmarc','brit_groix','brit_belle_ile','bisc_st_nazaire','bisc_noirmoutier','bisc_yeu','bisc_re'],
+  biscay_n_to_s:['bisc_re','bisc_oleron','bisc_royan','bisc_arcachon','bisc_capbreton','bisc_biarritz','bisc_sanseb','bisc_bilbao','bisc_santander'],
+  biscay_to_finisterre:['bisc_santander','bisc_suances','bisc_llanes','bisc_ribadesella','bisc_gijon','bisc_aviles','bisc_luarca','bisc_ribadeo','bisc_viveiro','bisc_cabo_ortegal','bisc_ferrol','bisc_coruna','bisc_malpica','bisc_muxia','bisc_finisterre'],
 
-  // === IBERIAN ATLANTIC COAST ===
-  finisterre_to_vigo:['bisc_finisterre','ib_vigo'],
-  finisterre_to_leixoes:['bisc_finisterre','ib_vigo','ib_porto'],
-  leixoes_south:['ib_porto','ib_nazare','ib_lisboa','ib_sines','ib_sagres'],
-  sagres_to_gibraltar:['ib_sagres','gib_approach','gib_strait'],
+  // === IBERIAN ATLANTIC COAST — granular ===
+  finisterre_to_vigo:['bisc_finisterre','ib_baiona','ib_vigo'],
+  finisterre_to_leixoes:['bisc_finisterre','ib_baiona','ib_vigo','pt_viana','pt_esposende','ib_porto'],
+  leixoes_south:['ib_porto','pt_espinho','pt_aveiro','pt_figueira','ib_nazare','pt_peniche','pt_ericeira','pt_cascais','ib_lisboa','pt_sesimbra','pt_setubal','ib_sines','pt_milfontes','pt_aljezur','pt_lagos','ib_sagres'],
+  sagres_to_gibraltar:['ib_sagres','gib_approach','gib_tarifa','gib_strait'],
 
   // === STRAIT OF GIBRALTAR ===
   gibraltar_transit:['gib_approach','gib_strait','gib_east'],
@@ -1540,10 +1623,10 @@ const SEA_LANES={
   barcelona_to_marseille:['wmed_barcelona','bal_menorca','lig_marseille'],
 
   // === LIGURIAN / TYRRHENIAN ===
-  marseille_to_genova:['lig_marseille','lig_nice','lig_genova'],
-  genova_to_livorno:['lig_genova','tyr_livorno','tyr_piombino'],
-  tyrrhenian_south:['tyr_piombino','tyr_civitavecchia','tyr_ponza','tyr_napoli'],
-  napoli_to_messina:['tyr_napoli','tyr_salerno','tyr_messina'],
+  marseille_to_genova:['lig_marseille','lig_toulon','lig_st_raphael','lig_nice','lig_monaco','lig_sanremo','lig_savona','lig_genova'],
+  genova_to_livorno:['lig_genova','tyr_spezia','tyr_livorno','tyr_piombino'],
+  tyrrhenian_south:['tyr_piombino','tyr_argentario','tyr_civitavecchia','tyr_fiumicino','tyr_ponza','tyr_gaeta','tyr_napoli'],
+  napoli_to_messina:['tyr_napoli','tyr_salerno','tyr_palinuro','tyr_scalea','tyr_pizzo','tyr_messina'],
   messina_to_malta:['tyr_messina','cmed_sicily_s','cmed_malta'],
 
   // === ADRIATIC ===
@@ -1582,9 +1665,8 @@ const SEA_LANES={
   skagen_to_kiel:['ns_skagen','balt_kiel'],
   kiel_to_gdansk:['balt_kiel','balt_bornholm','balt_gdansk'],
 
-  // === TRUCK ROAD CORRIDORS ===
-  // FR direct truck
-  road_calais_portugal:['road_calais','road_paris','road_bordeaux','road_irun','road_burgos','road_salamanca','road_porto'],
+  // === TRUCK ROAD CORRIDORS — real highway waypoints ===
+  road_calais_portugal:['road_calais','road_arras','road_peronne','road_paris_n','road_paris','road_paris_s','road_orleans','road_tours','road_poitiers','road_niort','road_saintes','road_bordeaux','road_dax','road_bayonne','road_irun','road_sansebastian','road_tolosa','road_vitoria','road_miranda','road_burgos','road_venta_banos','road_valladolid','road_tordesillas','road_salamanca','road_ciudad_rodrigo','road_fuentes','road_vilar_formoso','road_guarda','road_celorico','road_mangualde','road_viseu','road_albergaria','road_porto'],
   road_france_spain:['road_paris','road_lyon','road_montpellier','road_barcelona'],
   road_france_italy:['road_lyon','road_milan'],
   road_central_europe:['road_berlin','road_warsaw'],
@@ -1618,8 +1700,9 @@ function findSeaRoute(fromCoord, toCoord, fromName, toName, routeType, routeIdx)
 
   // Truck routes: linear interpolation (road corridors, no curve overshoot)
   // Maritime routes: Catmull-Rom with reduced tension for coast-hugging
-  if(isTruck) return linearInterpolate2(withOffset, 6);
-  return catmullRomSplineTight(withOffset, 10);
+  // With 300+ granular waypoints, less interpolation needed
+  if(isTruck) return linearInterpolate2(withOffset, 3);
+  return catmullRomSplineTight(withOffset, 4);
 }
 
 function findMaritimeRoute(from, to, fromName, toName){
@@ -1635,28 +1718,33 @@ function findMaritimeRoute(from, to, fromName, toName){
   // This creates the realistic path a ship would actually navigate
 
   // === UK origins ===
+  // Granular English Channel transit
+  const CH_EAST_TO_WEST = [NAV.ch_dover, NAV.ch_dungeness, NAV.ch_beachy, NAV.ch_selsey,
+    NAV.ch_wight, NAV.ch_anvil, NAV.ch_portland, NAV.ch_lyme, NAV.ch_berry,
+    NAV.ch_start, NAV.ch_eddystone, NAV.ch_falmouth, NAV.ch_lizard, NAV.ch_ushant];
+
   if(fromRegion === 'uk_thames'){
     if(toRegion === 'nl_be'){ waypoints.push(NAV.ns_thames, NAV.ns_off_nl); }
     else if(toRegion === 'france_channel'){ waypoints.push(NAV.ns_thames, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid); }
     else {
-      // UK Thames → Channel → Biscay → destination
-      waypoints.push(NAV.ns_thames, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid, NAV.ch_portland, NAV.ch_start, NAV.ch_ushant);
+      waypoints.push(NAV.ns_thames, NAV.ns_dover, ...CH_EAST_TO_WEST);
       addBiscayAndBeyond(waypoints, toRegion);
     }
   }
   else if(fromRegion === 'uk_humber'){
     if(toRegion === 'nl_be'){ waypoints.push(NAV.ns_humber, NAV.ns_off_nl); }
     else {
-      waypoints.push(NAV.ns_humber, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid, NAV.ch_portland, NAV.ch_start, NAV.ch_ushant);
+      waypoints.push(NAV.ns_humber, NAV.ns_dover, ...CH_EAST_TO_WEST);
       addBiscayAndBeyond(waypoints, toRegion);
     }
   }
   else if(fromRegion === 'uk_bristol'){
-    waypoints.push(NAV.ch_start, NAV.ch_ushant);
+    waypoints.push(NAV.ch_start, NAV.ch_eddystone, NAV.ch_falmouth, NAV.ch_lizard, NAV.ch_ushant);
     addBiscayAndBeyond(waypoints, toRegion);
   }
   else if(fromRegion === 'uk_south'){
-    waypoints.push(NAV.ch_wight, NAV.ch_portland, NAV.ch_start, NAV.ch_ushant);
+    waypoints.push(NAV.ch_wight, NAV.ch_anvil, NAV.ch_portland, NAV.ch_lyme, NAV.ch_berry,
+      NAV.ch_start, NAV.ch_eddystone, NAV.ch_falmouth, NAV.ch_lizard, NAV.ch_ushant);
     addBiscayAndBeyond(waypoints, toRegion);
   }
   // === NL/BE origins ===
@@ -1665,13 +1753,14 @@ function findMaritimeRoute(from, to, fromName, toName){
     else if(toRegion === 'france_channel'){ waypoints.push(NAV.ns_off_nl, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid); }
     else if(toRegion === 'baltic'){ waypoints.push(NAV.ns_off_nl, NAV.ns_skagen, NAV.balt_kiel, NAV.balt_bornholm, NAV.balt_gdansk); }
     else {
-      waypoints.push(NAV.ns_off_nl, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid, NAV.ch_portland, NAV.ch_start, NAV.ch_ushant);
+      waypoints.push(NAV.ns_off_nl, NAV.ns_dover, ...CH_EAST_TO_WEST);
       addBiscayAndBeyond(waypoints, toRegion);
     }
   }
   // === FR origins ===
   else if(fromRegion === 'france_channel'){
-    waypoints.push(NAV.ch_mid, NAV.ch_start, NAV.ch_ushant);
+    waypoints.push(NAV.ch_mid, NAV.ch_lyme, NAV.ch_berry, NAV.ch_start,
+      NAV.ch_eddystone, NAV.ch_falmouth, NAV.ch_lizard, NAV.ch_ushant);
     addBiscayAndBeyond(waypoints, toRegion);
   }
   else if(fromRegion === 'france_atlantic'){
@@ -1680,9 +1769,12 @@ function findMaritimeRoute(from, to, fromName, toName){
   }
   else if(fromRegion === 'france_med'){
     if(toRegion === 'iberian_west' || toRegion === 'portugal'){
-      // Med → Gibraltar → Atlantic
-      waypoints.push(NAV.lig_marseille, NAV.wmed_barcelona, NAV.wmed_valencia, NAV.wmed_cartagena, NAV.wmed_almeria,
-        NAV.gib_east, NAV.gib_strait, NAV.gib_approach);
+      // Med → coast → Gibraltar → Atlantic (granular)
+      waypoints.push(NAV.lig_marseille, NAV.lig_sete, NAV.lig_agde, NAV.lig_port_vendres,
+        NAV.wmed_barcelona, NAV.wmed_tarragona, NAV.wmed_castellon, NAV.wmed_valencia,
+        NAV.wmed_alicante, NAV.wmed_cartagena, NAV.wmed_aguilas, NAV.wmed_cabo_gata,
+        NAV.wmed_almeria, NAV.wmed_motril, NAV.wmed_malaga, NAV.wmed_estepona,
+        NAV.gib_east, NAV.gib_strait, NAV.gib_tarifa, NAV.gib_approach);
       addAtlanticIberia(waypoints, toRegion);
     } else {
       addMediterraneanRoute(waypoints, fromRegion, toRegion);
@@ -1690,19 +1782,22 @@ function findMaritimeRoute(from, to, fromName, toName){
   }
   // === PT origins ===
   else if(fromRegion === 'portugal'){
+    // Granular Portuguese coast southbound
+    const PT_SOUTH = [NAV.ib_porto, NAV.pt_espinho, NAV.pt_aveiro, NAV.pt_figueira,
+      NAV.ib_nazare, NAV.pt_peniche, NAV.pt_ericeira, NAV.pt_cascais,
+      NAV.ib_lisboa, NAV.pt_sesimbra, NAV.pt_setubal, NAV.ib_sines,
+      NAV.pt_milfontes, NAV.pt_aljezur, NAV.pt_lagos, NAV.ib_sagres];
     if(toRegion === 'spain_med' || toRegion === 'italy' || toRegion === 'malta' ||
        toRegion === 'greece' || toRegion === 'adriatic' || toRegion === 'black_sea'){
-      waypoints.push(NAV.ib_porto, NAV.ib_nazare, NAV.ib_lisboa, NAV.ib_sines, NAV.ib_sagres,
-        NAV.gib_approach, NAV.gib_strait, NAV.gib_east);
+      waypoints.push(...PT_SOUTH, NAV.gib_approach, NAV.gib_tarifa, NAV.gib_strait, NAV.gib_east);
       addMedFromGibraltar(waypoints, toRegion);
     }
     else if(toRegion === 'brazil'){
-      waypoints.push(NAV.ib_porto, NAV.ib_nazare, NAV.ib_lisboa, NAV.ib_sines, NAV.ib_sagres,
-        NAV.atl_canary, NAV.atl_cabo_verde, NAV.satl_mid);
+      waypoints.push(...PT_SOUTH, NAV.atl_canary, NAV.atl_cabo_verde, NAV.satl_mid);
       addBrazilApproach(waypoints, to);
     }
     else if(toRegion === 'usa'){
-      waypoints.push(NAV.ib_porto, NAV.ib_nazare, NAV.ib_lisboa);
+      waypoints.push(NAV.ib_porto, NAV.pt_aveiro, NAV.pt_figueira, NAV.ib_nazare, NAV.ib_lisboa);
       addTransatlantic(waypoints, to);
     }
   }
@@ -1717,11 +1812,25 @@ function findMaritimeRoute(from, to, fromName, toName){
       waypoints.push(NAV.gib_east, NAV.gib_strait, NAV.gib_approach);
       addAtlanticIberia(waypoints, toRegion);
     } else if(toRegion === 'nl_be' || toRegion === 'uk_thames'){
-      waypoints.push(NAV.gib_east, NAV.gib_strait, NAV.gib_approach, NAV.ib_sagres, NAV.ib_sines,
-        NAV.ib_nazare, NAV.ib_porto, NAV.ib_vigo, NAV.bisc_finisterre, NAV.bisc_cabo_ortegal,
-        NAV.bisc_cabo_penas, NAV.bisc_santander, NAV.bisc_capbreton, NAV.bisc_offshore,
-        NAV.bisc_arcachon, NAV.bisc_rochelle, NAV.bisc_yeu, NAV.bisc_belle_ile,
-        NAV.bisc_ushant, NAV.ch_ushant, NAV.ch_start, NAV.ch_mid, NAV.ch_dover, NAV.ns_dover);
+      // CN→NL/UK: Suez→Gib→PT coast→Biscay→Channel — granular
+      waypoints.push(NAV.gib_east, NAV.gib_strait, NAV.gib_tarifa, NAV.gib_approach,
+        NAV.ib_sagres, NAV.pt_lagos, NAV.pt_aljezur, NAV.pt_milfontes,
+        NAV.ib_sines, NAV.pt_setubal, NAV.pt_sesimbra, NAV.ib_lisboa,
+        NAV.pt_cascais, NAV.pt_ericeira, NAV.pt_peniche, NAV.ib_nazare,
+        NAV.pt_figueira, NAV.pt_aveiro, NAV.pt_espinho, NAV.ib_porto,
+        NAV.pt_esposende, NAV.pt_viana, NAV.ib_vigo, NAV.ib_baiona,
+        NAV.bisc_finisterre, NAV.bisc_muxia, NAV.bisc_malpica, NAV.bisc_coruna,
+        NAV.bisc_ferrol, NAV.bisc_cabo_ortegal, NAV.bisc_viveiro, NAV.bisc_ribadeo,
+        NAV.bisc_luarca, NAV.bisc_aviles, NAV.bisc_gijon, NAV.bisc_ribadesella,
+        NAV.bisc_llanes, NAV.bisc_san_vicente, NAV.bisc_suances, NAV.bisc_santander,
+        NAV.bisc_laredo, NAV.bisc_bilbao, NAV.bisc_sanseb, NAV.bisc_biarritz,
+        NAV.bisc_capbreton, NAV.bisc_arcachon, NAV.bisc_royan, NAV.bisc_oleron,
+        NAV.bisc_re, NAV.bisc_yeu, NAV.bisc_noirmoutier, NAV.bisc_st_nazaire,
+        NAV.brit_belle_ile, NAV.brit_groix, NAV.brit_penmarc, NAV.brit_raz,
+        NAV.ch_ushant, NAV.ch_lizard, NAV.ch_falmouth, NAV.ch_eddystone,
+        NAV.ch_start, NAV.ch_berry, NAV.ch_lyme, NAV.ch_portland,
+        NAV.ch_anvil, NAV.ch_wight, NAV.ch_selsey, NAV.ch_beachy,
+        NAV.ch_dungeness, NAV.ch_dover, NAV.ns_dover);
       if(toRegion === 'nl_be') waypoints.push(NAV.ns_off_nl);
       else waypoints.push(NAV.ns_thames);
     } else {
@@ -1739,41 +1848,58 @@ function findMaritimeRoute(from, to, fromName, toName){
 
 // Mediterranean internal routing (Med origin → Med destination)
 function addMediterraneanRoute(wp, fromRegion, toRegion){
+  // Granular Ligurian + Tyrrhenian coast sequences
+  const LIG_COAST = [NAV.lig_marseille, NAV.lig_toulon, NAV.lig_st_raphael, NAV.lig_nice,
+    NAV.lig_monaco, NAV.lig_sanremo, NAV.lig_savona, NAV.lig_genova];
+  const TYR_COAST = [NAV.tyr_spezia, NAV.tyr_livorno, NAV.tyr_piombino,
+    NAV.tyr_argentario, NAV.tyr_civitavecchia, NAV.tyr_fiumicino,
+    NAV.tyr_ponza, NAV.tyr_gaeta, NAV.tyr_napoli, NAV.tyr_salerno,
+    NAV.tyr_palinuro, NAV.tyr_scalea, NAV.tyr_pizzo, NAV.tyr_messina];
+
   if(fromRegion === 'france_med'){
-    if(toRegion === 'italy'){ wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova); return; }
-    if(toRegion === 'spain_med'){ wp.push(NAV.lig_marseille, NAV.wmed_barcelona, NAV.wmed_valencia); return; }
+    if(toRegion === 'italy'){ wp.push(...LIG_COAST); return; }
+    if(toRegion === 'spain_med'){ wp.push(NAV.lig_marseille, NAV.lig_sete, NAV.lig_agde, NAV.lig_port_vendres,
+      NAV.wmed_barcelona, NAV.wmed_tarragona, NAV.wmed_castellon, NAV.wmed_valencia); return; }
     if(toRegion === 'malta'){
-      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
-        NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.cmed_malta); return;
+      wp.push(...LIG_COAST, ...TYR_COAST, NAV.cmed_sicily_s, NAV.cmed_malta); return;
     }
     if(toRegion === 'greece'){
-      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
-        NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
+      wp.push(...LIG_COAST, ...TYR_COAST, NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
     }
     if(toRegion === 'adriatic'){
-      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
-        NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.adr_otranto); return;
+      wp.push(...LIG_COAST, ...TYR_COAST, NAV.adr_otranto); return;
     }
   }
-  // Default Med routing — follow Ligurian coast
-  wp.push(NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino, NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s);
+  // Default Med routing — follow Ligurian + Tyrrhenian coast
+  wp.push(NAV.lig_genova, ...TYR_COAST, NAV.cmed_sicily_s);
   if(toRegion === 'greece') wp.push(NAV.ion_kithira, NAV.emed_piraeus);
   else if(toRegion === 'malta') wp.push(NAV.cmed_malta);
 }
 
-// Route from Biscay/Ushant southward to various destinations
+// Route from Biscay/Ushant southward — granular coast-following every ~30km
 function addBiscayAndBeyond(wp, toRegion){
-  // Cross Bay of Biscay OFFSHORE — never cut across land
-  wp.push(NAV.bisc_belle_ile, NAV.bisc_yeu, NAV.bisc_rochelle,
-    NAV.bisc_arcachon, NAV.bisc_offshore, NAV.bisc_capbreton,
-    NAV.bisc_santander, NAV.bisc_cabo_penas, NAV.bisc_cabo_ortegal, NAV.bisc_finisterre);
+  // Brittany coast → Biscay → Galicia — real shipping lane hugs coast
+  wp.push(NAV.brit_raz, NAV.brit_penmarc, NAV.brit_groix, NAV.brit_belle_ile,
+    NAV.bisc_st_nazaire, NAV.bisc_noirmoutier, NAV.bisc_yeu, NAV.bisc_re,
+    NAV.bisc_oleron, NAV.bisc_royan, NAV.bisc_arcachon,
+    NAV.bisc_capbreton, NAV.bisc_biarritz, NAV.bisc_sanseb,
+    NAV.bisc_bilbao, NAV.bisc_laredo, NAV.bisc_santander,
+    NAV.bisc_suances, NAV.bisc_san_vicente, NAV.bisc_llanes,
+    NAV.bisc_ribadesella, NAV.bisc_gijon, NAV.bisc_aviles,
+    NAV.bisc_luarca, NAV.bisc_ribadeo, NAV.bisc_viveiro,
+    NAV.bisc_cabo_ortegal, NAV.bisc_ferrol, NAV.bisc_coruna,
+    NAV.bisc_malpica, NAV.bisc_muxia, NAV.bisc_finisterre);
 
   if(toRegion === 'spain_north'){ return; } // Santander/Bilbao — already there
   if(toRegion === 'iberian_west' || toRegion === 'portugal'){
     addAtlanticIberia(wp, toRegion); return;
   }
-  // Continue south for Med/Atlantic destinations
-  wp.push(NAV.ib_vigo, NAV.ib_porto, NAV.ib_nazare, NAV.ib_lisboa, NAV.ib_sines, NAV.ib_sagres);
+  // Continue south — granular Portuguese coast
+  wp.push(NAV.ib_baiona, NAV.ib_vigo, NAV.pt_viana, NAV.pt_esposende, NAV.ib_porto,
+    NAV.pt_espinho, NAV.pt_aveiro, NAV.pt_figueira, NAV.ib_nazare,
+    NAV.pt_peniche, NAV.pt_ericeira, NAV.pt_cascais, NAV.ib_lisboa,
+    NAV.pt_sesimbra, NAV.pt_setubal, NAV.ib_sines,
+    NAV.pt_milfontes, NAV.pt_aljezur, NAV.pt_lagos, NAV.ib_sagres);
 
   if(toRegion === 'brazil'){
     wp.push(NAV.atl_canary, NAV.atl_cabo_verde, NAV.satl_mid);
@@ -1791,43 +1917,49 @@ function addBiscayAndBeyond(wp, toRegion){
 }
 
 function addAtlanticIberia(wp, toRegion){
-  wp.push(NAV.ib_vigo, NAV.ib_porto);
+  wp.push(NAV.ib_baiona, NAV.ib_vigo, NAV.pt_viana, NAV.pt_esposende, NAV.ib_porto);
   if(toRegion === 'portugal') return;
-  wp.push(NAV.ib_nazare, NAV.ib_lisboa, NAV.ib_sines, NAV.ib_sagres);
+  wp.push(NAV.pt_espinho, NAV.pt_aveiro, NAV.pt_figueira, NAV.ib_nazare,
+    NAV.pt_peniche, NAV.pt_ericeira, NAV.pt_cascais, NAV.ib_lisboa,
+    NAV.pt_sesimbra, NAV.pt_setubal, NAV.ib_sines,
+    NAV.pt_milfontes, NAV.pt_aljezur, NAV.pt_lagos, NAV.ib_sagres);
 }
 
 function addMedFromGibraltar(wp, toRegion){
   // ALWAYS follow the coast: Gib → Almeria → Cartagena → Ibiza → Barcelona → Marseille → Genova → Corsica
   // Never jump directly from Spain to Corsica/Sardinia — that cuts across land
+  // Granular Spanish Med coast
+  const SPAIN_MED = [NAV.wmed_estepona, NAV.wmed_malaga, NAV.wmed_motril, NAV.wmed_almeria,
+    NAV.wmed_cabo_gata, NAV.wmed_aguilas, NAV.wmed_cartagena, NAV.wmed_alicante,
+    NAV.wmed_valencia, NAV.wmed_castellon, NAV.wmed_tarragona, NAV.wmed_barcelona];
+  const FR_LIG = [NAV.lig_port_vendres, NAV.lig_agde, NAV.lig_sete, NAV.lig_marseille,
+    NAV.lig_toulon, NAV.lig_st_raphael, NAV.lig_nice, NAV.lig_monaco,
+    NAV.lig_sanremo, NAV.lig_savona, NAV.lig_genova];
+  const TYR_FULL = [NAV.tyr_spezia, NAV.tyr_livorno, NAV.tyr_piombino,
+    NAV.tyr_argentario, NAV.tyr_civitavecchia, NAV.tyr_fiumicino,
+    NAV.tyr_ponza, NAV.tyr_gaeta, NAV.tyr_napoli, NAV.tyr_salerno,
+    NAV.tyr_palinuro, NAV.tyr_scalea, NAV.tyr_pizzo, NAV.tyr_messina];
+
   if(toRegion === 'spain_med'){
-    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_valencia); return;
+    wp.push(...SPAIN_MED.slice(0, 9)); return; // up to Valencia
   }
   if(toRegion === 'france_med'){
-    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona, NAV.lig_marseille); return;
+    wp.push(...SPAIN_MED, ...FR_LIG.slice(0, 4)); return; // up to Marseille
   }
   if(toRegion === 'italy'){
-    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
-      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova); return;
+    wp.push(...SPAIN_MED, ...FR_LIG); return;
   }
   if(toRegion === 'malta'){
-    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
-      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
-      NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.cmed_malta); return;
+    wp.push(...SPAIN_MED, ...FR_LIG, ...TYR_FULL, NAV.cmed_sicily_s, NAV.cmed_malta); return;
   }
   if(toRegion === 'adriatic'){
-    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
-      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
-      NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.adr_otranto); return;
+    wp.push(...SPAIN_MED, ...FR_LIG, ...TYR_FULL, NAV.adr_otranto); return;
   }
   if(toRegion === 'greece'){
-    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
-      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
-      NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
+    wp.push(...SPAIN_MED, ...FR_LIG, ...TYR_FULL, NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
   }
   if(toRegion === 'black_sea'){
-    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
-      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
-      NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.emed_crete_w, NAV.emed_crete_e,
+    wp.push(...SPAIN_MED, ...FR_LIG, ...TYR_FULL, NAV.cmed_sicily_s, NAV.emed_crete_w, NAV.emed_crete_e,
       NAV.aegean_dardanelles, NAV.bsea_bosphorus); return;
   }
   if(toRegion === 'baltic'){
@@ -1836,26 +1968,35 @@ function addMedFromGibraltar(wp, toRegion){
 }
 
 function addMedFromSuez(wp, toRegion){
+  // Granular reverse Med coast
+  const TYR_REV = [NAV.tyr_messina, NAV.tyr_pizzo, NAV.tyr_scalea, NAV.tyr_palinuro,
+    NAV.tyr_salerno, NAV.tyr_napoli, NAV.tyr_gaeta, NAV.tyr_ponza,
+    NAV.tyr_fiumicino, NAV.tyr_civitavecchia, NAV.tyr_argentario,
+    NAV.tyr_piombino, NAV.tyr_livorno, NAV.tyr_spezia];
+  const LIG_REV = [NAV.lig_genova, NAV.lig_savona, NAV.lig_sanremo, NAV.lig_monaco,
+    NAV.lig_nice, NAV.lig_st_raphael, NAV.lig_toulon, NAV.lig_marseille];
+
   if(toRegion === 'greece'){ wp.push(NAV.emed_crete_e, NAV.emed_crete_w, NAV.ion_kithira, NAV.emed_piraeus); return; }
   if(toRegion === 'adriatic'){ wp.push(NAV.emed_crete_e, NAV.ion_corfu, NAV.adr_otranto); return; }
   if(toRegion === 'malta'){ wp.push(NAV.emed_crete_w, NAV.cmed_malta); return; }
   if(toRegion === 'italy'){
-    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina, NAV.tyr_salerno, NAV.tyr_napoli); return;
+    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, ...TYR_REV.slice(0, 6)); return;
   }
   if(toRegion === 'spain_med'){
-    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina,
-      NAV.tyr_napoli, NAV.tyr_ponza, NAV.tyr_civitavecchia, NAV.tyr_piombino, NAV.tyr_livorno, NAV.lig_genova, NAV.lig_nice, NAV.lig_marseille,
-      NAV.wmed_barcelona, NAV.wmed_valencia); return;
+    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, ...TYR_REV, ...LIG_REV,
+      NAV.lig_sete, NAV.lig_agde, NAV.lig_port_vendres,
+      NAV.wmed_barcelona, NAV.wmed_tarragona, NAV.wmed_castellon, NAV.wmed_valencia); return;
   }
   if(toRegion === 'france_med'){
-    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina,
-      NAV.tyr_napoli, NAV.tyr_ponza, NAV.tyr_civitavecchia, NAV.tyr_piombino, NAV.tyr_livorno, NAV.lig_genova, NAV.lig_nice, NAV.lig_marseille); return;
+    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, ...TYR_REV, ...LIG_REV); return;
   }
-  // Default: through to Gibraltar — follow coast all the way
-  wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina,
-    NAV.tyr_napoli, NAV.tyr_ponza, NAV.tyr_civitavecchia, NAV.tyr_piombino, NAV.tyr_livorno, NAV.lig_genova, NAV.lig_nice, NAV.lig_marseille,
-    NAV.wmed_barcelona, NAV.wmed_ibiza, NAV.wmed_cartagena, NAV.wmed_almeria,
-    NAV.gib_east, NAV.gib_strait, NAV.gib_approach);
+  // Default: through to Gibraltar — full coast
+  wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, ...TYR_REV, ...LIG_REV,
+    NAV.lig_sete, NAV.lig_agde, NAV.lig_port_vendres,
+    NAV.wmed_barcelona, NAV.wmed_tarragona, NAV.wmed_castellon, NAV.wmed_valencia,
+    NAV.wmed_alicante, NAV.wmed_cartagena, NAV.wmed_aguilas, NAV.wmed_cabo_gata,
+    NAV.wmed_almeria, NAV.wmed_motril, NAV.wmed_malaga, NAV.wmed_estepona,
+    NAV.gib_east, NAV.gib_strait, NAV.gib_tarifa, NAV.gib_approach);
 }
 
 function addBrazilApproach(wp, to){
@@ -1874,27 +2015,63 @@ function findTruckRoute(from, to, fromName, toName){
   const tn = (toName||'').toLowerCase();
   const wp = [];
 
-  // FR → PT
+  // Full highway corridor: Calais→A26→A1→A10→A63→AP-8→AP-1→A1→A62→N620→IP5→A25→A1
+  const CALAIS_TO_BORDEAUX = [NAV.road_calais, NAV.road_arras, NAV.road_peronne,
+    NAV.road_paris_n, NAV.road_paris, NAV.road_paris_s,
+    NAV.road_orleans, NAV.road_tours, NAV.road_poitiers,
+    NAV.road_niort, NAV.road_saintes, NAV.road_bordeaux];
+  const BORDEAUX_TO_BURGOS = [NAV.road_dax, NAV.road_bayonne, NAV.road_irun,
+    NAV.road_sansebastian, NAV.road_tolosa, NAV.road_vitoria,
+    NAV.road_miranda, NAV.road_burgos];
+  const BURGOS_TO_PORTO = [NAV.road_venta_banos, NAV.road_valladolid,
+    NAV.road_tordesillas, NAV.road_salamanca, NAV.road_ciudad_rodrigo,
+    NAV.road_fuentes, NAV.road_vilar_formoso, NAV.road_guarda,
+    NAV.road_celorico, NAV.road_mangualde, NAV.road_viseu,
+    NAV.road_albergaria, NAV.road_porto];
+  const BURGOS_TO_LISBOA = [NAV.road_venta_banos, NAV.road_valladolid,
+    NAV.road_tordesillas, NAV.road_salamanca, NAV.road_ciudad_rodrigo,
+    NAV.road_fuentes, NAV.road_vilar_formoso, NAV.road_guarda,
+    NAV.road_celorico, NAV.road_mangualde, NAV.road_viseu,
+    NAV.road_albergaria, NAV.road_coimbra, NAV.road_leiria,
+    NAV.road_santarem, NAV.road_lisboa];
+
+  // FR → PT (Porto)
   if(fn.includes('fran') || fn.includes('calais') || fn.includes('paris')){
-    if(tn.includes('port') || tn.includes('leix') || tn.includes('lisb')){
-      wp.push(NAV.road_calais, NAV.road_paris, NAV.road_bordeaux, NAV.road_irun,
-        NAV.road_burgos, NAV.road_salamanca, NAV.road_porto);
+    if(tn.includes('lisb')){
+      wp.push(...CALAIS_TO_BORDEAUX, ...BORDEAUX_TO_BURGOS, ...BURGOS_TO_LISBOA);
+    }
+    else if(tn.includes('port') || tn.includes('leix')){
+      wp.push(...CALAIS_TO_BORDEAUX, ...BORDEAUX_TO_BURGOS, ...BURGOS_TO_PORTO);
     }
     else if(tn.includes('espa') || tn.includes('spain') || tn.includes('madrid') || tn.includes('barc')){
-      wp.push(NAV.road_calais, NAV.road_paris, NAV.road_lyon, NAV.road_montpellier, NAV.road_barcelona);
+      wp.push(NAV.road_calais, NAV.road_arras, NAV.road_peronne, NAV.road_paris_n,
+        NAV.road_paris, NAV.road_paris_s, NAV.road_lyon, NAV.road_montpellier, NAV.road_barcelona);
+    }
+    else { // default: to Porto
+      wp.push(...CALAIS_TO_BORDEAUX, ...BORDEAUX_TO_BURGOS, ...BURGOS_TO_PORTO);
     }
   }
   // UK → PT (Dover-Calais ferry + truck)
   else if(fn.includes('uk') || fn.includes('purflee') || fn.includes('london') || fn.includes('dover')){
-    wp.push(NAV.ch_dover); // Channel crossing point
-    wp.push(NAV.road_calais, NAV.road_paris, NAV.road_bordeaux, NAV.road_irun,
-      NAV.road_burgos, NAV.road_salamanca, NAV.road_porto);
+    wp.push(NAV.ch_dover);
+    if(tn.includes('lisb')){
+      wp.push(...CALAIS_TO_BORDEAUX, ...BORDEAUX_TO_BURGOS, ...BURGOS_TO_LISBOA);
+    } else {
+      wp.push(...CALAIS_TO_BORDEAUX, ...BORDEAUX_TO_BURGOS, ...BURGOS_TO_PORTO);
+    }
   }
-  // Generic truck route — simple road waypoints
+  // Generic truck route — Northern Europe southbound
   else {
-    if(from[0] > 48){ // Northern Europe → south
-      wp.push(NAV.road_paris, NAV.road_bordeaux, NAV.road_irun, NAV.road_burgos,
-        NAV.road_salamanca, NAV.road_porto);
+    if(from[0] > 48){
+      if(tn.includes('lisb')){
+        wp.push(NAV.road_paris, NAV.road_paris_s, NAV.road_orleans, NAV.road_tours,
+          NAV.road_poitiers, NAV.road_niort, NAV.road_saintes, NAV.road_bordeaux,
+          ...BORDEAUX_TO_BURGOS, ...BURGOS_TO_LISBOA);
+      } else {
+        wp.push(NAV.road_paris, NAV.road_paris_s, NAV.road_orleans, NAV.road_tours,
+          NAV.road_poitiers, NAV.road_niort, NAV.road_saintes, NAV.road_bordeaux,
+          ...BORDEAUX_TO_BURGOS, ...BURGOS_TO_PORTO);
+      }
     }
   }
   return wp;
@@ -2227,23 +2404,23 @@ function marFilterType(v){
 function renderMarRoutes(){
   // Clear existing
   Object.values(marLys).forEach(ly=>{
-    if(ly.g3)marMap.removeLayer(ly.g3);
-    if(ly.g2)marMap.removeLayer(ly.g2);if(ly.g1)marMap.removeLayer(ly.g1);
-    if(ly.core)marMap.removeLayer(ly.core);if(ly.dash)marMap.removeLayer(ly.dash);
+    if(ly.g3)marMap.removeLayer(ly.g3);if(ly.g2)marMap.removeLayer(ly.g2);
+    if(ly.g1)marMap.removeLayer(ly.g1);if(ly.core)marMap.removeLayer(ly.core);
+    if(ly.dash)marMap.removeLayer(ly.dash);
   });
   marLys={};
   marFiltered.forEach(r=>{
     if(!r.wp||r.wp.length<2)return;
     const isTruck=r.type.toLowerCase().includes('cami') || r.type.toLowerCase().includes('low-loader');
     const isRec=r.recommended;
-    // Triple-glow for depth (outer → mid → core → dash)
-    const g3=L.polyline(r.wp,{color:r.cl,weight:isTruck?4:6,opacity:.02,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
-    const g2=L.polyline(r.wp,{color:r.cl,weight:isTruck?2.5:3.5,opacity:.04,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
-    const g1=L.polyline(r.wp,{color:r.cl,weight:isTruck?1.5:2,opacity:isRec?.12:.06,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
-    const core=L.polyline(r.wp,{color:r.cl,weight:isTruck?1:1.2,opacity:isRec?.9:.45,smoothFactor:.8,
-      lineCap:'round',lineJoin:'round',dashArray:isTruck?'8 5':null}).addTo(marMap);
-    // Animated flow line (white dashes that travel along the route)
-    const dash=L.polyline(r.wp,{color:'#fff',weight:isTruck?.4:.5,opacity:isRec?.2:.1,smoothFactor:.8,lineCap:'round',dashArray:isTruck?'3 12':'2 10'}).addTo(marMap);
+    // Ultra-thin MarineTraffic style — subtle glow + hairline core
+    const g3=null; // removed outer glow entirely
+    const g2=L.polyline(r.wp,{color:r.cl,weight:isTruck?1.8:2.2,opacity:.025,smoothFactor:1,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const g1=L.polyline(r.wp,{color:r.cl,weight:isTruck?.9:1.1,opacity:isRec?.08:.035,smoothFactor:1,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const core=L.polyline(r.wp,{color:r.cl,weight:isTruck?.5:.6,opacity:isRec?.85:.4,smoothFactor:1,
+      lineCap:'round',lineJoin:'round',dashArray:isTruck?'6 4':null}).addTo(marMap);
+    // Animated flow line (tiny white dashes)
+    const dash=L.polyline(r.wp,{color:'#fff',weight:isTruck?.2:.25,opacity:isRec?.12:.06,smoothFactor:1,lineCap:'round',dashArray:isTruck?'2 10':'1.5 8'}).addTo(marMap);
     marLys[r.id]={g3,g2,g1,core,dash,r};
     core.on('click',()=>marSel(r.id));g1.on('click',()=>marSel(r.id));g2.on('click',()=>marSel(r.id));
   });
@@ -2272,7 +2449,7 @@ function renderMarPorts(){
   });
 
   Object.values(portInfo).forEach(p=>{
-    const sz=p.recommended?7:p.routes>3?5:4;
+    const sz=p.recommended?5:p.routes>3?4:3;
     const cl=p.cl;
     const isHub=p.routes>5;
     const m=L.marker(p.pt,{icon:L.divIcon({className:'',
