@@ -1451,8 +1451,10 @@ const NAV={
   // South France / Ligurian
   lig_marseille:[43.20,5.20],lig_nice:[43.60,7.20],lig_genova:[44.30,8.80],
   // Tyrrhenian Sea
-  tyr_corsica_s:[41.40,9.20],tyr_sardinia_n:[41.10,9.40],tyr_napoli:[40.70,14.10],
-  tyr_messina:[38.20,15.60],
+  tyr_livorno:[43.40,9.90],tyr_piombino:[42.80,10.20],
+  tyr_corsica_s:[41.40,9.20],tyr_sardinia_n:[41.10,9.40],
+  tyr_civitavecchia:[41.90,11.40],tyr_ponza:[40.90,12.80],
+  tyr_napoli:[40.70,14.10],tyr_salerno:[40.40,14.80],tyr_messina:[38.20,15.60],
   // Central Mediterranean
   cmed_malta:[35.90,14.40],cmed_sicily_s:[36.70,15.10],
   // Adriatic
@@ -1539,9 +1541,9 @@ const SEA_LANES={
 
   // === LIGURIAN / TYRRHENIAN ===
   marseille_to_genova:['lig_marseille','lig_nice','lig_genova'],
-  genova_to_livorno:['lig_genova'],
-  livorno_to_napoli:['tyr_corsica_s','tyr_napoli'],
-  napoli_to_messina:['tyr_napoli','tyr_messina'],
+  genova_to_livorno:['lig_genova','tyr_livorno','tyr_piombino'],
+  tyrrhenian_south:['tyr_piombino','tyr_civitavecchia','tyr_ponza','tyr_napoli'],
+  napoli_to_messina:['tyr_napoli','tyr_salerno','tyr_messina'],
   messina_to_malta:['tyr_messina','cmed_sicily_s','cmed_malta'],
 
   // === ADRIATIC ===
@@ -1739,20 +1741,20 @@ function addMediterraneanRoute(wp, fromRegion, toRegion){
     if(toRegion === 'italy'){ wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova); return; }
     if(toRegion === 'spain_med'){ wp.push(NAV.lig_marseille, NAV.wmed_barcelona, NAV.wmed_valencia); return; }
     if(toRegion === 'malta'){
-      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_corsica_s,
-        NAV.tyr_napoli, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.cmed_malta); return;
+      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
+        NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.cmed_malta); return;
     }
     if(toRegion === 'greece'){
-      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_corsica_s,
-        NAV.tyr_napoli, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
+      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
+        NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
     }
     if(toRegion === 'adriatic'){
-      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_corsica_s,
-        NAV.tyr_napoli, NAV.tyr_messina, NAV.adr_otranto); return;
+      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
+        NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.adr_otranto); return;
     }
   }
   // Default Med routing — follow Ligurian coast
-  wp.push(NAV.lig_genova, NAV.tyr_corsica_s, NAV.tyr_napoli, NAV.tyr_messina, NAV.cmed_sicily_s);
+  wp.push(NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino, NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s);
   if(toRegion === 'greece') wp.push(NAV.ion_kithira, NAV.emed_piraeus);
   else if(toRegion === 'malta') wp.push(NAV.cmed_malta);
 }
@@ -1807,23 +1809,23 @@ function addMedFromGibraltar(wp, toRegion){
   }
   if(toRegion === 'malta'){
     wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
-      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_corsica_s,
-      NAV.tyr_napoli, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.cmed_malta); return;
+      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
+      NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.cmed_malta); return;
   }
   if(toRegion === 'adriatic'){
     wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
-      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_corsica_s,
-      NAV.tyr_napoli, NAV.tyr_messina, NAV.adr_otranto); return;
+      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
+      NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.adr_otranto); return;
   }
   if(toRegion === 'greece'){
     wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
-      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_corsica_s,
-      NAV.tyr_napoli, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
+      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
+      NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
   }
   if(toRegion === 'black_sea'){
     wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
-      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_corsica_s,
-      NAV.tyr_napoli, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.emed_crete_w, NAV.emed_crete_e,
+      NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_livorno, NAV.tyr_piombino,
+      NAV.tyr_civitavecchia, NAV.tyr_ponza, NAV.tyr_napoli, NAV.tyr_salerno, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.emed_crete_w, NAV.emed_crete_e,
       NAV.aegean_dardanelles, NAV.bsea_bosphorus); return;
   }
   if(toRegion === 'baltic'){
@@ -1836,20 +1838,20 @@ function addMedFromSuez(wp, toRegion){
   if(toRegion === 'adriatic'){ wp.push(NAV.emed_crete_e, NAV.ion_corfu, NAV.adr_otranto); return; }
   if(toRegion === 'malta'){ wp.push(NAV.emed_crete_w, NAV.cmed_malta); return; }
   if(toRegion === 'italy'){
-    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina, NAV.tyr_napoli); return;
+    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina, NAV.tyr_salerno, NAV.tyr_napoli); return;
   }
   if(toRegion === 'spain_med'){
     wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina,
-      NAV.tyr_napoli, NAV.tyr_corsica_s, NAV.lig_genova, NAV.lig_nice, NAV.lig_marseille,
+      NAV.tyr_napoli, NAV.tyr_ponza, NAV.tyr_civitavecchia, NAV.tyr_piombino, NAV.tyr_livorno, NAV.lig_genova, NAV.lig_nice, NAV.lig_marseille,
       NAV.wmed_barcelona, NAV.wmed_valencia); return;
   }
   if(toRegion === 'france_med'){
     wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina,
-      NAV.tyr_napoli, NAV.tyr_corsica_s, NAV.lig_genova, NAV.lig_nice, NAV.lig_marseille); return;
+      NAV.tyr_napoli, NAV.tyr_ponza, NAV.tyr_civitavecchia, NAV.tyr_piombino, NAV.tyr_livorno, NAV.lig_genova, NAV.lig_nice, NAV.lig_marseille); return;
   }
   // Default: through to Gibraltar — follow coast all the way
   wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina,
-    NAV.tyr_napoli, NAV.tyr_corsica_s, NAV.lig_genova, NAV.lig_nice, NAV.lig_marseille,
+    NAV.tyr_napoli, NAV.tyr_ponza, NAV.tyr_civitavecchia, NAV.tyr_piombino, NAV.tyr_livorno, NAV.lig_genova, NAV.lig_nice, NAV.lig_marseille,
     NAV.wmed_barcelona, NAV.wmed_ibiza, NAV.wmed_cartagena, NAV.wmed_almeria,
     NAV.gib_east, NAV.gib_strait, NAV.gib_approach);
 }
