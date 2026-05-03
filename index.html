@@ -2237,13 +2237,13 @@ function renderMarRoutes(){
     const isTruck=r.type.toLowerCase().includes('cami') || r.type.toLowerCase().includes('low-loader');
     const isRec=r.recommended;
     // Triple-glow for depth (outer → mid → core → dash)
-    const g3=L.polyline(r.wp,{color:r.cl,weight:isTruck?8:12,opacity:.03,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
-    const g2=L.polyline(r.wp,{color:r.cl,weight:isTruck?5:7,opacity:.06,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
-    const g1=L.polyline(r.wp,{color:r.cl,weight:isTruck?3:4,opacity:isRec?.2:.1,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
-    const core=L.polyline(r.wp,{color:r.cl,weight:isTruck?1.8:2.2,opacity:isRec?.95:.55,smoothFactor:.8,
+    const g3=L.polyline(r.wp,{color:r.cl,weight:isTruck?4:6,opacity:.02,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const g2=L.polyline(r.wp,{color:r.cl,weight:isTruck?2.5:3.5,opacity:.04,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const g1=L.polyline(r.wp,{color:r.cl,weight:isTruck?1.5:2,opacity:isRec?.12:.06,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const core=L.polyline(r.wp,{color:r.cl,weight:isTruck?1:1.2,opacity:isRec?.9:.45,smoothFactor:.8,
       lineCap:'round',lineJoin:'round',dashArray:isTruck?'8 5':null}).addTo(marMap);
     // Animated flow line (white dashes that travel along the route)
-    const dash=L.polyline(r.wp,{color:'#fff',weight:isTruck?.6:.8,opacity:isRec?.3:.15,smoothFactor:.8,lineCap:'round',dashArray:isTruck?'3 12':'2 10'}).addTo(marMap);
+    const dash=L.polyline(r.wp,{color:'#fff',weight:isTruck?.4:.5,opacity:isRec?.2:.1,smoothFactor:.8,lineCap:'round',dashArray:isTruck?'3 12':'2 10'}).addTo(marMap);
     marLys[r.id]={g3,g2,g1,core,dash,r};
     core.on('click',()=>marSel(r.id));g1.on('click',()=>marSel(r.id));g2.on('click',()=>marSel(r.id));
   });
@@ -2272,19 +2272,17 @@ function renderMarPorts(){
   });
 
   Object.values(portInfo).forEach(p=>{
-    const sz=p.recommended?10:p.routes>3?8:6;
+    const sz=p.recommended?7:p.routes>3?5:4;
     const cl=p.cl;
     const isHub=p.routes>5;
     const m=L.marker(p.pt,{icon:L.divIcon({className:'',
       html:'<div style="position:relative;width:'+sz+'px;height:'+sz+'px">'+
         // Outer pulse ring
-        '<div style="position:absolute;inset:-'+(sz*.8)+'px;border-radius:50%;border:1px solid '+cl+';opacity:.25;animation:mar-ring '+(isHub?'2s':'3s')+' infinite ease-out"></div>'+
-        // Second pulse (hub ports only)
-        (isHub?'<div style="position:absolute;inset:-'+(sz*.5)+'px;border-radius:50%;border:1px solid '+cl+';opacity:.15;animation:mar-ring 2.5s .5s infinite ease-out"></div>':'')+
+        '<div style="position:absolute;inset:-'+(sz*.6)+'px;border-radius:50%;border:.5px solid '+cl+';opacity:.15;animation:mar-ring '+(isHub?'2.5s':'4s')+' infinite ease-out"></div>'+
         // Glow halo
-        '<div style="position:absolute;inset:-'+(sz*.3)+'px;border-radius:50%;background:'+cl+';opacity:.12;filter:blur('+sz/2+'px)"></div>'+
+        '<div style="position:absolute;inset:-'+(sz*.2)+'px;border-radius:50%;background:'+cl+';opacity:.08;filter:blur('+Math.max(2,sz/3)+'px)"></div>'+
         // Core dot
-        '<div style="width:'+sz+'px;height:'+sz+'px;background:radial-gradient(circle at 35% 35%,'+cl+','+cl+'cc);border-radius:50%;position:relative;z-index:3;box-shadow:0 0 '+(sz)+'px '+cl+',0 0 '+(sz*2)+'px '+cl+'40;border:1.5px solid rgba(255,255,255,.35)"></div>'+
+        '<div style="width:'+sz+'px;height:'+sz+'px;background:radial-gradient(circle at 35% 35%,'+cl+','+cl+'cc);border-radius:50%;position:relative;z-index:3;box-shadow:0 0 '+(sz*.6)+'px '+cl+'80;border:1px solid rgba(255,255,255,.3)"></div>'+
       '</div>',
       iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]})}).addTo(marMap)
       .bindTooltip('<div style="font-weight:700;font-size:11px;letter-spacing:.3px">'+p.name+'</div>'+
