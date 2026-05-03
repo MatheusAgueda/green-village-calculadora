@@ -1613,11 +1613,13 @@ function findSeaRoute(fromCoord, toCoord, fromName, toName, routeType, routeIdx)
   }
 
   // Apply slight offset for overlapping routes (same origin-dest pair)
-  const offset = routeIdx * 0.04;
+  const offset = routeIdx * 0.02; // reduced from 0.04 to prevent land crossings
   const withOffset = offset > 0 ? offsetRoute(deduped, offset, routeIdx) : deduped;
 
-  // Catmull-Rom spline interpolation for ultra-smooth curves
-  return catmullRomSpline(withOffset, isTruck ? 8 : 12);
+  // Truck routes: linear interpolation (road corridors, no curve overshoot)
+  // Maritime routes: Catmull-Rom with reduced tension for coast-hugging
+  if(isTruck) return linearInterpolate2(withOffset, 6);
+  return catmullRomSplineTight(withOffset, 10);
 }
 
 function findMaritimeRoute(from, to, fromName, toName){
@@ -1996,6 +1998,56 @@ function linearInterpolate(a, b, n){
     pts.push([a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t]);
   }
   return pts;
+}
+
+// Multi-point linear interpolation (for truck routes — straight segments, no overshoot)
+function linearInterpolate2(points, segsPerSpan){
+  if(points.length < 2) return points;
+  const result = [];
+  for(let i = 0; i < points.length - 1; i++){
+    const a = points[i], b = points[i+1];
+    for(let s = 0; s < segsPerSpan; s++){
+      const t = s / segsPerSpan;
+      result.push([a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t]);
+    }
+  }
+  result.push(points[points.length-1]);
+  return result;
+}
+
+// Tight Cardinal Spline — tension c=0.5 (s=0.25, vs standard s=0.5)
+// Less overshoot than standard Catmull-Rom, better for coast-hugging routes
+function catmullRomSplineTight(points, segmentsPerSpan){
+  if(points.length < 2) return points;
+  if(points.length === 2) return linearInterpolate(points[0], points[1], segmentsPerSpan * 2);
+
+  const result = [];
+  const s = 0.25; // s=(1-c)/2, c=0.5 → tighter than standard (s=0.5)
+  // Phantom endpoints
+  const ext = [
+    [2*points[0][0]-points[1][0], 2*points[0][1]-points[1][1]],
+    ...points,
+    [2*points[points.length-1][0]-points[points.length-2][0], 2*points[points.length-1][1]-points[points.length-2][1]]
+  ];
+
+  for(let i = 1; i < ext.length - 2; i++){
+    const p0 = ext[i-1], p1 = ext[i], p2 = ext[i+1], p3 = ext[i+2];
+    for(let j = 0; j < segmentsPerSpan; j++){
+      const t = j / segmentsPerSpan;
+      const t2 = t*t, t3 = t2*t;
+      // Cardinal spline basis functions
+      const c0 = s * (-t3 + 2*t2 - t);
+      const c1 = (2-s)*t3 + (-3+s)*t2 + 1;
+      const c2 = (s-2)*t3 + (3-2*s)*t2 + s*t;
+      const c3 = s * (t3 - t2);
+      result.push([
+        c0*p0[0] + c1*p1[0] + c2*p2[0] + c3*p3[0],
+        c0*p0[1] + c1*p1[1] + c2*p2[1] + c3*p3[1]
+      ]);
+    }
+  }
+  result.push(points[points.length-1]);
+  return result;
 }
 
 // ── ROUTE OFFSET — prevents overlapping routes between same ports ──
