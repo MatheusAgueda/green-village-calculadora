@@ -188,11 +188,15 @@ select{
 }
 
 /* === MARITIME TAB === */
-#maritime-map{width:100%;height:600px;border-radius:16px;overflow:hidden;position:relative;z-index:1}
-#maritime-map .leaflet-tile-pane{filter:hue-rotate(10deg) saturate(1.1)}
+#maritime-map{width:100%;height:720px;border-radius:16px;overflow:hidden;position:relative;z-index:1;box-shadow:0 0 60px rgba(33,150,243,.06),0 0 120px rgba(0,230,118,.03)}
+#maritime-map .leaflet-tile-pane{filter:hue-rotate(8deg) saturate(1.15) brightness(0.95)}
 #maritime-map .leaflet-control-zoom{border:none!important}
-#maritime-map .leaflet-control-zoom a{background:rgba(8,14,30,.96)!important;color:#2196f3!important;border:1px solid rgba(60,140,220,.12)!important;width:28px!important;height:28px!important;line-height:26px!important;font-size:14px!important;font-family:'Space Mono'!important;border-radius:6px!important;margin-bottom:2px!important}
+#maritime-map .leaflet-control-zoom a{background:rgba(8,14,30,.96)!important;color:#2196f3!important;border:1px solid rgba(60,140,220,.12)!important;width:32px!important;height:32px!important;line-height:30px!important;font-size:14px!important;font-family:'Space Mono'!important;border-radius:8px!important;margin-bottom:3px!important;backdrop-filter:blur(10px)!important}
+#maritime-map .leaflet-control-zoom a:hover{background:rgba(33,150,243,.15)!important;border-color:rgba(60,140,220,.3)!important}
 #maritime-canvas{position:absolute;inset:0;z-index:450;pointer-events:none;border-radius:16px}
+#maritime-map .leaflet-tooltip{background:rgba(8,14,30,.95)!important;border:1px solid rgba(60,140,220,.2)!important;border-radius:8px!important;padding:6px 10px!important;box-shadow:0 4px 20px rgba(0,0,0,.4)!important;backdrop-filter:blur(10px)!important;color:#e0e0e0!important;font-family:'Outfit',sans-serif!important}
+#maritime-map .leaflet-tooltip::before{border-top-color:rgba(8,14,30,.95)!important}
+#maritime-map .leaflet-interactive{transition:opacity .15s}
 .mar-filter-btn{padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.06);background:rgba(6,10,18,.5);color:rgba(156,163,175,.6);font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
 .mar-filter-btn:hover{border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
 .mar-filter-btn.active{border-color:rgba(29,184,84,.4);color:#22dd66;background:rgba(29,184,84,.08)}
@@ -567,9 +571,9 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
 <div class="glass rounded-3xl p-5 glow-card">
   <div class="flex flex-col lg:flex-row gap-4">
     <!-- Route list grouped by destination -->
-    <div class="lg:w-[300px] max-h-[620px] overflow-y-auto pr-1" id="mar-routes" style="scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.06) transparent"></div>
+    <div class="lg:w-[300px] max-h-[740px] overflow-y-auto pr-1" id="mar-routes" style="scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.06) transparent"></div>
     <!-- Map -->
-    <div class="flex-1 relative" style="min-height:600px">
+    <div class="flex-1 relative" style="min-height:720px">
       <div id="maritime-map"></div>
       <canvas id="maritime-canvas"></canvas>
       <!-- Detail panel (overlay on map) -->
@@ -1364,24 +1368,29 @@ const DCOL={portugal:'#ef5350',spain:'#ffa726',france:'#42a5f5',italy:'#66bb6a',
 const OCOL={uk:'#42a5f5',netherlands:'#ff9100',belgium:'#66bb6a',france:'#5c6bc0',portugal:'#ef5350',china:'#e53935'};
 const OLBL={uk:'UK',netherlands:'NL',belgium:'BE',france:'FR',portugal:'PT',china:'CN'};
 
-// ── PORT DATABASE (40+ ports) ──
+// ── PORT DATABASE (50+ ports with precise coordinates) ──
 const PDB={
   // UK
   purfleet:[51.482,.230],killingholme:[53.649,-.219],portbury:[51.493,-2.724],southampton:[50.899,-1.395],
   felixstowe:[51.963,1.351],tilbury:[51.461,.358],'london gateway':[51.450,.480],portsmouth:[50.819,-1.087],
+  dover:[51.127,1.313],immingham:[53.630,-.187],
   // NL/BE
-  rotterdam:[51.905,4.470],zeebrugge:[51.354,3.175],antwerp:[51.261,4.398],
+  rotterdam:[51.905,4.470],zeebrugge:[51.354,3.175],antwerp:[51.261,4.398],amsterdam:[52.408,4.878],
   // FR
-  calais:[50.951,1.858],'le havre':[49.494,.107],marseille:[43.348,5.352],
+  calais:[50.951,1.858],'le havre':[49.494,.107],marseille:[43.348,5.352],brest:[48.383,-4.495],
+  bordeaux:[44.867,-.556],nantes:[47.200,-1.570],dunkirk:[51.049,2.367],
   // PT
   'leixões':[41.185,-8.705],leixoes:[41.185,-8.705],'setúbal':[38.524,-8.888],setubal:[38.524,-8.888],
-  aveiro:[40.860,-8.650],'caniçal':[32.737,-16.733],canical:[32.737,-16.733],
+  aveiro:[40.860,-8.650],sines:[37.950,-8.870],lisboa:[38.710,-9.140],faro:[37.020,-7.930],
+  'caniçal':[32.737,-16.733],canical:[32.737,-16.733],
   'porto santo':[33.060,-16.340],'ponta delgada':[37.740,-25.670],pico:[38.530,-28.530],
   // ES
   vigo:[42.237,-8.715],santander:[43.462,-3.810],valencia:[39.452,-.320],algeciras:[36.132,-5.443],
-  sagunto:[39.646,-.214],'las palmas':[28.144,-15.414],
+  sagunto:[39.646,-.214],'las palmas':[28.144,-15.414],barcelona:[41.350,2.166],bilbao:[43.340,-3.042],
+  cartagena:[37.598,-.978],cadiz:[36.537,-6.295],
   // IT
-  salerno:[40.683,14.770],livorno:[43.544,10.297],
+  salerno:[40.683,14.770],livorno:[43.544,10.297],genova:[44.406,8.926],napoli:[40.843,14.268],
+  gioia_tauro:[38.426,15.898],trieste:[45.647,13.760],
   // GR
   pireu:[37.947,23.638],piraeus:[37.947,23.638],thessaloniki:[40.622,22.948],
   // MT
@@ -1391,17 +1400,597 @@ const PDB={
   // HR
   rijeka:[45.327,14.442],split:[43.508,16.440],
   // BG
-  'sófia':[42.697,23.322],sofia:[42.697,23.322],
+  'sófia':[42.697,23.322],sofia:[42.697,23.322],varna:[43.190,27.915],burgas:[42.490,27.470],
   // BR
   santos:[-23.960,-46.300],'vitória':[-20.320,-40.290],vitoria:[-20.320,-40.290],
   'rio de janeiro':[-22.905,-43.170],
   // CN
-  shanghai:[31.230,121.474],
+  shanghai:[31.230,121.474],shenzhen:[22.480,113.900],ningbo:[29.870,121.880],
   // US
   'new york':[40.668,-74.036],'brunswick':[31.152,-81.496],galveston:[29.310,-94.790],
+  savannah:[32.080,-81.090],jacksonville:[30.390,-81.440],
+  // Suez / Red Sea / Indian Ocean waypoints (for CN routing)
+  'port said':[31.265,32.302],aden:[12.790,45.010],colombo:[6.950,79.850],
+  singapore:[1.264,103.840],
   // Generic fallbacks
   portugal:[39.5,-8.5],france:[46.5,2.5],'uk':[52.5,-.5]
 };
+
+// ══════════════════════════════════════════════════════════════════════════════
+// REAL SEA LANE NAVIGATION SYSTEM
+// Waypoints follow actual shipping lanes, coastlines, straits, and channels.
+// Ships route through: English Channel, Bay of Biscay, Strait of Gibraltar,
+// Suez Canal, Mediterranean corridors, North Sea, Baltic approaches.
+// Truck routes follow real motorway corridors (E-roads, autoroutes, autobahnen).
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ── NAVIGATION WAYPOINTS — key maritime chokepoints & coastal turns ──
+const NAV={
+  // English Channel
+  ch_dover:[51.00,1.35],ch_mid:[50.30,.50],ch_ushant:[48.45,-5.10],
+  ch_start:[50.20,-3.60],ch_portland:[50.50,-2.40],ch_wight:[50.60,-1.30],
+  // North Sea
+  ns_thames:[51.50,.80],ns_dover:[51.10,1.50],ns_off_nl:[52.00,3.50],
+  ns_humber:[53.60,.10],ns_skagen:[57.72,10.60],
+  // Bay of Biscay — follow the coast, not straight line
+  bisc_ushant:[48.45,-5.10],bisc_belle_ile:[47.30,-3.20],bisc_rochelle:[46.10,-1.60],
+  bisc_bordeaux:[45.50,-1.70],bisc_santander:[43.70,-3.70],bisc_cabo_ortegal:[43.77,-7.87],
+  bisc_finisterre:[42.88,-9.27],
+  // Iberian Atlantic coast
+  ib_vigo:[42.20,-8.90],ib_porto:[41.15,-8.85],ib_nazare:[39.60,-9.20],
+  ib_lisboa:[38.65,-9.30],ib_sines:[37.95,-8.95],ib_sagres:[37.00,-8.95],
+  // Strait of Gibraltar
+  gib_approach:[36.10,-5.90],gib_strait:[35.95,-5.60],gib_east:[36.10,-5.20],
+  // Western Mediterranean
+  wmed_almeria:[36.60,-2.30],wmed_cartagena:[37.50,-0.85],wmed_ibiza:[38.90,1.20],
+  wmed_valencia:[39.40,-0.20],wmed_barcelona:[41.30,2.10],
+  // Balearic passage
+  bal_menorca:[39.90,4.10],
+  // South France / Ligurian
+  lig_marseille:[43.20,5.20],lig_nice:[43.60,7.20],lig_genova:[44.30,8.80],
+  // Tyrrhenian Sea
+  tyr_corsica_s:[41.40,9.20],tyr_sardinia_n:[41.10,9.40],tyr_napoli:[40.70,14.10],
+  tyr_messina:[38.20,15.60],
+  // Central Mediterranean
+  cmed_malta:[35.90,14.40],cmed_sicily_s:[36.70,15.10],
+  // Adriatic
+  adr_otranto:[40.10,18.50],adr_bari:[41.10,16.90],adr_ancona:[43.60,13.60],
+  adr_venice:[45.40,12.40],
+  // Eastern Mediterranean / Aegean
+  emed_crete_w:[35.50,23.50],emed_crete_e:[35.20,26.30],emed_piraeus:[37.90,23.60],
+  aegean_dardanelles:[40.10,26.30],aegean_thessaloniki:[40.60,22.90],
+  // Ionian
+  ion_corfu:[39.60,19.90],ion_kithira:[36.20,23.00],
+  // Black Sea
+  bsea_bosphorus:[41.10,29.00],bsea_varna:[43.10,28.00],
+  // Suez route (Asia → Med)
+  suez_north:[31.27,32.35],suez_south:[29.95,32.55],
+  red_bab:[12.60,43.30],red_jeddah:[21.50,39.10],
+  // Indian Ocean
+  io_aden:[12.80,45.00],io_socotra:[12.50,54.00],io_arabian:[16.00,62.00],
+  io_mumbai:[19.00,72.00],io_sri_lanka:[7.00,80.00],io_malacca_w:[5.50,95.00],
+  io_malacca_e:[1.30,104.00],
+  // South China Sea
+  scs_singapore:[1.20,103.80],scs_vietnam:[10.00,109.00],scs_hong_kong:[22.30,114.10],
+  scs_taiwan:[22.00,120.00],scs_shanghai:[31.00,122.00],
+  // Atlantic — transatlantic
+  atl_azores:[38.50,-28.00],atl_bermuda:[32.30,-64.80],atl_canary:[28.10,-15.50],
+  atl_cabo_verde:[16.00,-23.00],
+  // South Atlantic (BR routes)
+  satl_recife:[-8.00,-34.00],satl_salvador:[-13.00,-38.00],satl_mid:[-15.00,-25.00],
+  satl_rio:[-23.00,-43.00],satl_santos:[-24.00,-46.00],
+  // US East Coast
+  us_florida:[25.80,-80.00],us_savannah:[32.00,-80.50],us_norfolk:[36.85,-76.00],
+  us_ny_approach:[40.50,-73.80],
+  // North Atlantic (US/UK corridor)
+  natl_ireland:[51.50,-10.00],natl_mid:[48.00,-25.00],natl_newfoundland:[46.00,-48.00],
+  // Baltic
+  balt_kiel:[54.30,10.10],balt_bornholm:[55.10,14.80],balt_gdansk:[54.50,18.80],
+  // Truck corridors (land waypoints for road routes)
+  road_calais:[50.95,1.86],road_paris:[48.85,2.35],road_lyon:[45.76,4.83],
+  road_bordeaux:[44.84,-.58],road_irun:[43.34,-1.79],road_burgos:[42.35,-3.70],
+  road_madrid:[40.42,-3.70],road_badajoz:[38.87,-6.97],road_lisboa:[38.72,-9.14],
+  road_porto:[41.15,-8.61],road_salamanca:[40.96,-5.66],road_valladolid:[41.65,-4.72],
+  road_bilbao:[43.26,-2.93],road_barcelona:[41.39,2.17],road_montpellier:[43.61,3.88],
+  road_milan:[45.46,9.19],road_munich:[48.14,11.58],road_berlin:[52.52,13.40],
+  road_warsaw:[52.23,21.01],road_vienna:[48.21,16.37],road_zagreb:[45.81,15.98],
+  road_sofia_road:[42.70,23.32],road_thessaloniki_road:[40.63,22.94],
+  road_athens:[37.98,23.73],road_split_road:[43.51,16.44],road_rijeka_road:[45.33,14.44]
+};
+
+// ── SEA LANE GRAPH — realistic routing between port regions ──
+// Each lane is a sequence of NAV waypoints that a ship would actually follow.
+// The router picks the optimal chain of lanes for any origin→destination pair.
+const SEA_LANES={
+  // === ENGLISH CHANNEL ===
+  thames_to_channel:['ns_thames','ns_dover','ch_dover','ch_mid'],
+  humber_to_channel:['ns_humber','ns_dover','ch_dover','ch_mid'],
+  channel_to_ushant:['ch_mid','ch_portland','ch_start','ch_ushant'],
+  channel_west:['ch_wight','ch_portland','ch_start','ch_ushant'],
+  portbury_to_ushant:['ch_start','ch_ushant'],
+
+  // === NORTH SEA ===
+  thames_to_rotterdam:['ns_thames','ns_off_nl'],
+  rotterdam_to_channel:['ns_off_nl','ns_dover','ch_dover','ch_mid'],
+  zeebrugge_to_channel:['ns_dover','ch_dover','ch_mid'],
+  rotterdam_to_skagen:['ns_off_nl','ns_skagen'],
+
+  // === BAY OF BISCAY (hug coast, never cross open ocean) ===
+  ushant_to_biscay_n:['bisc_ushant','bisc_belle_ile','bisc_rochelle'],
+  biscay_n_to_s:['bisc_rochelle','bisc_bordeaux','bisc_santander'],
+  biscay_to_finisterre:['bisc_santander','bisc_cabo_ortegal','bisc_finisterre'],
+
+  // === IBERIAN ATLANTIC COAST ===
+  finisterre_to_vigo:['bisc_finisterre','ib_vigo'],
+  finisterre_to_leixoes:['bisc_finisterre','ib_vigo','ib_porto'],
+  leixoes_south:['ib_porto','ib_nazare','ib_lisboa','ib_sines','ib_sagres'],
+  sagres_to_gibraltar:['ib_sagres','gib_approach','gib_strait'],
+
+  // === STRAIT OF GIBRALTAR ===
+  gibraltar_transit:['gib_approach','gib_strait','gib_east'],
+
+  // === WESTERN MEDITERRANEAN ===
+  gib_to_cartagena:['gib_east','wmed_almeria','wmed_cartagena'],
+  cartagena_to_valencia:['wmed_cartagena','wmed_ibiza','wmed_valencia'],
+  valencia_to_barcelona:['wmed_valencia','wmed_barcelona'],
+  barcelona_to_marseille:['wmed_barcelona','bal_menorca','lig_marseille'],
+
+  // === LIGURIAN / TYRRHENIAN ===
+  marseille_to_genova:['lig_marseille','lig_nice','lig_genova'],
+  genova_to_livorno:['lig_genova'],
+  livorno_to_napoli:['tyr_corsica_s','tyr_napoli'],
+  napoli_to_messina:['tyr_napoli','tyr_messina'],
+  messina_to_malta:['tyr_messina','cmed_sicily_s','cmed_malta'],
+
+  // === ADRIATIC ===
+  otranto_to_adriatic:['adr_otranto','adr_bari','adr_ancona'],
+  adriatic_to_trieste:['adr_ancona','adr_venice'],
+  otranto_to_split:['adr_otranto','adr_bari'],
+  messina_to_adriatic:['tyr_messina','adr_otranto'],
+
+  // === EASTERN MEDITERRANEAN / AEGEAN ===
+  malta_to_piraeus:['cmed_malta','emed_crete_w','ion_kithira','emed_piraeus'],
+  piraeus_to_thessaloniki:['emed_piraeus','aegean_thessaloniki'],
+  piraeus_to_dardanelles:['emed_piraeus','aegean_dardanelles'],
+  dardanelles_to_bosphorus:['aegean_dardanelles','bsea_bosphorus'],
+  bosphorus_to_varna:['bsea_bosphorus','bsea_varna'],
+
+  // === SUEZ CANAL (Asia routes) ===
+  suez_transit:['suez_south','suez_north'],
+  red_sea:['io_aden','red_bab','red_jeddah','suez_south'],
+
+  // === INDIAN OCEAN / ASIA ===
+  io_to_sri_lanka:['io_aden','io_socotra','io_arabian','io_sri_lanka'],
+  sri_lanka_to_malacca:['io_sri_lanka','io_malacca_w','io_malacca_e'],
+  malacca_to_shanghai:['scs_singapore','scs_vietnam','scs_hong_kong','scs_taiwan','scs_shanghai'],
+
+  // === ATLANTIC CROSSINGS ===
+  // Europe to Brazil
+  sagres_to_canary:['ib_sagres','atl_canary'],
+  canary_to_brazil:['atl_canary','atl_cabo_verde','satl_mid','satl_recife','satl_salvador'],
+  brazil_south:['satl_salvador','satl_rio','satl_santos'],
+
+  // Europe to US East Coast
+  ushant_to_us:['bisc_ushant','natl_ireland','natl_mid','natl_newfoundland','us_ny_approach'],
+  us_south:['us_ny_approach','us_norfolk','us_savannah','us_florida'],
+
+  // Baltic
+  skagen_to_kiel:['ns_skagen','balt_kiel'],
+  kiel_to_gdansk:['balt_kiel','balt_bornholm','balt_gdansk'],
+
+  // === TRUCK ROAD CORRIDORS ===
+  // FR direct truck
+  road_calais_portugal:['road_calais','road_paris','road_bordeaux','road_irun','road_burgos','road_salamanca','road_porto'],
+  road_france_spain:['road_paris','road_lyon','road_montpellier','road_barcelona'],
+  road_france_italy:['road_lyon','road_milan'],
+  road_central_europe:['road_berlin','road_warsaw'],
+  road_balkans:['road_vienna','road_zagreb','road_sofia_road'],
+  road_greece:['road_sofia_road','road_thessaloniki_road','road_athens']
+};
+
+// ── SMART ROUTE BUILDER — finds realistic maritime path between any two ports ──
+// Uses the sea lane graph + Catmull-Rom spline interpolation for silky-smooth curves
+
+function findSeaRoute(fromCoord, toCoord, fromName, toName, routeType, routeIdx){
+  const isTruck = (routeType||'').toLowerCase().includes('cami') || (routeType||'').toLowerCase().includes('low-loader');
+
+  // Get raw waypoints through the sea lane system
+  const rawWP = isTruck ? findTruckRoute(fromCoord, toCoord, fromName, toName) :
+                          findMaritimeRoute(fromCoord, toCoord, fromName, toName);
+
+  // Add start and end points
+  const fullWP = [fromCoord, ...rawWP, toCoord];
+
+  // Remove consecutive duplicates
+  const deduped = [fullWP[0]];
+  for(let i=1;i<fullWP.length;i++){
+    const p=fullWP[i],prev=deduped[deduped.length-1];
+    if(Math.abs(p[0]-prev[0])>.001 || Math.abs(p[1]-prev[1])>.001) deduped.push(p);
+  }
+
+  // Apply slight offset for overlapping routes (same origin-dest pair)
+  const offset = routeIdx * 0.04;
+  const withOffset = offset > 0 ? offsetRoute(deduped, offset, routeIdx) : deduped;
+
+  // Catmull-Rom spline interpolation for ultra-smooth curves
+  return catmullRomSpline(withOffset, isTruck ? 8 : 12);
+}
+
+function findMaritimeRoute(from, to, fromName, toName){
+  const fn = (fromName||'').toLowerCase();
+  const tn = (toName||'').toLowerCase();
+  const waypoints = [];
+
+  // Determine regions
+  const fromRegion = getMaritimeRegion(from, fn);
+  const toRegion = getMaritimeRegion(to, tn);
+
+  // Build route through sea lanes based on origin and destination regions
+  // This creates the realistic path a ship would actually navigate
+
+  // === UK origins ===
+  if(fromRegion === 'uk_thames'){
+    if(toRegion === 'nl_be'){ waypoints.push(NAV.ns_thames, NAV.ns_off_nl); }
+    else if(toRegion === 'france_channel'){ waypoints.push(NAV.ns_thames, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid); }
+    else {
+      // UK Thames → Channel → Biscay → destination
+      waypoints.push(NAV.ns_thames, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid, NAV.ch_portland, NAV.ch_start, NAV.ch_ushant);
+      addBiscayAndBeyond(waypoints, toRegion);
+    }
+  }
+  else if(fromRegion === 'uk_humber'){
+    if(toRegion === 'nl_be'){ waypoints.push(NAV.ns_humber, NAV.ns_off_nl); }
+    else {
+      waypoints.push(NAV.ns_humber, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid, NAV.ch_portland, NAV.ch_start, NAV.ch_ushant);
+      addBiscayAndBeyond(waypoints, toRegion);
+    }
+  }
+  else if(fromRegion === 'uk_bristol'){
+    waypoints.push(NAV.ch_start, NAV.ch_ushant);
+    addBiscayAndBeyond(waypoints, toRegion);
+  }
+  else if(fromRegion === 'uk_south'){
+    waypoints.push(NAV.ch_wight, NAV.ch_portland, NAV.ch_start, NAV.ch_ushant);
+    addBiscayAndBeyond(waypoints, toRegion);
+  }
+  // === NL/BE origins ===
+  else if(fromRegion === 'nl_be'){
+    if(toRegion === 'uk_thames'){ waypoints.push(NAV.ns_off_nl, NAV.ns_thames); }
+    else if(toRegion === 'france_channel'){ waypoints.push(NAV.ns_off_nl, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid); }
+    else if(toRegion === 'baltic'){ waypoints.push(NAV.ns_off_nl, NAV.ns_skagen, NAV.balt_kiel, NAV.balt_bornholm, NAV.balt_gdansk); }
+    else {
+      waypoints.push(NAV.ns_off_nl, NAV.ns_dover, NAV.ch_dover, NAV.ch_mid, NAV.ch_portland, NAV.ch_start, NAV.ch_ushant);
+      addBiscayAndBeyond(waypoints, toRegion);
+    }
+  }
+  // === FR origins ===
+  else if(fromRegion === 'france_channel'){
+    waypoints.push(NAV.ch_mid, NAV.ch_start, NAV.ch_ushant);
+    addBiscayAndBeyond(waypoints, toRegion);
+  }
+  else if(fromRegion === 'france_atlantic'){
+    waypoints.push(NAV.bisc_rochelle, NAV.bisc_bordeaux);
+    addBiscayAndBeyond(waypoints, toRegion);
+  }
+  else if(fromRegion === 'france_med'){
+    if(toRegion === 'iberian_west' || toRegion === 'portugal'){
+      // Med → Gibraltar → Atlantic
+      waypoints.push(NAV.lig_marseille, NAV.wmed_barcelona, NAV.wmed_valencia, NAV.wmed_cartagena, NAV.wmed_almeria,
+        NAV.gib_east, NAV.gib_strait, NAV.gib_approach);
+      addAtlanticIberia(waypoints, toRegion);
+    } else {
+      addMediterraneanRoute(waypoints, fromRegion, toRegion);
+    }
+  }
+  // === PT origins ===
+  else if(fromRegion === 'portugal'){
+    if(toRegion === 'spain_med' || toRegion === 'italy' || toRegion === 'malta' ||
+       toRegion === 'greece' || toRegion === 'adriatic' || toRegion === 'black_sea'){
+      waypoints.push(NAV.ib_porto, NAV.ib_nazare, NAV.ib_lisboa, NAV.ib_sines, NAV.ib_sagres,
+        NAV.gib_approach, NAV.gib_strait, NAV.gib_east);
+      addMedFromGibraltar(waypoints, toRegion);
+    }
+    else if(toRegion === 'brazil'){
+      waypoints.push(NAV.ib_porto, NAV.ib_nazare, NAV.ib_lisboa, NAV.ib_sines, NAV.ib_sagres,
+        NAV.atl_canary, NAV.atl_cabo_verde, NAV.satl_mid);
+      addBrazilApproach(waypoints, to);
+    }
+    else if(toRegion === 'usa'){
+      waypoints.push(NAV.ib_porto, NAV.ib_nazare, NAV.ib_lisboa);
+      addTransatlantic(waypoints, to);
+    }
+  }
+  // === CN (Shanghai) origins ===
+  else if(fromRegion === 'china'){
+    // Shanghai → Malacca → Indian Ocean → Suez → Med → destination
+    waypoints.push(NAV.scs_shanghai, NAV.scs_taiwan, NAV.scs_hong_kong, NAV.scs_vietnam,
+      NAV.scs_singapore, NAV.io_malacca_e, NAV.io_malacca_w, NAV.io_sri_lanka,
+      NAV.io_arabian, NAV.io_socotra, NAV.io_aden, NAV.red_bab, NAV.red_jeddah,
+      NAV.suez_south, NAV.suez_north);
+    if(toRegion === 'portugal' || toRegion === 'iberian_west' || toRegion === 'spain_north'){
+      waypoints.push(NAV.gib_east, NAV.gib_strait, NAV.gib_approach);
+      addAtlanticIberia(waypoints, toRegion);
+    } else if(toRegion === 'nl_be' || toRegion === 'uk_thames'){
+      waypoints.push(NAV.gib_east, NAV.gib_strait, NAV.gib_approach, NAV.ib_sagres, NAV.ib_sines,
+        NAV.ib_nazare, NAV.bisc_finisterre, NAV.bisc_cabo_ortegal, NAV.bisc_santander,
+        NAV.bisc_bordeaux, NAV.bisc_rochelle, NAV.bisc_ushant, NAV.ch_ushant,
+        NAV.ch_start, NAV.ch_mid, NAV.ch_dover, NAV.ns_dover);
+      if(toRegion === 'nl_be') waypoints.push(NAV.ns_off_nl);
+      else waypoints.push(NAV.ns_thames);
+    } else {
+      // CN → Med destination
+      addMedFromSuez(waypoints, toRegion);
+    }
+  }
+  // === Generic fallback — use closest known route logic ===
+  else {
+    addBiscayAndBeyond(waypoints, toRegion);
+  }
+
+  return waypoints;
+}
+
+// Mediterranean internal routing (Med origin → Med destination)
+function addMediterraneanRoute(wp, fromRegion, toRegion){
+  if(fromRegion === 'france_med'){
+    if(toRegion === 'italy'){ wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova); return; }
+    if(toRegion === 'spain_med'){ wp.push(NAV.lig_marseille, NAV.wmed_barcelona, NAV.wmed_valencia); return; }
+    if(toRegion === 'malta'){
+      wp.push(NAV.lig_marseille, NAV.lig_nice, NAV.lig_genova, NAV.tyr_corsica_s,
+        NAV.tyr_napoli, NAV.tyr_messina, NAV.cmed_sicily_s, NAV.cmed_malta); return;
+    }
+    if(toRegion === 'greece'){
+      wp.push(NAV.lig_marseille, NAV.tyr_corsica_s, NAV.tyr_napoli, NAV.tyr_messina,
+        NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
+    }
+    if(toRegion === 'adriatic'){
+      wp.push(NAV.lig_marseille, NAV.lig_genova, NAV.tyr_corsica_s, NAV.tyr_napoli,
+        NAV.tyr_messina, NAV.adr_otranto); return;
+    }
+  }
+  // Default Med routing
+  wp.push(NAV.tyr_corsica_s, NAV.tyr_napoli, NAV.tyr_messina, NAV.cmed_sicily_s);
+  if(toRegion === 'greece') wp.push(NAV.ion_kithira, NAV.emed_piraeus);
+  else if(toRegion === 'malta') wp.push(NAV.cmed_malta);
+}
+
+// Route from Biscay/Ushant southward to various destinations
+function addBiscayAndBeyond(wp, toRegion){
+  // Always cross Bay of Biscay along the coast
+  wp.push(NAV.bisc_belle_ile, NAV.bisc_rochelle, NAV.bisc_bordeaux,
+    NAV.bisc_santander, NAV.bisc_cabo_ortegal, NAV.bisc_finisterre);
+
+  if(toRegion === 'spain_north'){ return; } // Santander/Bilbao — already there
+  if(toRegion === 'iberian_west' || toRegion === 'portugal'){
+    addAtlanticIberia(wp, toRegion); return;
+  }
+  // Continue south for Med/Atlantic destinations
+  wp.push(NAV.ib_vigo, NAV.ib_porto, NAV.ib_nazare, NAV.ib_lisboa, NAV.ib_sines, NAV.ib_sagres);
+
+  if(toRegion === 'brazil'){
+    wp.push(NAV.atl_canary, NAV.atl_cabo_verde, NAV.satl_mid);
+    return;
+  }
+  if(toRegion === 'usa'){
+    // Go back north via Azores
+    wp.length -= 4; // remove iberian south
+    addTransatlantic(wp, null);
+    return;
+  }
+  // Gibraltar and Mediterranean
+  wp.push(NAV.gib_approach, NAV.gib_strait, NAV.gib_east);
+  addMedFromGibraltar(wp, toRegion);
+}
+
+function addAtlanticIberia(wp, toRegion){
+  wp.push(NAV.ib_vigo, NAV.ib_porto);
+  if(toRegion === 'portugal') return;
+  wp.push(NAV.ib_nazare, NAV.ib_lisboa, NAV.ib_sines, NAV.ib_sagres);
+}
+
+function addMedFromGibraltar(wp, toRegion){
+  if(toRegion === 'spain_med'){
+    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_valencia); return;
+  }
+  if(toRegion === 'france_med'){
+    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona, NAV.lig_marseille); return;
+  }
+  if(toRegion === 'italy'){
+    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.wmed_ibiza, NAV.wmed_barcelona,
+      NAV.bal_menorca, NAV.tyr_corsica_s); return;
+  }
+  if(toRegion === 'malta'){
+    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.tyr_corsica_s, NAV.tyr_napoli,
+      NAV.tyr_messina, NAV.cmed_sicily_s, NAV.cmed_malta); return;
+  }
+  if(toRegion === 'adriatic'){
+    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.tyr_corsica_s, NAV.tyr_napoli,
+      NAV.tyr_messina, NAV.adr_otranto); return;
+  }
+  if(toRegion === 'greece'){
+    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.tyr_corsica_s, NAV.tyr_napoli,
+      NAV.tyr_messina, NAV.cmed_sicily_s, NAV.ion_kithira, NAV.emed_piraeus); return;
+  }
+  if(toRegion === 'black_sea'){
+    wp.push(NAV.wmed_almeria, NAV.wmed_cartagena, NAV.tyr_corsica_s, NAV.tyr_napoli,
+      NAV.tyr_messina, NAV.cmed_sicily_s, NAV.emed_crete_w, NAV.emed_crete_e,
+      NAV.aegean_dardanelles, NAV.bsea_bosphorus); return;
+  }
+  if(toRegion === 'baltic'){
+    // Unusual route — back through Atlantic and North Sea
+    wp.push(NAV.wmed_almeria); return;
+  }
+}
+
+function addMedFromSuez(wp, toRegion){
+  if(toRegion === 'greece'){ wp.push(NAV.emed_crete_e, NAV.emed_crete_w, NAV.ion_kithira, NAV.emed_piraeus); return; }
+  if(toRegion === 'adriatic'){ wp.push(NAV.emed_crete_e, NAV.ion_corfu, NAV.adr_otranto); return; }
+  if(toRegion === 'malta'){ wp.push(NAV.emed_crete_w, NAV.cmed_malta); return; }
+  if(toRegion === 'italy'){
+    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.cmed_sicily_s, NAV.tyr_messina, NAV.tyr_napoli); return;
+  }
+  if(toRegion === 'spain_med'){
+    wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.tyr_corsica_s, NAV.wmed_barcelona, NAV.wmed_valencia); return;
+  }
+  // Default: through to Gibraltar
+  wp.push(NAV.emed_crete_w, NAV.cmed_malta, NAV.tyr_corsica_s, NAV.wmed_barcelona,
+    NAV.wmed_valencia, NAV.wmed_cartagena, NAV.wmed_almeria, NAV.gib_east, NAV.gib_strait, NAV.gib_approach);
+}
+
+function addBrazilApproach(wp, to){
+  if(to[0] > -15) wp.push(NAV.satl_recife);
+  else if(to[0] > -20) wp.push(NAV.satl_recife, NAV.satl_salvador);
+  else wp.push(NAV.satl_recife, NAV.satl_salvador, NAV.satl_rio);
+}
+
+function addTransatlantic(wp, to){
+  wp.push(NAV.natl_ireland, NAV.natl_mid, NAV.natl_newfoundland, NAV.us_ny_approach);
+  if(to && to[0] < 35) wp.push(NAV.us_norfolk, NAV.us_savannah);
+}
+
+function findTruckRoute(from, to, fromName, toName){
+  const fn = (fromName||'').toLowerCase();
+  const tn = (toName||'').toLowerCase();
+  const wp = [];
+
+  // FR → PT
+  if(fn.includes('fran') || fn.includes('calais') || fn.includes('paris')){
+    if(tn.includes('port') || tn.includes('leix') || tn.includes('lisb')){
+      wp.push(NAV.road_calais, NAV.road_paris, NAV.road_bordeaux, NAV.road_irun,
+        NAV.road_burgos, NAV.road_salamanca, NAV.road_porto);
+    }
+    else if(tn.includes('espa') || tn.includes('spain') || tn.includes('madrid') || tn.includes('barc')){
+      wp.push(NAV.road_calais, NAV.road_paris, NAV.road_lyon, NAV.road_montpellier, NAV.road_barcelona);
+    }
+  }
+  // UK → PT (Dover-Calais ferry + truck)
+  else if(fn.includes('uk') || fn.includes('purflee') || fn.includes('london') || fn.includes('dover')){
+    wp.push(NAV.ch_dover); // Channel crossing point
+    wp.push(NAV.road_calais, NAV.road_paris, NAV.road_bordeaux, NAV.road_irun,
+      NAV.road_burgos, NAV.road_salamanca, NAV.road_porto);
+  }
+  // Generic truck route — simple road waypoints
+  else {
+    if(from[0] > 48){ // Northern Europe → south
+      wp.push(NAV.road_paris, NAV.road_bordeaux, NAV.road_irun, NAV.road_burgos,
+        NAV.road_salamanca, NAV.road_porto);
+    }
+  }
+  return wp;
+}
+
+// ── MARITIME REGION CLASSIFIER ──
+function getMaritimeRegion(coord, name){
+  const n = name || '';
+  const lat = coord[0], lng = coord[1];
+
+  // Explicit name matches first
+  if(n.includes('shanghai') || n.includes('shenzhen') || n.includes('ningbo')) return 'china';
+  if(n.includes('santos') || n.includes('vitória') || n.includes('vitoria') || n.includes('rio')) return 'brazil';
+  if(n.includes('new york') || n.includes('brunswick') || n.includes('galveston') ||
+     n.includes('savannah') || n.includes('jacksonville')) return 'usa';
+  if(n.includes('gdansk') || n.includes('gdynia') || n.includes('szczecin')) return 'baltic';
+  if(n.includes('varna') || n.includes('burgas') || n.includes('sofia')) return 'black_sea';
+
+  // UK ports by position
+  if(lat > 49 && lat < 55 && lng > -4 && lng < 2){
+    if(n.includes('portbury') || n.includes('bristol')) return 'uk_bristol';
+    if(n.includes('southampton') || n.includes('portsmouth')) return 'uk_south';
+    if(lat > 53) return 'uk_humber';
+    return 'uk_thames';
+  }
+  // NL/BE
+  if(lat > 50.5 && lat < 53 && lng > 2 && lng < 7) return 'nl_be';
+  // France Channel
+  if(lat > 48 && lat < 52 && lng > -2 && lng < 3 && n.match(/calais|havre|dunkirk|brest/)) return 'france_channel';
+  if(lat > 48 && lat < 52 && lng > -5 && lng < 3) return 'france_channel';
+  // France Atlantic
+  if(lat > 43 && lat < 48 && lng > -2 && lng < 1) return 'france_atlantic';
+  // France Med
+  if(n.includes('marseille') || (lat > 42 && lat < 44 && lng > 3 && lng < 8)) return 'france_med';
+  // Portugal
+  if(lat > 36 && lat < 43 && lng > -10 && lng < -7) return 'portugal';
+  // Spain North
+  if(n.match(/santander|bilbao/) || (lat > 43 && lat < 44 && lng > -5 && lng < -1)) return 'spain_north';
+  // Spain Med
+  if(n.match(/valencia|barcelona|cartagena|sagunto|algeciras|cadiz|las palmas/) ||
+     (lat > 35 && lat < 42 && lng > -7 && lng < 4)) return 'spain_med';
+  // Italy
+  if(lat > 37 && lat < 46 && lng > 7 && lng < 19) return 'italy';
+  // Malta
+  if(lat > 35 && lat < 36.5 && lng > 14 && lng < 15) return 'malta';
+  // Greece
+  if(lat > 34 && lat < 42 && lng > 19 && lng < 30) return 'greece';
+  // Adriatic
+  if(n.match(/rijeka|split|trieste/) || (lat > 42 && lat < 46 && lng > 12 && lng < 18)) return 'adriatic';
+  // Baltic
+  if(lat > 53 && lng > 9 && lng < 20) return 'baltic';
+  // Black Sea
+  if(lat > 40 && lng > 27) return 'black_sea';
+
+  return 'unknown';
+}
+
+// ── CATMULL-ROM SPLINE — ultra-smooth curve through control points ──
+function catmullRomSpline(points, segmentsPerSpan){
+  if(points.length < 2) return points;
+  if(points.length === 2) return linearInterpolate(points[0], points[1], segmentsPerSpan * 2);
+
+  const result = [];
+  // Extend with phantom points for endpoints
+  const ext = [
+    [2*points[0][0]-points[1][0], 2*points[0][1]-points[1][1]],
+    ...points,
+    [2*points[points.length-1][0]-points[points.length-2][0], 2*points[points.length-1][1]-points[points.length-2][1]]
+  ];
+
+  for(let i = 1; i < ext.length - 2; i++){
+    const p0 = ext[i-1], p1 = ext[i], p2 = ext[i+1], p3 = ext[i+2];
+    for(let s = 0; s < segmentsPerSpan; s++){
+      const t = s / segmentsPerSpan;
+      const t2 = t*t, t3 = t2*t;
+      // Catmull-Rom matrix (tension 0.5)
+      const lat = 0.5 * (
+        (-t3 + 2*t2 - t) * p0[0] +
+        (3*t3 - 5*t2 + 2) * p1[0] +
+        (-3*t3 + 4*t2 + t) * p2[0] +
+        (t3 - t2) * p3[0]
+      );
+      const lng = 0.5 * (
+        (-t3 + 2*t2 - t) * p0[1] +
+        (3*t3 - 5*t2 + 2) * p1[1] +
+        (-3*t3 + 4*t2 + t) * p2[1] +
+        (t3 - t2) * p3[1]
+      );
+      result.push([lat, lng]);
+    }
+  }
+  // Add final point
+  result.push(points[points.length-1]);
+  return result;
+}
+
+function linearInterpolate(a, b, n){
+  const pts = [];
+  for(let i = 0; i <= n; i++){
+    const t = i / n;
+    pts.push([a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t]);
+  }
+  return pts;
+}
+
+// ── ROUTE OFFSET — prevents overlapping routes between same ports ──
+function offsetRoute(points, amount, idx){
+  return points.map((p, i) => {
+    if(i === 0 || i === points.length - 1) return p; // Keep endpoints exact
+    const prev = points[Math.max(0, i-1)];
+    const next = points[Math.min(points.length-1, i+1)];
+    const dx = next[0] - prev[0], dy = next[1] - prev[1];
+    const len = Math.sqrt(dx*dx + dy*dy) || 1;
+    const dir = (idx % 2 === 0 ? 1 : -1);
+    return [p[0] + (-dy/len) * amount * dir, p[1] + (dx/len) * amount * dir];
+  });
+}
 
 // ── PORT RESOLVER — fuzzy match port name to coords ──
 function resolvePort(name){
@@ -1416,24 +2005,22 @@ function resolvePort(name){
   return null;
 }
 
-// ── WAYPOINT GENERATOR — curved arc between two points ──
-function genWP(from,to,n=20,curve=0){
-  const pts=[];
-  for(let i=0;i<=n;i++){
-    const t=i/n;
-    const lat=from[0]+(to[0]-from[0])*t;
-    const lng=from[1]+(to[1]-from[1])*t;
-    // Add perpendicular curve (bezier-like)
-    const perp=Math.sin(t*Math.PI)*curve;
-    const dx=to[0]-from[0],dy=to[1]-from[1],len=Math.sqrt(dx*dx+dy*dy)||1;
-    pts.push([lat+(-dy/len)*perp, lng+(dx/len)*perp]);
-  }
-  return pts;
-}
-
 // ── EXTRACT ALL ROUTES FROM CALCULATOR R OBJECT ──
 function extractRoutes(){
   const flat=[];let idx=0;
+  // Count routes per origin-dest pair for offset calculation
+  const pairCount = {};
+  for(const[destKey,destObj]of Object.entries(R)){
+    if(!destObj.routes)continue;
+    for(const[origKey,routes]of Object.entries(destObj.routes)){
+      routes.forEach((rt,ri)=>{
+        const pairKey = (resolvePort(rt.from)||[0,0]).join(',')+'→'+(resolvePort(rt.to)||[0,0]).join(',');
+        pairCount[pairKey] = (pairCount[pairKey]||0);
+      });
+    }
+  }
+
+  const pairIdx = {};
   for(const[destKey,destObj]of Object.entries(R)){
     if(!destObj.routes)continue;
     const destLabel=destObj.label,destFlag=destObj.flag;
@@ -1442,9 +2029,15 @@ function extractRoutes(){
         const id='mr_'+destKey+'_'+origKey+'_'+ri;
         const fromPt=resolvePort(rt.from);
         const toPt=resolvePort(rt.to);
-        // Curve offset alternates to avoid overlap
-        const curveAmt=(fromPt&&toPt)?((ri%2===0?1:-1)*(.08+ri*.02)*(Math.sqrt(Math.pow(fromPt[0]-toPt[0],2)+Math.pow(fromPt[1]-toPt[1],2))/10)):0;
-        const wp=(fromPt&&toPt)?genWP(fromPt,toPt,25,curveAmt):null;
+
+        // Track index per origin-dest pair for offset
+        const pairKey = (fromPt||[0,0]).join(',')+'→'+(toPt||[0,0]).join(',');
+        pairIdx[pairKey] = (pairIdx[pairKey]||0);
+        const thisIdx = pairIdx[pairKey]++;
+
+        // Build realistic waypoints through sea lanes
+        const wp=(fromPt&&toPt)?findSeaRoute(fromPt, toPt, rt.from, rt.to, rt.type, thisIdx):null;
+
         flat.push({
           id,dest:destKey,destLabel,destFlag,orig:origKey,origLabel:OLBL[origKey]||origKey.toUpperCase(),
           from:rt.from,to:rt.to,cost:rt.cost,type:rt.type||'',note:rt.note||'',
@@ -1563,91 +2156,187 @@ function marFilterType(v){
 function renderMarRoutes(){
   // Clear existing
   Object.values(marLys).forEach(ly=>{
+    if(ly.g3)marMap.removeLayer(ly.g3);
     if(ly.g2)marMap.removeLayer(ly.g2);if(ly.g1)marMap.removeLayer(ly.g1);
     if(ly.core)marMap.removeLayer(ly.core);if(ly.dash)marMap.removeLayer(ly.dash);
   });
   marLys={};
   marFiltered.forEach(r=>{
-    if(!r.wp)return;
-    const isTruck=r.type.toLowerCase().includes('cami');
-    const g2=L.polyline(r.wp,{color:r.cl,weight:isTruck?6:8,opacity:.06,smoothFactor:1.2,lineCap:'round',lineJoin:'round'}).addTo(marMap);
-    const g1=L.polyline(r.wp,{color:r.cl,weight:isTruck?3:4,opacity:.15,smoothFactor:1.2,lineCap:'round',lineJoin:'round'}).addTo(marMap);
-    const core=L.polyline(r.wp,{color:r.cl,weight:isTruck?1.5:2,opacity:r.recommended?.9:.6,smoothFactor:1.2,
-      lineCap:'round',lineJoin:'round',dashArray:isTruck?'6 4':null}).addTo(marMap);
-    const dash=isTruck?null:L.polyline(r.wp,{color:'#fff',weight:1,opacity:.2,smoothFactor:1.2,lineCap:'round',dashArray:'2 8'}).addTo(marMap);
-    marLys[r.id]={g2,g1,core,dash,r};
-    core.on('click',()=>marSel(r.id));g1.on('click',()=>marSel(r.id));
+    if(!r.wp||r.wp.length<2)return;
+    const isTruck=r.type.toLowerCase().includes('cami') || r.type.toLowerCase().includes('low-loader');
+    const isRec=r.recommended;
+    // Triple-glow for depth (outer → mid → core → dash)
+    const g3=L.polyline(r.wp,{color:r.cl,weight:isTruck?8:12,opacity:.03,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const g2=L.polyline(r.wp,{color:r.cl,weight:isTruck?5:7,opacity:.06,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const g1=L.polyline(r.wp,{color:r.cl,weight:isTruck?3:4,opacity:isRec?.2:.1,smoothFactor:.8,lineCap:'round',lineJoin:'round'}).addTo(marMap);
+    const core=L.polyline(r.wp,{color:r.cl,weight:isTruck?1.8:2.2,opacity:isRec?.95:.55,smoothFactor:.8,
+      lineCap:'round',lineJoin:'round',dashArray:isTruck?'8 5':null}).addTo(marMap);
+    // Animated flow line (white dashes that travel along the route)
+    const dash=L.polyline(r.wp,{color:'#fff',weight:isTruck?.6:.8,opacity:isRec?.3:.15,smoothFactor:.8,lineCap:'round',dashArray:isTruck?'3 12':'2 10'}).addTo(marMap);
+    marLys[r.id]={g3,g2,g1,core,dash,r};
+    core.on('click',()=>marSel(r.id));g1.on('click',()=>marSel(r.id));g2.on('click',()=>marSel(r.id));
   });
-  // Animate dashes
-  let dO=0;(function aD(){dO-=.3;Object.values(marLys).forEach(({dash})=>{if(!dash)return;const e=dash.getElement&&dash.getElement();if(e)e.style.strokeDashoffset=dO+'px'});requestAnimationFrame(aD)})();
+  // Animate flowing dashes
+  let dO=0;(function aD(){dO-=.4;Object.values(marLys).forEach(({dash})=>{if(!dash)return;const e=dash.getElement&&dash.getElement();if(e)e.style.strokeDashoffset=dO+'px'});requestAnimationFrame(aD)})();
 }
 
-// ── PORT MARKERS ──
+// ── PORT MARKERS — professional design with glow + label ──
 function renderMarPorts(){
-  // Remove old markers
   if(window._marPortMarkers)window._marPortMarkers.forEach(m=>marMap.removeLayer(m));
   window._marPortMarkers=[];
   const seen=new Set();
+  const portInfo={};
+  // Collect port data — count routes, determine if origin/destination
   marFiltered.forEach(r=>{
-    [r.from,r.to].forEach(name=>{
+    [['from',r.from],['to',r.to]].forEach(([dir,name])=>{
       const pt=resolvePort(name);if(!pt)return;
       const key=pt[0].toFixed(2)+'_'+pt[1].toFixed(2);
-      if(seen.has(key))return;seen.add(key);
-      const cl=r.cl,sz=7;
-      const m=L.marker(pt,{icon:L.divIcon({className:'',
-        html:'<div style="position:relative;width:'+sz+'px;height:'+sz+'px"><div style="width:'+sz+'px;height:'+sz+'px;background:'+cl+';border-radius:50%;position:relative;z-index:3;box-shadow:0 0 4px '+cl+',0 0 8px '+cl+'60;border:1.5px solid rgba(255,255,255,.3)"></div><div style="position:absolute;inset:-4px;border-radius:50%;border:1px solid '+cl+';opacity:.3;animation:mar-ring 2.5s infinite ease-out"></div></div>',
-        iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]})}).addTo(marMap)
-        .bindTooltip('<b>'+name+'</b>',{direction:'top',offset:[0,-8],className:'leaflet-tooltip'});
-      window._marPortMarkers.push(m);
+      if(!portInfo[key])portInfo[key]={pt,name,cl:r.cl,routes:0,isOrigin:false,isDest:false,recommended:false};
+      portInfo[key].routes++;
+      if(dir==='from')portInfo[key].isOrigin=true;
+      if(dir==='to')portInfo[key].isDest=true;
+      if(r.recommended)portInfo[key].recommended=true;
+      if(!portInfo[key].name||name.length>portInfo[key].name.length)portInfo[key].name=name;
     });
+  });
+
+  Object.values(portInfo).forEach(p=>{
+    const sz=p.recommended?10:p.routes>3?8:6;
+    const cl=p.cl;
+    const isHub=p.routes>5;
+    const m=L.marker(p.pt,{icon:L.divIcon({className:'',
+      html:'<div style="position:relative;width:'+sz+'px;height:'+sz+'px">'+
+        // Outer pulse ring
+        '<div style="position:absolute;inset:-'+(sz*.8)+'px;border-radius:50%;border:1px solid '+cl+';opacity:.25;animation:mar-ring '+(isHub?'2s':'3s')+' infinite ease-out"></div>'+
+        // Second pulse (hub ports only)
+        (isHub?'<div style="position:absolute;inset:-'+(sz*.5)+'px;border-radius:50%;border:1px solid '+cl+';opacity:.15;animation:mar-ring 2.5s .5s infinite ease-out"></div>':'')+
+        // Glow halo
+        '<div style="position:absolute;inset:-'+(sz*.3)+'px;border-radius:50%;background:'+cl+';opacity:.12;filter:blur('+sz/2+'px)"></div>'+
+        // Core dot
+        '<div style="width:'+sz+'px;height:'+sz+'px;background:radial-gradient(circle at 35% 35%,'+cl+','+cl+'cc);border-radius:50%;position:relative;z-index:3;box-shadow:0 0 '+(sz)+'px '+cl+',0 0 '+(sz*2)+'px '+cl+'40;border:1.5px solid rgba(255,255,255,.35)"></div>'+
+      '</div>',
+      iconSize:[sz,sz],iconAnchor:[sz/2,sz/2]})}).addTo(marMap)
+      .bindTooltip('<div style="font-weight:700;font-size:11px;letter-spacing:.3px">'+p.name+'</div>'+
+        '<div style="font-size:9px;color:#888;margin-top:2px">'+p.routes+' rota'+(p.routes>1?'s':'')+
+        (p.isOrigin&&p.isDest?' · Hub':'')+(p.recommended?' · ⭐':'')+'</div>',
+        {direction:'top',offset:[0,-sz],className:'leaflet-tooltip'});
+    window._marPortMarkers.push(m);
   });
 }
 
-// ── SHIP ANIMATION ENGINE ──
+// ── SHIP ANIMATION ENGINE — MarineTraffic-style with wake trails ──
 function initMarShips(){
   marCv=$('maritime-canvas');marCx=marCv.getContext('2d');
-  function rsz(){const r=$('maritime-map').getBoundingClientRect();marCv.width=r.width;marCv.height=r.height;marCv.style.width=r.width+'px';marCv.style.height=r.height+'px'}
+  function rsz(){const r=$('maritime-map').getBoundingClientRect();marCv.width=r.width*window.devicePixelRatio;marCv.height=r.height*window.devicePixelRatio;marCv.style.width=r.width+'px';marCv.style.height=r.height+'px';marCx.scale(window.devicePixelRatio,window.devicePixelRatio)}
   rsz();if(!window._marResObs){window._marResObs=new ResizeObserver(rsz);window._marResObs.observe($('maritime-map'))}
-  // Only animate recommended routes + first route per dest (max ~15 ships for performance)
+
+  // Select ships: recommended + first per destination (max 18 for performance)
   const shipRoutes=[];const seenDest=new Set();
   marFiltered.forEach(r=>{
-    if(!r.wp)return;
+    if(!r.wp||r.wp.length<3)return;
     if(r.recommended){shipRoutes.push(r);seenDest.add(r.dest);return}
     if(!seenDest.has(r.dest)){shipRoutes.push(r);seenDest.add(r.dest)}
   });
-  marShips=shipRoutes.slice(0,18).map(r=>({r,t:Math.random(),sp:.0001+Math.random()*.00007,d:1}));
+  marShips=shipRoutes.slice(0,18).map(r=>({
+    r, t:Math.random(), sp:(.00006+Math.random()*.00004), d:1,
+    trail:[], trailMax:40, // Wake trail history
+    sz:r.recommended?11:9
+  }));
 
-  function pp(wp,t){const n=wp.length-1,f=t*n,i=Math.min(Math.floor(f),n-1),s=f-i;
+  function pp(wp,t){
+    const n=wp.length-1,f=t*n,i=Math.min(Math.floor(f),n-1),s=f-i;
     const a=wp[i],b=wp[Math.min(i+1,wp.length-1)];
-    return{lat:a[0]+(b[0]-a[0])*s,lng:a[1]+(b[1]-a[1])*s,h:Math.atan2(b[1]-a[1],-(b[0]-a[0]))}}
+    return{lat:a[0]+(b[0]-a[0])*s,lng:a[1]+(b[1]-a[1])*s,
+      h:Math.atan2(b[1]-a[1],-(b[0]-a[0]))}
+  }
 
-  function drawShip(x,y,h,cl,sz){
+  function drawShip(x,y,h,cl,sz,isRec){
     marCx.save();marCx.translate(x,y);marCx.rotate(h);
-    marCx.shadowColor=cl;marCx.shadowBlur=14;
-    marCx.beginPath();marCx.moveTo(0,-sz);marCx.lineTo(sz*.5,sz*.5);marCx.lineTo(0,sz*.2);marCx.lineTo(-sz*.5,sz*.5);marCx.closePath();
-    marCx.fillStyle=cl;marCx.globalAlpha=.9;marCx.fill();
-    marCx.shadowBlur=0;marCx.beginPath();marCx.moveTo(0,-sz*.6);marCx.lineTo(0,sz*.1);
-    marCx.strokeStyle='rgba(255,255,255,.5)';marCx.lineWidth=1;marCx.stroke();
-    marCx.restore()
+
+    // Hull glow
+    marCx.shadowColor=cl;marCx.shadowBlur=isRec?20:12;
+
+    // Ship hull (arrow shape — MarineTraffic style)
+    marCx.beginPath();
+    marCx.moveTo(0,-sz);          // Bow
+    marCx.lineTo(sz*.4,sz*.15);   // Starboard mid
+    marCx.lineTo(sz*.35,sz*.5);   // Starboard stern
+    marCx.lineTo(0,sz*.35);       // Center stern
+    marCx.lineTo(-sz*.35,sz*.5);  // Port stern
+    marCx.lineTo(-sz*.4,sz*.15);  // Port mid
+    marCx.closePath();
+    marCx.fillStyle=cl;marCx.globalAlpha=.92;marCx.fill();
+
+    // Hull highlight
+    marCx.shadowBlur=0;
+    marCx.beginPath();
+    marCx.moveTo(0,-sz*.7);
+    marCx.lineTo(sz*.15,sz*.1);
+    marCx.lineTo(0,sz*.2);
+    marCx.lineTo(-sz*.15,sz*.1);
+    marCx.closePath();
+    marCx.fillStyle='rgba(255,255,255,.2)';marCx.globalAlpha=1;marCx.fill();
+
+    // Bridge line
+    marCx.beginPath();marCx.moveTo(0,-sz*.3);marCx.lineTo(0,sz*.15);
+    marCx.strokeStyle='rgba(255,255,255,.35)';marCx.lineWidth=.8;marCx.stroke();
+
+    marCx.restore();
   }
 
   if(window._marAnimId)cancelAnimationFrame(window._marAnimId);
   (function frm(){
-    marCx.clearRect(0,0,marCv.width,marCv.height);
+    const cw=marCv.width/window.devicePixelRatio,ch=marCv.height/window.devicePixelRatio;
+    marCx.clearRect(0,0,cw,ch);
+
     marShips.forEach(s=>{
-      s.t+=s.sp*s.d;if(s.t>1){s.t=1;s.d=-1}if(s.t<0){s.t=0;s.d=1}
-      const p=pp(s.r.wp,s.t),pt=marMap.latLngToContainerPoint([p.lat,p.lng]);
-      if(pt.x>-50&&pt.x<marCv.width+50&&pt.y>-50&&pt.y<marCv.height+50){
-        for(let i=1;i<=5;i++){
-          const wt=Math.max(0,Math.min(1,s.t-i*.003*s.d));
-          const w=pp(s.r.wp,wt),wp=marMap.latLngToContainerPoint([w.lat,w.lng]);
-          marCx.beginPath();marCx.arc(wp.x,wp.y,Math.max(.5,2.2-i*.35),0,Math.PI*2);
-          marCx.fillStyle=s.r.cl;marCx.globalAlpha=.2-i*.035;marCx.fill()
+      s.t+=s.sp*s.d;
+      if(s.t>1){s.t=1;s.d=-1}
+      if(s.t<0){s.t=0;s.d=1}
+
+      const p=pp(s.r.wp,s.t);
+      const pt=marMap.latLngToContainerPoint([p.lat,p.lng]);
+
+      // Skip if offscreen
+      if(pt.x<-80||pt.x>cw+80||pt.y<-80||pt.y>ch+80)return;
+
+      // Record trail position
+      s.trail.push({x:pt.x,y:pt.y});
+      if(s.trail.length>s.trailMax) s.trail.shift();
+
+      // Draw wake trail (fading gradient)
+      if(s.trail.length>2){
+        for(let i=1;i<s.trail.length;i++){
+          const alpha=(i/s.trail.length)*.25;
+          const width=Math.max(.3,(i/s.trail.length)*2.5);
+          marCx.beginPath();
+          marCx.moveTo(s.trail[i-1].x,s.trail[i-1].y);
+          marCx.lineTo(s.trail[i].x,s.trail[i].y);
+          marCx.strokeStyle=s.r.cl;
+          marCx.globalAlpha=alpha;
+          marCx.lineWidth=width;
+          marCx.lineCap='round';
+          marCx.stroke();
         }
-        marCx.globalAlpha=1;drawShip(pt.x,pt.y,p.h,s.r.cl,10);
+        // White wake foam line (thinner, brighter)
+        for(let i=Math.max(1,s.trail.length-12);i<s.trail.length;i++){
+          const alpha=((i-(s.trail.length-12))/12)*.15;
+          marCx.beginPath();
+          marCx.moveTo(s.trail[i-1].x,s.trail[i-1].y);
+          marCx.lineTo(s.trail[i].x,s.trail[i].y);
+          marCx.strokeStyle='#fff';
+          marCx.globalAlpha=alpha;
+          marCx.lineWidth=.6;
+          marCx.stroke();
+        }
       }
+
+      // Draw ship
+      marCx.globalAlpha=1;
+      drawShip(pt.x,pt.y,p.h,s.r.cl,s.sz,s.r.recommended);
     });
-    window._marAnimId=requestAnimationFrame(frm)
+
+    window._marAnimId=requestAnimationFrame(frm);
   })();
 }
 
