@@ -352,7 +352,6 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   <button onclick="GV.switchTab('international')" id="tab-international" class="tab-btn tab-active px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
     <span class="mr-1.5">🌍</span> Internacional
   </button>
-  
   <button onclick="GV.switchTab('settings')" id="tab-settings" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
     <span class="mr-1.5">⚙️</span> Configurações
   </button>
@@ -649,7 +648,7 @@ let R={
 
 // === TABS ===
 function switchTab(t){
-  ['international','brazil','settings','maritime'].forEach(x=>{
+  ['international','settings','maritime'].forEach(x=>{
     $('panel-'+x).classList.toggle('hidden',x!==t);
     $('tab-'+x).classList.toggle('tab-active',x===t);
   });
@@ -659,7 +658,7 @@ function switchTab(t){
 
 // === COUNTRY BUTTONS ===
 function buildCountryButtons(){
-  const euK=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"],nonK=["brazil","usa"];
+  const euK=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"],nonK=["usa"];
   const mk=(k,el)=>{const c=R[k];if(!c)return;const b=document.createElement('button');
     b.className='country-btn flex items-center gap-1.5 px-3 py-2 rounded-xl border border-white/[.06] bg-gv-bg/60 text-gray-400 text-[13px] cursor-pointer';
     b.dataset.country=k;b.innerHTML=`<span class="text-lg">${c.flag}</span><span class="font-medium">${c.label}</span>`;b.onclick=()=>selectCountry(k);el.appendChild(b);};
@@ -705,7 +704,7 @@ function showRouteNote(){
 
 function autoSelectCurrency(){
   const origin=$('intl_origin').value;
-  const currencyMap={uk:'GBP',netherlands:'EUR',france:'EUR',portugal:'EUR',belgium:'EUR',china:'CNY'};
+  const currencyMap={uk:'GBP',netherlands:'EUR',france:'EUR',portugal:'EUR',belgium:'EUR',china:'CNY',brazil:'USD'};
   const currency=currencyMap[origin]||'EUR';
   $('intl_currency').value=currency;
 }
@@ -735,7 +734,7 @@ function calcInternational(){
   const c=R[AC];if(!c)return;
   const ip=pn('intl_price'),cur=$('intl_currency').value,ok=$('intl_origin').value,ri=parseInt($('intl_route').value,10);
   const rts=c.routes?.[ok]||[];if(isNaN(ri)||ri>=rts.length){toast('Seleciona uma rota.',false);return;}
-  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isBR=AC==="brazil";
+  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isBR=AC===;
   const pe=ip*(cr[cur]||1),tid=tierOf(pe),tier=ts[tid];
   const pill=$('intl_tierPill');
   pill.textContent=tier.label;$('intl_tierDesc').textContent=tier.description;
@@ -966,22 +965,6 @@ function calcInternational(){
   $('intl_results').classList.remove('hidden');
 }
 
-// === CALC BRAZIL ===
-function (){}"><span class="text-gray-500 text-xs">${l}</span><span class="${b?'text-[#00ff88] font-bold':'font-medium'} text-sm font-mono">${v}</span></div>`;
-
-  $('br_importSummary').innerHTML=row("FOB (BRL)",f(fB))+row("Frete Marítimo (BRL)",f(frB))+row("Seguro (BRL)",f(iB))+row("Valor CIF (BRL)",f(cif),1)+
-    '<div class="my-3 border-t border-white/[.04]"></div>'+
-    row("II",f(vII))+row("IPI",f(vIPI))+row("PIS",f(vPIS))+row("COFINS",f(vCOF))+row("ICMS (gross-up)",f(vICMS))+
-    row("Total Tributos",f(tTrib),1)+row("Carga tributária efetiva",`${cEf.toFixed(1).replace('.',',')}%`)+
-    '<div class="my-3 border-t border-white/[.04]"></div>'+
-    row("AFRMM (25% frete)",f(afrmm))+row("SISCOMEX (taxa fixa)",f(siscomex));
-  $('br_priceFormation').innerHTML=row("Valor CIF",f(cif))+row("Total Tributos",f(tTrib))+row("AFRMM",f(afrmm))+row("SISCOMEX",f(siscomex))+row("Custos Portuários",f(pc))+row("Transporte Terrestre",f(it))+
-    row("Custo Nacionalizado",f(custoT),1)+'<div class="my-3 border-t border-white/[.04]"></div>'+
-    row(`Mark-up (${mg}%)`,f(lucro))+row("PREÇO DE VENDA",f(pFinal),1);
-  $('br_results').classList.remove('hidden');
-}
-
-// === BUILD BRAZIL FIELDS ===
 function buildBrFields(){
   const inp=(id,lbl,val,cls='ci')=>`<div><label class="lbl">${lbl}</label><input type="text" id="${id}" value="${val}" class="${cls}"/></div>`;
   const inps=(id,lbl,val)=>`<div><label class="lbls">${lbl}</label><input type="text" id="${id}" value="${val}" class="cis"/></div>`;
@@ -1067,7 +1050,7 @@ function rrHTML(ck,ok,i,r){
 
 function buildRouteEditor(){
   const ctn=$('routeEditor');ctn.innerHTML='';
-  const order=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","brazil","usa"];
+  const order=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","usa"];
   [...new Set([...order,...Object.keys(R)])].forEach(ck=>{
     const c=R[ck];if(!c)return;
     const tot=Object.values(c.routes||{}).reduce((s,a)=>s+a.length,0);
@@ -1085,7 +1068,7 @@ function buildRouteEditor(){
     const body=$(`re_${ck}_body`);
 
     if(ck==='brazil')body.innerHTML+=`<div class="rounded-xl border border-white/[.04] bg-gv-bg/50 p-4"><div class="text-[10px] uppercase tracking-[.2em] text-amber-400 mb-3 font-medium">Taxas Brasil (Internacional)</div><div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
-${[['fobRate','FOB Rate'],['taxII','II'],['taxIPI','IPI'],['taxPIS','PIS'],['taxCOFINS','COFINS'],['taxICMS','ICMS']].map(([f,l])=>`<div><label class="text-[9px] text-gray-500">${l}</label><input type="text" data-field="${f}" data-country="brazil" value="${((c[f]||0)*100).toFixed(1)}" class="cfg-input w-full rounded-lg border border-white/8 bg-gv-bg/80 text-white text-xs px-2 py-1.5 font-mono"/>%</div>`).join('')}</div></div>`;
+${[['fobRate','FOB Rate'],['taxII','II'],['taxIPI','IPI'],['taxPIS','PIS'],['taxCOFINS','COFINS'],['taxICMS','ICMS']].map(([f,l])=>`<div><label class="text-[9px] text-gray-500">${l}</label><input type="text" data-field="${f}" data-country= value="${((c[f]||0)*100).toFixed(1)}" class="cfg-input w-full rounded-lg border border-white/8 bg-gv-bg/80 text-white text-xs px-2 py-1.5 font-mono"/>%</div>`).join('')}</div></div>`;
 
     if(ck==='china'&&c.vatExtra!==undefined)body.innerHTML+=`<div class="rounded-xl border border-white/[.04] bg-gv-bg/50 p-4"><div class="text-[10px] uppercase tracking-[.2em] text-[#5eb5ff] mb-3 font-medium">Taxa Extra China</div><div class="flex items-center gap-2"><label class="text-[9px] text-gray-500">Taxa adicional</label><input type="text" data-field="vatExtra" data-country="china" value="${((c.vatExtra||0)*100).toFixed(1)}" class="cfg-input w-16 rounded-lg border border-white/8 bg-gv-bg/80 text-white text-xs px-2 py-1.5 font-mono"/><span class="text-[9px] text-gray-500">%</span></div></div>`;
 
@@ -1130,7 +1113,7 @@ function addNewCountry(){
 function saveRoutes(){
   $$('[data-field="vatRate"]').forEach(i=>{if(R[i.dataset.country])R[i.dataset.country].vatRate=(parseFloat(i.value.replace(',','.'))||0)/100;});
   ['fobRate','taxII','taxIPI','taxPIS','taxCOFINS','taxICMS'].forEach(f=>{
-    const i=document.querySelector(`[data-field="${f}"][data-country="brazil"]`);if(i&&R.brazil)R.brazil[f]=(parseFloat(i.value.replace(',','.'))||0)/100;
+    const i=document.querySelector(`[data-field="${f}"][data-country=]`);if(i&&R.brazil)R.brazil[f]=(parseFloat(i.value.replace(',','.'))||0)/100;
   });
   const cx=document.querySelector('[data-field="vatExtra"][data-country="china"]');
   if(cx&&R.china)R.china.vatExtra=(parseFloat(cx.value.replace(',','.'))||0)/100;
@@ -1178,12 +1161,6 @@ function copyIntl(){
   l.push(`Calculado: ${new Date().toLocaleString("pt-PT")}`);
   navigator.clipboard.writeText(l.join('\n')).then(()=>toast('Copiado!'));
 }
-function (){}: ${r.children[1]?.textContent}\n`;});
-  t+='\n=== FORMAÇÃO DE PREÇO ===\n';
-  $('br_priceFormation')?.querySelectorAll('.flex.justify-between').forEach(r=>{t+=`${r.children[0]?.textContent}: ${r.children[1]?.textContent}\n`;});
-  navigator.clipboard.writeText(t).then(()=>toast('Copiado!'));
-}
-
 // === EXCHANGE RATE ===
 async function fetchRates(){
   const s=$('rateStatus');s.textContent="Câmbio: a carregar...";s.classList.add('pulse-rate');
