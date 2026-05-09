@@ -734,7 +734,7 @@ function calcInternational(){
   const c=R[AC];if(!c)return;
   const ip=pn('intl_price'),cur=$('intl_currency').value,ok=$('intl_origin').value,ri=parseInt($('intl_route').value,10);
   const rts=c.routes?.[ok]||[];if(isNaN(ri)||ri>=rts.length){toast('Seleciona uma rota.',false);return;}
-  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isBR=false;
+  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isBR=AC===;
   const pe=ip*(cr[cur]||1),tid=tierOf(pe),tier=ts[tid];
   const pill=$('intl_tierPill');
   pill.textContent=tier.label;$('intl_tierDesc').textContent=tier.description;
@@ -965,16 +965,7 @@ function calcInternational(){
   $('intl_results').classList.remove('hidden');
 }
 
-function buildBrFields(){
-  const inp=(id,lbl,val,cls='ci')=>`<div><label class="lbl">${lbl}</label><input type="text" id="${id}" value="${val}" class="${cls}"/></div>`;
-  const inps=(id,lbl,val)=>`<div><label class="lbls">${lbl}</label><input type="text" id="${id}" value="${val}" class="cis"/></div>`;
-  $('br_usd_fields').innerHTML=inp('br_fobUsd','FOB (USD)','10000')+inp('br_freightUsd','Frete Marítimo (USD)','2500')+
-    inp('br_insuranceUsd','Seguro (USD)','200')+inp('br_exchangeRate','Câmbio USD/BRL','6.00')+
-    '<span class="text-[10px] text-gray-600 block mt-1">Atualização via aba Configurações</span>';
-  $('br_fiscal_fields').innerHTML=inps('br_iiRateNonBk','II Normal (%)','12.6')+inps('br_iiRateBk','II BK (%)','0')+
-    inps('br_ipiRate','IPI (%)','0')+inps('br_pisRate','PIS (%)','2.1')+inps('br_cofinsRate','COFINS (%)','9.65')+inps('br_icmsRate','ICMS (%)','18');
-  $('br_cost_fields').innerHTML=inp('br_portCosts','Custos Portuários (BRL)','5000')+inp('br_inlandTransport','Transporte Terrestre (BRL)','3000')+inp('br_marginPercent','Margem de Lucro (%)','20');
-}
+function buildBrFields(){}
 
 // === CONFIG SECTIONS ===
 function buildCfgSections(){
