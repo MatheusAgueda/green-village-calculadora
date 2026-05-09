@@ -404,7 +404,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       <div><label class="lbl">Moeda</label>
         <select id="intl_currency" onchange="GV.updateTierPreview()" class="ci">
           <option value="EUR">EUR €</option><option value="GBP">GBP £</option><option value="BRL">BRL R$</option>
-          <option value="USD">USD $</option><option value="PLN">PLN zł</option>
+          <option value="CNY">CNY ¥</option><option value="USD">USD $</option><option value="PLN">PLN zł</option>
         </select>
       </div>
     </div>
@@ -616,7 +616,7 @@ function toast(msg,ok=true){
   t.textContent=msg;$('toastContainer').appendChild(t);setTimeout(()=>t.remove(),2600);
 }
 
-const csym={EUR:"€",GBP:"£",BRL:"R$",USD:"$",PLN:"zł"};
+const csym={EUR:"€",GBP:"£",BRL:"R$",CNY:"¥",USD:"$",PLN:"zł"};
 const oLabels={uk:"🇬🇧 Inglaterra",netherlands:"🇳🇱 Holanda",france:"🇫🇷 França",portugal:"🇵🇹 Portugal",belgium:"🇧🇪 Bélgica",china:"🇨🇳 China"};
 const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"]);
 
@@ -624,15 +624,15 @@ function rates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;};
   // Margem de segurança cambial (default 3%) — protege contra flutuação
   const sm=(100-(g('safetyMargin')||3))/100; // ex: 3% → multiplica rate por 0.97
-  const gbp=(g('gbp')||.84)*sm, brl=(g('brl')||6.5)*sm, usd=(g('usd')||1.1)*sm, pln=(g('pln')||4.5)*sm;
-  return{EUR:1,GBP:gbp>0?1/gbp:1.19,BRL:brl>0?1/brl:0.154USD:usd>0?1/usd:0.909,PLN:pln>0?1/pln:0.222};
+  const gbp=(g('gbp')||.84)*sm, brl=(g('brl')||6.5)*sm, cny=(g('cny')||8)*sm, usd=(g('usd')||1.1)*sm, pln=(g('pln')||4.5)*sm;
+  return{EUR:1,GBP:gbp>0?1/gbp:1.19,BRL:brl>0?1/brl:0.154,CNY:cny>0?1/cny:0.125,USD:usd>0?1/usd:0.909,PLN:pln>0?1/pln:0.222};
 }
 function localRates(){
-  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
+  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), cny=(g('cny')||8), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
   const e={rate:1,symbol:"€",code:"EUR"};
   return{portugal:e,spain:e,france:e,italy:e,greece:e,malta:e,"netherlands-dest":e,croatia:e,bulgaria:e,
     poland:{rate:pln>0?pln:4.5,symbol:"zł",code:"PLN"},brazil:{rate:brl>0?brl:6.5,symbol:"R$",code:"BRL"},
-    china:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
+    china:{rate:cny>0?cny:8,symbol:"¥",code:"CNY"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
 }
 
 function tiers(){
@@ -774,7 +774,7 @@ function showRouteNote(){
 
 function autoSelectCurrency(){
   const origin=$('intl_origin').value;
-  const currencyMap={uk:'GBP',netherlands:'EUR',france:'EUR',portugal:'EUR',belgium:'EUR',china:'USD',brazil:'USD'};
+  const currencyMap={uk:'GBP',netherlands:'EUR',france:'EUR',portugal:'EUR',belgium:'EUR',china:'CNY',brazil:'USD'};
   const currency=currencyMap[origin]||'EUR';
   $('intl_currency').value=currency;
 }
@@ -1087,7 +1087,7 @@ function buildCfgSections(){
   $('cfg_sections').innerHTML=
     sec('[#00ff88]','Taxas de Câmbio',`<span class="text-gray-600 text-xs font-light ml-1">(1 EUR =)</span><button onclick="GV.fetchRates()" class="ml-auto px-4 py-1.5 rounded-xl border border-[#00ff88]/20 text-[10px] text-[#00ff88] uppercase tracking-[.15em] hover:bg-[#00ff88]/10 transition font-medium">🔄 Atualizar</button>`)+
     `<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">${
-      inp('cfg_gbp','GBP (£)','0.84','1€ = £X')+inp('cfg_brl','BRL (R$)','6.50')+
+      inp('cfg_gbp','GBP (£)','0.84','1€ = £X')+inp('cfg_brl','BRL (R$)','6.50')+inp('cfg_cny','CNY (¥)','8.00')+
       inp('cfg_usd','USD ($)','1.10')+inp('cfg_pln','PLN (zł)','4.50')+inp('cfg_usdbrl','USD/BRL','6.00','Para a aba Brasil')
     }</div>`+
     sec('[#5eb5ff]','Escalas de Margem (Tiers)',`<span class="ml-2 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[9px] uppercase tracking-[.15em] font-semibold">🔒 Bloqueado</span>`)+
@@ -1273,20 +1273,20 @@ function copyBrazil(){
 // === EXCHANGE RATE ===
 async function fetchRates(){
   const s=$('rateStatus');s.textContent="Câmbio: a carregar...";s.classList.add('pulse-rate');
-  const fallback={USDEUR:1.1,GBPEUR:0.84,BRLEUR:6.5PLNEUR:4.5,USDBRL:5.9};
+  const fallback={USDEUR:1.1,GBPEUR:0.84,BRLEUR:6.5,CNYEUR:8,PLNEUR:4.5,USDBRL:5.9};
   try{
-    const pairs=["USD-EUR","GBP-EUR","BRL-EUR","PLN-EUR","USD-BRL"];
+    const pairs=["USD-EUR","GBP-EUR","BRL-EUR","CNY-EUR","PLN-EUR","USD-BRL"];
     const url=`https://economia.awesomeapi.com.br/json/last/${pairs.join(',')}`;
     const res=await fetch(url,{method:'GET',headers:{'Accept':'application/json'},signal:AbortSignal.timeout(5000)});
     if(!res.ok)throw new Error(`HTTP ${res.status}`);
     const d=await res.json();
-    const pairMap={'USD-EUR':'USDEUR','GBP-EUR':'GBPEUR','BRL-EUR':'BRLEUR','PLN-EUR':'PLNEUR','USD-BRL':'USDBRL'};
+    const pairMap={'USD-EUR':'USDEUR','GBP-EUR':'GBPEUR','BRL-EUR':'BRLEUR','CNY-EUR':'CNYEUR','PLN-EUR':'PLNEUR','USD-BRL':'USDBRL'};
     let ok=true;
     Object.entries(pairMap).forEach(([key,label])=>{
       if(d[key]?.bid){
         const v=parseFloat(d[key].bid);
         const val=(label==='USDBRL'?v:(1/v)).toFixed(label==='USDBRL'?2:4);
-        const id=label==='USDEUR'?'cfg_usd':label==='GBPEUR'?'cfg_gbp':label==='BRLEUR'?'cfg_brl':label==='CNYEUR'?'':label==='PLNEUR'?'cfg_pln':'cfg_usdbrl';
+        const id=label==='USDEUR'?'cfg_usd':label==='GBPEUR'?'cfg_gbp':label==='BRLEUR'?'cfg_brl':label==='CNYEUR'?'cfg_cny':label==='PLNEUR'?'cfg_pln':'cfg_usdbrl';
         $(id).value=val;
       }else ok=false;
     });
@@ -1294,7 +1294,7 @@ async function fetchRates(){
     s.classList.remove('pulse-rate');
   }catch(e){
     Object.entries(fallback).forEach(([id,val])=>{
-      const el=id==='USDBRL'?$('cfg_usdbrl'):id==='USDEUR'?$('cfg_usd'):id==='GBPEUR'?$('cfg_gbp'):id==='BRLEUR'?$('cfg_brl'):id==='CNYEUR'?$(''):id==='PLNEUR'?$('cfg_pln'):null;
+      const el=id==='USDBRL'?$('cfg_usdbrl'):id==='USDEUR'?$('cfg_usd'):id==='GBPEUR'?$('cfg_gbp'):id==='BRLEUR'?$('cfg_brl'):id==='PLNEUR'?$('cfg_pln'):null;
       if(el)el.value=val;
     });
     s.textContent="Câmbio: ⚠️ usando valores padrão";s.classList.remove('pulse-rate');s.style.color='#fbbf24';
@@ -1322,7 +1322,7 @@ function saveToLS(){
   try{
     saveRoutes();
     const cfg={};
-    ['cfg_gbp','cfg_brl','cfg_usd','cfg_pln','cfg_usdbrl',
+    ['cfg_gbp','cfg_brl','cfg_cny','cfg_usd','cfg_pln','cfg_usdbrl',
      'cfg_lux_sea','cfg_lux_land','cfg_lux_crane',
      'cfg_landBase','cfg_craneFrPt','cfg_truckingPerKm','cfg_customsFee','cfg_insurance',
      'cfg_insurancePct','cfg_portOrigin','cfg_portDest','cfg_demurrageRate','cfg_demurrageDays',
