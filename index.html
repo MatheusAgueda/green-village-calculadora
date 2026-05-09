@@ -352,9 +352,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   <button onclick="GV.switchTab('international')" id="tab-international" class="tab-btn tab-active px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
     <span class="mr-1.5">🌍</span> Internacional
   </button>
-  <button onclick="GV.switchTab('brazil')" id="tab-brazil" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
-    <span class="mr-1.5">🇧🇷</span> Brasil Detalhada
-  </button>
+  
   <button onclick="GV.switchTab('settings')" id="tab-settings" class="tab-btn px-5 py-2.5 rounded-2xl border border-white/8 bg-gv-card/80 text-sm font-semibold uppercase tracking-[.12em] text-gray-400 backdrop-blur-sm">
     <span class="mr-1.5">⚙️</span> Configurações
   </button>
@@ -404,7 +402,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       <div><label class="lbl">Moeda</label>
         <select id="intl_currency" onchange="GV.updateTierPreview()" class="ci">
           <option value="EUR">EUR €</option><option value="GBP">GBP £</option><option value="BRL">BRL R$</option>
-          <option value="USD">USD $</option><option value="PLN">PLN zł</option>
+          <option value="CNY">CNY ¥</option><option value="USD">USD $</option><option value="PLN">PLN zł</option>
         </select>
       </div>
     </div>
@@ -440,73 +438,6 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
       <div id="intl_grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 fade-in"></div>
     </div>
 
-  </div>
-</div>
-</div>
-
-<!-- TAB 2: BRASIL -->
-<div id="panel-brazil" class="hidden fade-in">
-<div class="glass rounded-3xl p-6 sm:p-8 glow-card">
-  <div class="flex items-center gap-4 mb-6">
-    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-900/30 to-yellow-900/20 border border-white/[.06] flex items-center justify-center text-3xl shadow-lg">🇧🇷</div>
-    <div>
-      <h2 class="text-xl font-display font-bold tracking-tight">Importação para o Brasil</h2>
-      <p class="text-xs text-gray-500 font-light">Cálculo detalhado com tributos brasileiros • ICMS gross-up • Formação de preço</p>
-    </div>
-  </div>
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-    <div class="sec">
-      <h4 class="text-[10px] font-semibold uppercase tracking-[.2em] text-[#00ff88] mb-4 flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-[#00ff88]"></span>Dados em USD
-      </h4>
-      <div class="space-y-3" id="br_usd_fields"></div>
-    </div>
-    <div class="sec">
-      <h4 class="text-[10px] font-semibold uppercase tracking-[.2em] text-[#5eb5ff] mb-4 flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-[#5eb5ff]"></span>Parâmetros Fiscais
-      </h4>
-      <div class="space-y-3">
-        <label class="flex items-center gap-3 p-3 rounded-xl bg-gv-bg/60 border border-white/[.04] cursor-pointer group">
-          <input type="checkbox" id="br_isBk" class="w-4 h-4 accent-[#00ff88] rounded"/>
-          <span class="text-xs text-gray-300 group-hover:text-white transition">Bem de Capital (BK) — II a 0%</span>
-        </label>
-        <div class="grid grid-cols-2 gap-2" id="br_fiscal_fields"></div>
-      </div>
-    </div>
-    <div class="sec">
-      <h4 class="text-[10px] font-semibold uppercase tracking-[.2em] text-amber-400 mb-4 flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Custos Brasil
-      </h4>
-      <div class="space-y-3" id="br_cost_fields"></div>
-      <button onclick="GV.calcBrazil()" class="mt-5 w-full px-6 py-3 rounded-2xl text-sm font-bold uppercase tracking-[.12em] text-gv-bg btn-main">Calcular</button>
-    </div>
-  </div>
-
-  <div id="br_results" class="hidden mt-6">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-xs font-display font-semibold text-[#00ff88] uppercase tracking-[.2em] flex items-center gap-2">
-        <span class="w-5 h-px bg-gradient-to-r from-[#00ff88]/60 to-transparent"></span>
-        Resultado Detalhado
-      </h3>
-      <div class="flex gap-2">
-        <button onclick="GV.copyBrazil()" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📋 Copiar</button>
-        <button onclick="GV.exportPDF('br_resultGrid','Brasil')" class="small-btn px-3 py-1.5 rounded-xl border border-white/8 text-gray-400 text-[10px] uppercase tracking-wider">📄 PDF</button>
-      </div>
-    </div>
-    <div id="br_resultGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <div class="sec">
-        <h4 class="text-[10px] font-semibold uppercase tracking-[.15em] text-gray-400 mb-4 flex items-center gap-2">
-          <span class="w-1 h-1 rounded-full bg-gray-500"></span>Resumo Importação
-        </h4>
-        <div id="br_importSummary"></div>
-      </div>
-      <div class="sec">
-        <h4 class="text-[10px] font-semibold uppercase tracking-[.15em] text-gray-400 mb-4 flex items-center gap-2">
-          <span class="w-1 h-1 rounded-full bg-gray-500"></span>Formação de Preço
-        </h4>
-        <div id="br_priceFormation"></div>
-      </div>
-    </div>
   </div>
 </div>
 </div>
@@ -616,7 +547,7 @@ function toast(msg,ok=true){
   t.textContent=msg;$('toastContainer').appendChild(t);setTimeout(()=>t.remove(),2600);
 }
 
-const csym={EUR:"€",GBP:"£",BRL:"R$",USD:"$",PLN:"zł"};
+const csym={EUR:"€",GBP:"£",BRL:"R$",CNY:"¥",USD:"$",PLN:"zł"};
 const oLabels={uk:"🇬🇧 Inglaterra",netherlands:"🇳🇱 Holanda",france:"🇫🇷 França",portugal:"🇵🇹 Portugal",belgium:"🇧🇪 Bélgica",china:"🇨🇳 China"};
 const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"]);
 
@@ -624,15 +555,15 @@ function rates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;};
   // Margem de segurança cambial (default 3%) — protege contra flutuação
   const sm=(100-(g('safetyMargin')||3))/100; // ex: 3% → multiplica rate por 0.97
-  const gbp=(g('gbp')||.84)*sm, brl=(g('brl')||6.5)*sm, usd=(g('usd')||1.1)*sm, pln=(g('pln')||4.5)*sm;
-  return{EUR:1,GBP:gbp>0?1/gbp:1.19,BRL:brl>0?1/brl:0.154,USD:usd>0?1/usd:0.909,PLN:pln>0?1/pln:0.222};
+  const gbp=(g('gbp')||.84)*sm, brl=(g('brl')||6.5)*sm, cny=(g('cny')||8)*sm, usd=(g('usd')||1.1)*sm, pln=(g('pln')||4.5)*sm;
+  return{EUR:1,GBP:gbp>0?1/gbp:1.19,BRL:brl>0?1/brl:0.154,CNY:cny>0?1/cny:0.125,USD:usd>0?1/usd:0.909,PLN:pln>0?1/pln:0.222};
 }
 function localRates(){
-  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
+  const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), cny=(g('cny')||8), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
   const e={rate:1,symbol:"€",code:"EUR"};
   return{portugal:e,spain:e,france:e,italy:e,greece:e,malta:e,"netherlands-dest":e,croatia:e,bulgaria:e,
     poland:{rate:pln>0?pln:4.5,symbol:"zł",code:"PLN"},brazil:{rate:brl>0?brl:6.5,symbol:"R$",code:"BRL"},
-    china:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
+    china:{rate:cny>0?cny:8,symbol:"¥",code:"CNY"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
 }
 
 function tiers(){
@@ -774,7 +705,7 @@ function showRouteNote(){
 
 function autoSelectCurrency(){
   const origin=$('intl_origin').value;
-  const currencyMap={uk:'GBP',netherlands:'EUR',france:'EUR',portugal:'EUR',belgium:'EUR',china:'USD',brazil:'USD'};
+  const currencyMap={uk:'GBP',netherlands:'EUR',france:'EUR',portugal:'EUR',belgium:'EUR',china:'CNY'};
   const currency=currencyMap[origin]||'EUR';
   $('intl_currency').value=currency;
 }
@@ -1036,22 +967,7 @@ function calcInternational(){
 }
 
 // === CALC BRAZIL ===
-function calcBrazil(){
-  const fU=pn('br_fobUsd'),frU=pn('br_freightUsd'),iU=pn('br_insuranceUsd'),ex=pn('br_exchangeRate')||pn('cfg_usdbrl')||6;
-  const fB=fU*ex,frB=frU*ex,iB=iU*ex,cif=fB+frB+iB;
-  const bk=$('br_isBk').checked,ii=(bk?pn('br_iiRateBk'):pn('br_iiRateNonBk'))/100;
-  const ipi=pn('br_ipiRate')/100,pis=pn('br_pisRate')/100,cof=pn('br_cofinsRate')/100,icms=pn('br_icmsRate')/100;
-  const vII=cif*ii,bIPI=cif+vII,vIPI=bIPI*ipi,bPC=cif+vII+vIPI,vPIS=bPC*pis,vCOF=bPC*cof;
-  const div=(1-icms)||1,bICMS=(cif+vII+vIPI+vPIS+vCOF)/div,vICMS=bICMS*icms;
-  const tTrib=vII+vIPI+vPIS+vCOF+vICMS,cEf=cif>0?(tTrib/cif)*100:0;
-  // AFRMM: 25% sobre frete marítimo
-  const afrmm=frB*0.25;
-  // SISCOMEX: R$214.50 por DI
-  const siscomex=214.50;
-  const pc=pn('br_portCosts'),it=pn('br_inlandTransport'),custoT=cif+tTrib+afrmm+siscomex+pc+it;
-  const mg=pn('br_marginPercent'),lucro=custoT*(mg/100),pFinal=custoT+lucro;
-  const f=v=>fc(v,"R$","pt-BR");
-  const row=(l,v,b=false)=>`<div class="flex justify-between items-center py-2 ${b?'pt-3 mt-2 border-t border-white/[.06]':''}"><span class="text-gray-500 text-xs">${l}</span><span class="${b?'text-[#00ff88] font-bold':'font-medium'} text-sm font-mono">${v}</span></div>`;
+function (){}"><span class="text-gray-500 text-xs">${l}</span><span class="${b?'text-[#00ff88] font-bold':'font-medium'} text-sm font-mono">${v}</span></div>`;
 
   $('br_importSummary').innerHTML=row("FOB (BRL)",f(fB))+row("Frete Marítimo (BRL)",f(frB))+row("Seguro (BRL)",f(iB))+row("Valor CIF (BRL)",f(cif),1)+
     '<div class="my-3 border-t border-white/[.04]"></div>'+
@@ -1087,7 +1003,7 @@ function buildCfgSections(){
   $('cfg_sections').innerHTML=
     sec('[#00ff88]','Taxas de Câmbio',`<span class="text-gray-600 text-xs font-light ml-1">(1 EUR =)</span><button onclick="GV.fetchRates()" class="ml-auto px-4 py-1.5 rounded-xl border border-[#00ff88]/20 text-[10px] text-[#00ff88] uppercase tracking-[.15em] hover:bg-[#00ff88]/10 transition font-medium">🔄 Atualizar</button>`)+
     `<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">${
-      inp('cfg_gbp','GBP (£)','0.84','1€ = £X')+inp('cfg_brl','BRL (R$)','6.50')+
+      inp('cfg_gbp','GBP (£)','0.84','1€ = £X')+inp('cfg_brl','BRL (R$)','6.50')+inp('CNY (¥)','8.00')+
       inp('cfg_usd','USD ($)','1.10')+inp('cfg_pln','PLN (zł)','4.50')+inp('cfg_usdbrl','USD/BRL','6.00','Para a aba Brasil')
     }</div>`+
     sec('[#5eb5ff]','Escalas de Margem (Tiers)',`<span class="ml-2 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[9px] uppercase tracking-[.15em] font-semibold">🔒 Bloqueado</span>`)+
@@ -1262,9 +1178,7 @@ function copyIntl(){
   l.push(`Calculado: ${new Date().toLocaleString("pt-PT")}`);
   navigator.clipboard.writeText(l.join('\n')).then(()=>toast('Copiado!'));
 }
-function copyBrazil(){
-  let t='=== RESUMO IMPORTAÇÃO ===\n';
-  $('br_importSummary')?.querySelectorAll('.flex.justify-between').forEach(r=>{t+=`${r.children[0]?.textContent}: ${r.children[1]?.textContent}\n`;});
+function (){}: ${r.children[1]?.textContent}\n`;});
   t+='\n=== FORMAÇÃO DE PREÇO ===\n';
   $('br_priceFormation')?.querySelectorAll('.flex.justify-between').forEach(r=>{t+=`${r.children[0]?.textContent}: ${r.children[1]?.textContent}\n`;});
   navigator.clipboard.writeText(t).then(()=>toast('Copiado!'));
@@ -2702,8 +2616,8 @@ function init(){
   else fetchRates();
 }
 
-return{switchTab,calcInternational,calcBrazil,applySettings,fetchRates,exportPDF,init,
-  updateTierPreview,onOriginChange,onRouteChange,autoSelectCurrency,showRouteNote,copyIntl,copyBrazil,addRoute,removeOrigin,addOrigin,addNewCountry,exportJSON,importJSON,
+return{switchTab,calcInternational,applySettings,fetchRates,exportPDF,init,
+  updateTierPreview,onOriginChange,onRouteChange,autoSelectCurrency,showRouteNote,copyIntl,addRoute,removeOrigin,addOrigin,addNewCountry,exportJSON,importJSON,
   marSel,marClose,marFilterDest,marFilterOrig,marFilterType};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
