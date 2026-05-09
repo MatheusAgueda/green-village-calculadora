@@ -585,7 +585,7 @@ const tierOf=p=>p<=5000?"low":p>20000?"luxury":"medium";
 let R={
   portugal:{label:"Portugal",flag:"🇵🇹",vatRate:.23,routes:{
     uk:[
-      {from:"Purfleet",to:"Leixões (direto)",cost:3800,type:"RoRo",recommended:true,note:"⭐ RECOMENDADO para Portugal. Porto direto, sem transbordo. Tarifa base xlsx oficial."},
+      {from:"Purfleet",to:"Leixões (direto)",cost:4000,type:"RoRo",recommended:true,note:"⭐ RECOMENDADO para Portugal. Porto direto, sem transbordo. Tarifa base xlsx oficial."},
       {from:"Purfleet",to:"Leixões (direto)",cost:4150,type:"RoRo",note:"Tarifa alta época / extras — porto direto Leixões. Across real ~€4,110."},
       {from:"Killingholme",to:"Leixões (direto)",cost:4150,type:"RoRo",note:"Porto direto Leixões."},
       {from:"UK (camião direto)",to:"Portugal",cost:2800,type:"Low-loader",note:"Potteries Heavy Haulage / WS Transportation — low-loader specialist. Mais lento (~5 dias)."},
@@ -734,7 +734,7 @@ function calcInternational(){
   const c=R[AC];if(!c)return;
   const ip=pn('intl_price'),cur=$('intl_currency').value,ok=$('intl_origin').value,ri=parseInt($('intl_route').value,10);
   const rts=c.routes?.[ok]||[];if(isNaN(ri)||ri>=rts.length){toast('Seleciona uma rota.',false);return;}
-  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isBR=false;
+  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isBR=AC===;
   const pe=ip*(cr[cur]||1),tid=tierOf(pe),tier=ts[tid];
   const pill=$('intl_tierPill');
   pill.textContent=tier.label;$('intl_tierDesc').textContent=tier.description;
