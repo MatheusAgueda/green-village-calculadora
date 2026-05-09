@@ -734,7 +734,7 @@ function calcInternational(){
   const c=R[AC];if(!c)return;
   const ip=pn('intl_price'),cur=$('intl_currency').value,ok=$('intl_origin').value,ri=parseInt($('intl_route').value,10);
   const rts=c.routes?.[ok]||[];if(isNaN(ri)||ri>=rts.length){toast('Seleciona uma rota.',false);return;}
-  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isBR=AC===;
+  const rt=rts[ri],lr=localRates(),cr=rates(),ts=tiers(),isBR=false;
   const pe=ip*(cr[cur]||1),tid=tierOf(pe),tier=ts[tid];
   const pill=$('intl_tierPill');
   pill.textContent=tier.label;$('intl_tierDesc').textContent=tier.description;
