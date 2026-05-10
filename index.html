@@ -548,7 +548,7 @@ function toast(msg,ok=true){
 
 const csym={EUR:"€",GBP:"£",BRL:"R$",USD:"$",PLN:"zł"};
 const oLabels={uk:"🇬🇧 Inglaterra",netherlands:"🇳🇱 Holanda",france:"🇫🇷 França",portugal:"🇵🇹 Portugal",belgium:"🇧🇪 Bélgica",china:"🇨🇳 China"};
-const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"]);
+const EU=new Set(["portugal","brazil"]);
 
 function rates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;};
@@ -560,9 +560,8 @@ function rates(){
 function localRates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), cny=(g('cny')||8), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
   const e={rate:1,symbol:"€",code:"EUR"};
-  return{portugal:e,spain:e,france:e,italy:e,greece:e,malta:e,"netherlands-dest":e,croatia:e,bulgaria:e,
-    poland:{rate:pln>0?pln:4.5,symbol:"zł",code:"PLN"},brazil:{rate:brl>0?brl:6.5,symbol:"R$",code:"BRL"},
-    china:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
+  return{portugal:e,brazil:e},brazil:{rate:brl>0?brl:6.5,symbol:"R$",code:"BRL"},
+    china:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
 }
 
 function tiers(){
@@ -616,14 +615,11 @@ let R={
       {from:"Leixões",to:"Ponta Delgada (Açores)",cost:5985,type:"Flat Rack",note:"⚠️ ILHAS: Preço ref. casa grande (11,58×3,68×3,50m / 5t) em transporte CONVENCIONAL. Inclui despesas portuárias e BL. Varia conforme tamanho."},
       {from:"Leixões",to:"Ponta Delgada (Açores)",cost:8162,type:"Breakbulk",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."},
       {from:"Leixões",to:"Ilha do Pico (Açores)",cost:6650,type:"Flat Rack",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."}],
-    china:[{from:"Shanghai",to:"Leixões",cost:23244,type:"Flat Rack"},{from:"Shanghai",to:"Leixões",cost:4655,type:"Container 20' + montagem",note:"Frete 2.655€ + 2.000€ montagem contentores expansíveis"},{from:"Shanghai",to:"Leixões",cost:5528,type:"Container 40' + montagem",note:"Frete 3.528€ + 2.000€ montagem contentores expansíveis"}]}}
-  "netherlands-dest":{label:"Holanda",flag:"🇳🇱",vatRate:.21,routes:{uk:[{from:"Purfleet",to:"Rotterdam",cost:1325,type:"RO-RO"},{from:"Killingholme",to:"Rotterdam",cost:1675,type:"RO-RO"}],france:[{from:"Calais",to:"Rotterdam",cost:2800,type:"Camião"}]}}
-  brazil:{label:"Brasil",flag:"🇧🇷",vatRate:0,taxII:.126,taxIPI:0,taxPIS:.021,taxCOFINS:.0965,taxICMS:.18,fobRate:.10,routes:{
+    china:[{from:"Shanghai",to:"Leixões",cost:23244,type:"Flat Rack"},{from:"Shanghai",to:"Leixões",cost:4655,type:"Container 20' + montagem",note:"Frete 2.655€ + 2.000€ montagem contentores expansíveis"},{from:"Shanghai",to:"Leixões",cost:5528,type:"Container 40' + montagem",note:"Frete 3.528€ + 2.000€ montagem contentores expansíveis"}]}}"netherlands-dest":{label:"Holanda",flag:"🇳🇱",vatRate:.21,routes:{uk:[{from:"Purfleet",to:"Rotterdam",cost:1325,type:"RO-RO"},{from:"Killingholme",to:"Rotterdam",cost:1675,type:"RO-RO"}],france:[{from:"Calais",to:"Rotterdam",cost:2800,type:"Camião"}]}}brazil:{label:"Brasil",flag:"🇧🇷",vatRate:0,taxII:.126,taxIPI:0,taxPIS:.021,taxCOFINS:.0965,taxICMS:.18,fobRate:.10,routes:{
     uk:[{from:"Felixstowe",to:"Santos",cost:4950,type:"Flat Rack",note:"⭐ Oficial 2026. HS 8716.10.98. Inclui desp. portuárias, BL e despacho exportação"},{from:"London Gateway",to:"Santos",cost:13500,type:"Flat Rack"},{from:"Tilbury",to:"Santos",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
     netherlands:[{from:"Rotterdam",to:"Santos",cost:4750,type:"Flat Rack",note:"⭐ Oficial 2026. Inclui desp. portuárias, BL e despacho exportação"},{from:"Rotterdam",to:"Santos",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
     portugal:[{from:"Leixões",to:"Santos",cost:8850,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"}],
-    china:[{from:"Shanghai",to:"Santos",cost:21000,type:"Flat Rack"},{from:"Shanghai",to:"Santos",cost:2880,type:"Container 20HQ"},{from:"Shanghai",to:"Santos",cost:5760,type:"Container 40HQ"}]}}
-};
+    china:[{from:"Shanghai",to:"Santos",cost:21000,type:"Flat Rack"},{from:"Shanghai",to:"Santos",cost:2880,type:"Container 20HQ"},{from:"Shanghai",to:"Santos",cost:5760,type:"Container 40HQ"}]}}};
 
 // === TABS ===
 function switchTab(t){
