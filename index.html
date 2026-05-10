@@ -570,11 +570,11 @@ function tiers(){
   // LOCKED: lucros e comissões fixos — não editáveis (decisão Matheus 2026-05-01)
   return{
     low:{id:"low",label:"Low Budget",description:"Casas até 5.000€. Lucro GV + Comissão base. Transporte normal.",
-      companyProfit:6000,commission:500,landMultiplier:1,seaMultiplier:1,craneCost:0},
+      companyProfit:6000,commission:1000,landMultiplier:1,seaMultiplier:1,craneCost:0},
     medium:{id:"medium",label:"Valor Médio",description:"Casas entre 5.000€ e 20.000€. Lucro GV reforçado + Comissão intermédia.",
       companyProfit:6000,commission:1000,landMultiplier:1,seaMultiplier:1,craneCost:0},
     luxury:{id:"luxury",label:"Luxo",description:"Casas acima de 20.000€. Lucro máximo, marítimo x2, terrestre x2 + autogrua.",
-      companyProfit:12000,commission:2000,
+      companyProfit:12000,commission:1000,
       landMultiplier:g('cfg_lux_land')||2,seaMultiplier:g('cfg_lux_sea')||2,craneCost:g('cfg_lux_crane')||2000}
   };
 }
