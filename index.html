@@ -548,7 +548,7 @@ function toast(msg,ok=true){
 
 const csym={EUR:"€",GBP:"£",BRL:"R$",USD:"$",PLN:"zł"};
 const oLabels={uk:"🇬🇧 Inglaterra",netherlands:"🇳🇱 Holanda",france:"🇫🇷 França",portugal:"🇵🇹 Portugal",belgium:"🇧🇪 Bélgica",china:"🇨🇳 China"};
-const EU=new Set(["portugal","brazil"]);
+const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"]);
 
 function rates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;};
@@ -560,8 +560,9 @@ function rates(){
 function localRates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), cny=(g('cny')||8), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
   const e={rate:1,symbol:"€",code:"EUR"};
-  return{portugal:e,brazil:{rate:brl>0?brl:6.5,symbol:"R$",code:"BRL"},
-    china:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
+  return{portugal:e,spain:e,france:e,italy:e,greece:e,malta:e,"netherlands-dest":e,croatia:e,bulgaria:e,
+    poland:{rate:pln>0?pln:4.5,symbol:"zł",code:"PLN"},brazil:{rate:brl>0?brl:6.5,symbol:"R$",code:"BRL"},
+    china:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
 }
 
 function tiers(){
@@ -616,11 +617,33 @@ let R={
       {from:"Leixões",to:"Ponta Delgada (Açores)",cost:8162,type:"Breakbulk",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."},
       {from:"Leixões",to:"Ilha do Pico (Açores)",cost:6650,type:"Flat Rack",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."}],
     china:[{from:"Shanghai",to:"Leixões",cost:23244,type:"Flat Rack"},{from:"Shanghai",to:"Leixões",cost:4655,type:"Container 20' + montagem",note:"Frete 2.655€ + 2.000€ montagem contentores expansíveis"},{from:"Shanghai",to:"Leixões",cost:5528,type:"Container 40' + montagem",note:"Frete 3.528€ + 2.000€ montagem contentores expansíveis"}]}},
+    spain:{label:"Espanha",flag:"🇪🇸",vatRate:.21,routes:{
+    uk:[{from:"Portbury",to:"Vigo (UECC)",cost:2334,type:"UECC RoRo",portIncl:true,note:"⭐ MELHOR PREÇO. UECC LINER IN/OUT. 11×3.7m / 7t. Válido Jun 2026."},{from:"Portbury",to:"Vigo (UECC)",cost:2514,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×4.0m."},{from:"Portbury",to:"Vigo (UECC)",cost:2696,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×4.3m."},{from:"Purfleet",to:"Santander",cost:4950,type:"RO-RO"},{from:"Felixstowe",to:"Algeciras",cost:5980,type:"Flat Rack"},{from:"Felixstowe",to:"Valencia",cost:9650,type:"Flat Rack"},{from:"Portbury",to:"Vigo",cost:11050,type:"RO-RO",note:"Outro operador (full service)"},{from:"Portbury",to:"Vigo",cost:11300,type:"RO-RO",note:"Outro operador (full service)"},{from:"Southampton",to:"Valencia",cost:11950,type:"RO-RO"},{from:"Southampton",to:"Santander",cost:12950,type:"RO-RO"},{from:"Portbury",to:"Sagunto",cost:16570,type:"RO-RO"}],
+    netherlands:[{from:"Rotterdam",to:"Valencia",cost:3500,type:"RO-RO"},{from:"Rotterdam",to:"Santander",cost:3200,type:"RO-RO"}],
+    france:[{from:"Calais",to:"Santander",cost:2800,type:"Camião"},{from:"Marseille",to:"Valencia",cost:2500,type:"RO-RO"}],
+    belgium:[{from:"Zeebrugge",to:"Vigo (UECC)",cost:2663,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×3.7m."},{from:"Zeebrugge",to:"Vigo (UECC)",cost:2870,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×4.0m."},{from:"Zeebrugge",to:"Vigo (UECC)",cost:3079,type:"UECC RoRo",portIncl:true,note:"UECC LINER IN/OUT. 11×4.3m."}],
+    portugal:[{from:"Leixões",to:"Las Palmas (Canárias)",cost:6200,type:"Flat Rack"}]}},
+    france:{label:"França",flag:"🇫🇷",vatRate:.20,routes:{
+    uk:[{from:"Purfleet",to:"Calais",cost:2950,type:"RO-RO"},{from:"Tilbury",to:"Le Havre",cost:3250,type:"RO-RO"},{from:"Southampton",to:"Le Havre",cost:3750,type:"RO-RO"}],
+    france:[{from:"Calais",to:"Le Havre",cost:2500,type:"Camião"},{from:"Le Havre",to:"Marseille",cost:3500,type:"Camião"}],
+    belgium:[{from:"Zeebrugge",to:"Le Havre (UECC)",cost:2251,type:"RO-RO",note:"UECC LINER IN/FAS OUT. 11×3.7m. Custos portuários Le Havre NÃO incluídos (Manucar)."},{from:"Zeebrugge",to:"Le Havre (UECC)",cost:2426,type:"RO-RO",note:"UECC FAS OUT. 11×4.0m."},{from:"Zeebrugge",to:"Le Havre (UECC)",cost:2600,type:"RO-RO",note:"UECC FAS OUT. 11×4.3m."}]}},
+    italy:{label:"Itália",flag:"🇮🇹",vatRate:.22,routes:{uk:[{from:"Southampton",to:"Salerno",cost:11950,type:"RO-RO"},{from:"Portbury",to:"Livorno",cost:16010,type:"RO-RO"},{from:"Portbury",to:"Livorno",cost:16520,type:"RO-RO"}]}},
+    greece:{label:"Grécia",flag:"🇬🇷",vatRate:.24,routes:{uk:[{from:"Southampton",to:"Pireu",cost:14900,type:"RO-RO"},{from:"Portbury",to:"Pireu",cost:18300,type:"RO-RO"},{from:"Portbury",to:"Pireu",cost:19100,type:"RO-RO"},{from:"Southampton",to:"Thessaloniki",cost:14500,type:"RO-RO"}]}},
+    malta:{label:"Malta",flag:"🇲🇹",vatRate:.18,routes:{uk:[{from:"Southampton",to:"Malta Free Port",cost:4560,type:"Flat Rack"},{from:"Southampton",to:"La Valleta",cost:11200,type:"RO-RO"}]}},
+    "netherlands-dest":{label:"Holanda",flag:"🇳🇱",vatRate:.21,routes:{uk:[{from:"Purfleet",to:"Rotterdam",cost:1325,type:"RO-RO"},{from:"Killingholme",to:"Rotterdam",cost:1675,type:"RO-RO"}],france:[{from:"Calais",to:"Rotterdam",cost:2800,type:"Camião"}]}},
+    poland:{label:"Polónia",flag:"🇵🇱",vatRate:.23,routes:{
+    uk:[{from:"Felixstowe",to:"Gdańsk",cost:6950,type:"Flat Rack"},{from:"Purfleet",to:"Gdańsk",cost:9900,type:"RO-RO"},{from:"Southampton",to:"Gdynia",cost:11950,type:"RO-RO"}],
+    belgium:[{from:"Antwerp",to:"Gdynia",cost:5895,type:"RO-RO",note:"Dims: 12×4×4m / 5t por unidade"}],
+    netherlands:[{from:"Rotterdam",to:"Szczecin",cost:3800,type:"RO-RO"},{from:"Rotterdam",to:"Gdańsk",cost:9667,type:"Camião",note:"Transporte por camião — 12×4×4m / 5t"}],
+    france:[{from:"Calais",to:"Gdańsk",cost:5200,type:"RO-RO"}]}},
+    croatia:{label:"Croácia",flag:"🇭🇷",vatRate:.25,routes:{uk:[{from:"Felixstowe",to:"Rijeka",cost:7150,type:"Flat Rack"},{from:"Southampton",to:"Rijeka",cost:11950,type:"RO-RO"},{from:"Southampton",to:"Split",cost:12950,type:"RO-RO"}]}},
+    bulgaria:{label:"Bulgária",flag:"🇧🇬",vatRate:.20,routes:{netherlands:[{from:"Rotterdam",to:"Sófia",cost:17167,type:"Camião",note:"Transporte por camião — 12×4×4m / 5t"}]}},
   brazil:{label:"Brasil",flag:"🇧🇷",vatRate:0,taxII:.126,taxIPI:0,taxPIS:.021,taxCOFINS:.0965,taxICMS:.18,fobRate:.10,routes:{
     uk:[{from:"Felixstowe",to:"Santos",cost:4950,type:"Flat Rack",note:"⭐ Oficial 2026. HS 8716.10.98. Inclui desp. portuárias, BL e despacho exportação"},{from:"London Gateway",to:"Santos",cost:13500,type:"Flat Rack"},{from:"Tilbury",to:"Santos",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
     netherlands:[{from:"Rotterdam",to:"Santos",cost:4750,type:"Flat Rack",note:"⭐ Oficial 2026. Inclui desp. portuárias, BL e despacho exportação"},{from:"Rotterdam",to:"Santos",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
     portugal:[{from:"Leixões",to:"Santos",cost:8850,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"}],
-    china:[{from:"Shanghai",to:"Santos",cost:21000,type:"Flat Rack"},{from:"Shanghai",to:"Santos",cost:2880,type:"Container 20HQ"},{from:"Shanghai",to:"Santos",cost:5760,type:"Container 40HQ"}]}}};
+    china:[{from:"Shanghai",to:"Santos",cost:21000,type:"Flat Rack"},{from:"Shanghai",to:"Santos",cost:2880,type:"Container 20HQ"},{from:"Shanghai",to:"Santos",cost:5760,type:"Container 40HQ"}]}},
+    usa:{label:"EUA",flag:"🇺🇸",vatRate:0,routes:{uk:[{from:"Southampton",to:"New York, NY",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Brunswick, GA",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Galveston, TX",cost:34370,type:"RO-RO"}]}}};
 
 // === TABS ===
 function switchTab(t){
@@ -634,7 +657,7 @@ function switchTab(t){
 
 // === COUNTRY BUTTONS ===
 function buildCountryButtons(){
-  const euK=["portugal"],nonK=["brazil"];
+  const euK=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"],nonK=["brazil","usa"];
   const mk=(k,el)=>{const c=R[k];if(!c)return;const b=document.createElement('button');
     b.className='country-btn flex items-center gap-1.5 px-3 py-2 rounded-xl border border-white/[.06] bg-gv-bg/60 text-gray-400 text-[13px] cursor-pointer';
     b.dataset.country=k;b.innerHTML=`<span class="text-lg">${c.flag}</span><span class="font-medium">${c.label}</span>`;b.onclick=()=>selectCountry(k);el.appendChild(b);};
@@ -1017,7 +1040,7 @@ function rrHTML(ck,ok,i,r){
 
 function buildRouteEditor(){
   const ctn=$('routeEditor');ctn.innerHTML='';
-  const order=["portugal","brazil"];
+  const order=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","usa"];
   [...new Set([...order,...Object.keys(R)])].forEach(ck=>{
     const c=R[ck];if(!c)return;
     const tot=Object.values(c.routes||{}).reduce((s,a)=>s+a.length,0);
@@ -1220,7 +1243,9 @@ let marInit=false,marMap=null,marCv=null,marCx=null,marLys={},marShips=[],marAct
 let marFlat=[],marFiltered=[],marFilter={dest:null,orig:null,type:null};
 
 // ── DESTINATION COLORS ──
-const DCOL={portugal:'#ef5350',brazil:'#ffd600'};
+const DCOL={portugal:'#ef5350',spain:'#ffa726',france:'#42a5f5',italy:'#66bb6a',greece:'#29b6f6',
+  malta:'#ab47bc','netherlands-dest':'#ff9100',poland:'#ec407a',croatia:'#26c6da',bulgaria:'#8d6e63',
+  brazil:'#ffd600',usa:'#7e57c2'};
 const OCOL={uk:'#42a5f5',netherlands:'#ff9100',belgium:'#66bb6a',france:'#5c6bc0',portugal:'#ef5350',china:'#e53935'};
 const OLBL={uk:'UK',netherlands:'NL',belgium:'BE',france:'FR',portugal:'PT',china:'CN'};
 
