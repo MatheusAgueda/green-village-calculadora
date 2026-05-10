@@ -615,7 +615,7 @@ let R={
       {from:"Leixões",to:"Ponta Delgada (Açores)",cost:5985,type:"Flat Rack",note:"⚠️ ILHAS: Preço ref. casa grande (11,58×3,68×3,50m / 5t) em transporte CONVENCIONAL. Inclui despesas portuárias e BL. Varia conforme tamanho."},
       {from:"Leixões",to:"Ponta Delgada (Açores)",cost:8162,type:"Breakbulk",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."},
       {from:"Leixões",to:"Ilha do Pico (Açores)",cost:6650,type:"Flat Rack",note:"⚠️ ILHAS: Preço varia conforme tamanho da casa."}],
-    china:[{from:"Shanghai",to:"Leixões",cost:23244,type:"Flat Rack"},{from:"Shanghai",to:"Leixões",cost:4655,type:"Container 20' + montagem",note:"Frete 2.655€ + 2.000€ montagem contentores expansíveis"},{from:"Shanghai",to:"Leixões",cost:5528,type:"Container 40' + montagem",note:"Frete 3.528€ + 2.000€ montagem contentores expansíveis"}]}}"netherlands-dest":{label:"Holanda",flag:"🇳🇱",vatRate:.21,routes:{uk:[{from:"Purfleet",to:"Rotterdam",cost:1325,type:"RO-RO"},{from:"Killingholme",to:"Rotterdam",cost:1675,type:"RO-RO"}],france:[{from:"Calais",to:"Rotterdam",cost:2800,type:"Camião"}]}}brazil:{label:"Brasil",flag:"🇧🇷",vatRate:0,taxII:.126,taxIPI:0,taxPIS:.021,taxCOFINS:.0965,taxICMS:.18,fobRate:.10,routes:{
+    china:[{from:"Shanghai",to:"Leixões",cost:23244,type:"Flat Rack"},{from:"Shanghai",to:"Leixões",cost:4655,type:"Container 20' + montagem",note:"Frete 2.655€ + 2.000€ montagem contentores expansíveis"},{from:"Shanghai",to:"Leixões",cost:5528,type:"Container 40' + montagem",note:"Frete 3.528€ + 2.000€ montagem contentores expansíveis"}]}}brazil:{label:"Brasil",flag:"🇧🇷",vatRate:0,taxII:.126,taxIPI:0,taxPIS:.021,taxCOFINS:.0965,taxICMS:.18,fobRate:.10,routes:{
     uk:[{from:"Felixstowe",to:"Santos",cost:4950,type:"Flat Rack",note:"⭐ Oficial 2026. HS 8716.10.98. Inclui desp. portuárias, BL e despacho exportação"},{from:"London Gateway",to:"Santos",cost:13500,type:"Flat Rack"},{from:"Tilbury",to:"Santos",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
     netherlands:[{from:"Rotterdam",to:"Santos",cost:4750,type:"Flat Rack",note:"⭐ Oficial 2026. Inclui desp. portuárias, BL e despacho exportação"},{from:"Rotterdam",to:"Santos",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
     portugal:[{from:"Leixões",to:"Santos",cost:8850,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"}],
@@ -1016,7 +1016,7 @@ function rrHTML(ck,ok,i,r){
 
 function buildRouteEditor(){
   const ctn=$('routeEditor');ctn.innerHTML='';
-  const order=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","usa"];
+  const order=["portugal","brazil"];
   [...new Set([...order,...Object.keys(R)])].forEach(ck=>{
     const c=R[ck];if(!c)return;
     const tot=Object.values(c.routes||{}).reduce((s,a)=>s+a.length,0);
@@ -1219,9 +1219,9 @@ let marInit=false,marMap=null,marCv=null,marCx=null,marLys={},marShips=[],marAct
 let marFlat=[],marFiltered=[],marFilter={dest:null,orig:null,type:null};
 
 // ── DESTINATION COLORS ──
-const DCOL={portugal:'#ef5350',spain:'#ffa726',france:'#42a5f5',italy:'#66bb6a',greece:'#29b6f6',
-  malta:'#ab47bc','netherlands-dest':'#ff9100',poland:'#ec407a',croatia:'#26c6da',bulgaria:'#8d6e63',
-  brazil:'#ffd600',usa:'#7e57c2'};
+const DCOL={portugal:'#ef5350',
+  ,
+  brazil:'#ffd600'};
 const OCOL={uk:'#42a5f5',netherlands:'#ff9100',belgium:'#66bb6a',france:'#5c6bc0',portugal:'#ef5350',china:'#e53935'};
 const OLBL={uk:'UK',netherlands:'NL',belgium:'BE',france:'FR',portugal:'PT',china:'CN'};
 
