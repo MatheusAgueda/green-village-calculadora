@@ -570,11 +570,11 @@ function tiers(){
   // LOCKED: lucros e comissões fixos — não editáveis (decisão Matheus 2026-05-01)
   return{
     low:{id:"low",label:"Low Budget",description:"Casas até 5.000€. Lucro GV + Comissão base. Transporte normal.",
-      companyProfit:6000,commission:1000,landMultiplier:1,seaMultiplier:1,craneCost:0},
+      companyProfit:6000,commission:500,landMultiplier:1,seaMultiplier:1,craneCost:0},
     medium:{id:"medium",label:"Valor Médio",description:"Casas entre 5.000€ e 20.000€. Lucro GV reforçado + Comissão intermédia.",
       companyProfit:6000,commission:1000,landMultiplier:1,seaMultiplier:1,craneCost:0},
     luxury:{id:"luxury",label:"Luxo",description:"Casas acima de 20.000€. Lucro máximo, marítimo x2, terrestre x2 + autogrua.",
-      companyProfit:12000,commission:1000,
+      companyProfit:12000,commission:2000,
       landMultiplier:g('cfg_lux_land')||2,seaMultiplier:g('cfg_lux_sea')||2,craneCost:g('cfg_lux_crane')||2000}
   };
 }
@@ -901,8 +901,8 @@ function calcInternational(){
 
   // ============ COLLAPSIBLE DETAIL ============
   let dtl='';
-  const dr=(l,v,cl='')=>{dtl+=`<div class="flex justify-between items-center py-1.5 ${cl}"><span class="text-[11px] text-gray-500">${l}</span><span class="text-[11px] font-mono font-medium">${v}</span></div>`;};
-  const ds=(t)=>{dtl+=`<div class="text-[9px] uppercase tracking-[.2em] text-gray-600 pt-3 pb-1 font-semibold border-t border-white/[.04] mt-2">${t}</div>`;};
+  const dr=(l,v,cl='')=>{dtl+=`<div class="flex justify-between items-center py-2.5 ${cl}"><span class="text-sm text-gray-400">${l}</span><span class="text-sm font-mono font-semibold text-gray-200">${v}</span></div>`;};
+  const ds=(t)=>{dtl+=`<div class="text-xs uppercase tracking-[.15em] text-[#00ff88]/70 pt-4 pb-2 font-bold border-t border-white/[.08] mt-3">${t}</div>`;};
 
   ds("Aquisição");
   if(ip>0)dr("Preço da casa",`${ip>0&&cur!=='EUR'?s+ip.toLocaleString("pt-PT")+' = ':''}${fc(pe)}`);
@@ -913,11 +913,11 @@ function calcInternational(){
     ds("Alfândega");
     dr("Valor CIF",fc(cifVal));
     dr(`Direitos (${(dutyRate*100).toFixed(1)}%)`,dutyRate===0?'€0':fc(customsDuty));
-    if(dutyNote)dtl+=`<div class="text-[9px] text-gray-600 -mt-0.5 mb-1">${dutyNote}</div>`;
+    if(dutyNote)dtl+=`<div class="text-xs text-gray-500 -mt-0.5 mb-1.5">${dutyNote}</div>`;
     if(antiDumping>0)dr(`Anti-dumping (${(antiDumpR*100).toFixed(1)}%)`,fc(antiDumping));
     dr(`IVA Aduaneiro (${(vatR*100).toFixed(0)}%)`,fc(ivaAduaneiro),'text-amber-400');
     dr("Despachante",fc(despacho));
-    if(portIncl)dtl+=`<div class="text-[9px] text-[#00ff88]/60 py-0.5">Porto incluído no frete (LINER IN/OUT)</div>`;
+    if(portIncl)dtl+=`<div class="text-xs text-[#00ff88]/70 py-1">Porto incluído no frete (LINER IN/OUT)</div>`;
     else dr(`Porto (${portOrig}+${portDest})`,fc(portHandling));
     if(demurrage>0)dr(`Demurrage (${demDays}d × €${demRate})`,fc(demurrage));
     if(docFee>0)dr("Documentação (BL+EUR.1+cert.)",fc(docFee));
@@ -948,14 +948,14 @@ function calcInternational(){
     dr(`IVA ${(vatR*100).toFixed(0)}% (${c.label})`,fc(ivaVenda));
   }
 
-  dr("TOTAL",fc(total),'font-bold text-[#00ff88] text-sm border-t border-[#00ff88]/20 pt-2 mt-2');
+  dr("TOTAL",fc(total),'font-bold text-[#00ff88] text-base border-t border-[#00ff88]/30 pt-3 mt-3');
 
   g.innerHTML+=`<div class="sm:col-span-2">
     <details class="rounded-xl border border-white/[.06] overflow-hidden">
-      <summary class="px-4 py-3 cursor-pointer text-[11px] uppercase tracking-[.15em] text-gray-500 hover:text-gray-300 hover:bg-white/[.02] transition select-none flex items-center gap-2">
-        <span class="chevron text-[10px]">&#9654;</span> Ver decomposição completa
+      <summary class="px-4 py-3 cursor-pointer text-sm uppercase tracking-[.12em] text-gray-400 hover:text-gray-200 hover:bg-white/[.03] transition select-none flex items-center gap-2">
+        <span class="chevron text-xs transition-transform">&#9654;</span> Ver decomposição completa
       </summary>
-      <div class="px-4 pb-4">${dtl}</div>
+      <div class="px-5 pb-5 pt-2">${dtl}</div>
     </details>
   </div>`;
 
