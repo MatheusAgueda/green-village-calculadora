@@ -554,7 +554,7 @@ function rates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;};
   // Margem de segurança cambial (default 3%) — protege contra flutuação
   const sm=(100-(g('safetyMargin')||3))/100; // ex: 3% → multiplica rate por 0.97
-  const gbp=(g('gbp')||.84)*sm, brl=(g('brl')||6.5)*sm, cny=(g('cny')||8)*sm, usd=(g('usd')||1.1)*sm, pln=(g('pln')||4.5)*sm;
+  const gbp=(g('gbp')||.84)*sm, brl=(g('brl')||6.5)*sm,  usd=(g('usd')||1.1)*sm, pln=(g('pln')||4.5)*sm;
   return{EUR:1,GBP:gbp>0?1/gbp:1.19,BRL:brl>0?1/brl:0.154,USD:usd>0?1/usd:0.909,PLN:pln>0?1/pln:0.222};
 }
 function localRates(){
@@ -754,7 +754,7 @@ function calcInternational(){
   // Seguro: 0.5% do valor da casa ou mínimo configurável
   const insPct=(pn('cfg_insurancePct')||0.5)/100;
   const insMin=INSURANCE(); // mínimo da config (default 200€)
-  const insuranceFee=needsCustoms?Math.max(pe*insPct,insMin):0;
+  const insuranceFee=(needsCustoms||isBR)?Math.max(pe*insPct,insMin):0;
   // CIF = preço + frete marítimo + seguro (base tributável aduaneira)
   const cifVal=pe+sea+insuranceFee;
 
@@ -805,7 +805,7 @@ function calcInternational(){
 
   if(isBR){
     // Brasil: tributação própria (II + IPI + PIS + COFINS + ICMS gross-up)
-    fob=pe*(c.fobRate||0);cif=pe+fob+sea+(isNonEUOrigin?insuranceFee:0);
+    fob=pe*(c.fobRate||0);cif=pe+fob+sea+insuranceFee;
     const vII=cif*(c.taxII||0),vIPI=(cif+vII)*(c.taxIPI||0),bPC=cif+vII+vIPI;
     const vPIS=bPC*(c.taxPIS||0),vCOF=bPC*(c.taxCOFINS||0);
     const icR=c.taxICMS||0,bICMS=(cif+vII+vIPI+vPIS+vCOF)/((1-icR)||1),vICMS=bICMS*icR;
