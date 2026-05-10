@@ -1240,7 +1240,7 @@ function importJSON(){
 // MARITIME & LOGISTICS INTELLIGENCE DASHBOARD — ALL ROUTES FROM CALCULATOR
 // ══════════════════════════════════════════════════════════════════════════════
 let marInit=false,marMap=null,marCv=null,marCx=null,marLys={},marShips=[],marActive=null;
-let marFlat=[],marFiltered=[],marFilter={dest:null,orig:null,type:null};
+let marFlat=[],marFiltered=[],marFilter={dest:null,orig:null,type:null,recommended:true};
 
 // ── DESTINATION COLORS ──
 const DCOL={portugal:'#ef5350',spain:'#ffa726',france:'#42a5f5',italy:'#66bb6a',greece:'#29b6f6',
@@ -2188,7 +2188,7 @@ function marPriceTier(p){
 function initMaritime(){
   if(marInit)return;marInit=true;
   const sc=document.createElement('script');sc.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-  sc.onload=()=>{marFlat=extractRoutes();marFiltered=[...marFlat];buildMaritime()};
+  sc.onload=()=>{marFlat=extractRoutes();marFiltered=marFlat.filter(r=>r.recommended);buildMaritime()};
   document.head.appendChild(sc);
 }
 
@@ -2233,6 +2233,7 @@ function buildMarStats(routes){
 function buildMarFilters(){
   // Destination filters
   const dests=[...new Set(marFlat.map(r=>r.dest))];
+  $('mar-filter-dest').insertAdjacentHTML('beforebegin','<div class="flex gap-2 mb-3"><button class="mar-filter-btn active" id="mar-rec-btn" onclick="GV.marFilterRec(true)">\u2b50 Recomendadas</button><button class="mar-filter-btn" id="mar-all-btn" onclick="GV.marFilterRec(false)">Todas</button></div>');
   $('mar-filter-dest').innerHTML='<button class="mar-filter-btn active" onclick="GV.marFilterDest(null)">Todos</button>'+
     dests.map(d=>{const o=R[d];return'<button class="mar-filter-btn" onclick="GV.marFilterDest(\''+d+'\')" data-fd="'+d+'">'+
       (o?o.flag+' ':'')+(o?o.label:d)+'</button>'}).join('');
@@ -2248,7 +2249,8 @@ function buildMarFilters(){
 
 function applyMarFilter(){
   marFiltered=marFlat.filter(r=>{
-    if(marFilter.dest&&r.dest!==marFilter.dest)return false;
+        if(marFilter.recommended&&!r.recommended)return false;
+if(marFilter.dest&&r.dest!==marFilter.dest)return false;
     if(marFilter.orig&&r.orig!==marFilter.orig)return false;
     if(marFilter.type&&!r.type.toLowerCase().includes(marFilter.type.toLowerCase()))return false;
     return true;
@@ -2263,6 +2265,14 @@ function applyMarFilter(){
   // Fit map to visible routes
   const bounds=[];marFiltered.forEach(r=>{if(r.wp)r.wp.forEach(p=>bounds.push(p))});
   if(bounds.length>0&&marMap)marMap.fitBounds(bounds,{padding:[30,30],maxZoom:7,duration:.6});
+}
+
+function marFilterRec(v){
+  marFilter.recommended=v;
+  var rb=$('mar-rec-btn'),ab=$('mar-all-btn');
+  if(rb)rb.classList.toggle('active',v);
+  if(ab)ab.classList.toggle('active',!v);
+  applyMarFilter();
 }
 
 function marFilterDest(v){
@@ -2585,7 +2595,7 @@ function init(){
 
 return{switchTab,calcInternational,applySettings,fetchRates,exportPDF,init,
   updateTierPreview,onOriginChange,onRouteChange,autoSelectCurrency,showRouteNote,copyIntl,addRoute,removeOrigin,addOrigin,addNewCountry,exportJSON,importJSON,
-  marSel,marClose,marFilterDest,marFilterOrig,marFilterType};
+  marSel,marClose,marFilterRec,marFilterDest,marFilterOrig,marFilterType};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
