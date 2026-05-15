@@ -257,6 +257,10 @@ select{
 .cat-m{font-family:'Space Mono',monospace;font-weight:600;font-size:12px}
 .cat-g{color:#1db854}
 .cat-b{color:#5eb5ff}
+.cat-pvp{color:#00ff88;font-weight:700}
+.cat-lucro{color:#fbbf24;font-size:11px}
+.cat-iva{color:rgba(156,163,175,.5);font-size:11px}
+.cat-sep{border-left:2px solid rgba(94,181,255,.08)}
 .cat-pend{color:#fbbf24;font-size:11px;font-style:italic;text-align:center}
 .cat-plink{color:#fff;text-decoration:none;font-weight:600;transition:color .2s}
 .cat-plink:hover{color:#5eb5ff;text-decoration:underline}
@@ -622,13 +626,17 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     <table class="cat-table w-full">
       <thead>
         <tr class="cat-header">
-          <th class="cat-th text-left" style="min-width:240px">Produto</th>
+          <th class="cat-th text-left" style="min-width:200px">Produto</th>
           <th class="cat-th cat-c">Tam.</th>
           <th class="cat-th cat-c">Cont.</th>
           <th class="cat-th cat-r">EXW USD</th>
-          <th class="cat-th cat-r">PT Net EUR</th>
-          <th class="cat-th cat-r">PT Desemb EUR</th>
-          <th class="cat-th cat-r">BR Landed BRL</th>
+          <th class="cat-th cat-r cat-sep" title="Custo nosso (CIF+duty+ops)">PT Custo</th>
+          <th class="cat-th cat-r" title="Lucro GV + Comissão">Lucro</th>
+          <th class="cat-th cat-r" title="IVA aduaneiro (dedutível) — desembolso real">IVA Alf.</th>
+          <th class="cat-th cat-r" title="IVA venda 23% ao cliente">IVA Venda</th>
+          <th class="cat-th cat-r" title="Preço final ao cliente c/ IVA" style="color:#00ff88">PVP PT</th>
+          <th class="cat-th cat-r cat-sep" title="Custo total importação Brasil c/ todos impostos">BR Custo</th>
+          <th class="cat-th cat-r" title="Preço final ao cliente Brasil" style="color:#00ff88">PVP BR</th>
         </tr>
       </thead>
       <tbody id="cat-tbody"></tbody>
@@ -650,9 +658,12 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   </div>
   <div class="flex flex-wrap gap-4 items-center">
     <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">EXW:</span> $<span id="mj_exw">16000</span></div>
-    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">PT Net:</span> €<span id="mj_pt">0</span></div>
+    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">PT Custo:</span> €<span id="mj_pt">0</span></div>
+    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">Lucro:</span> <span style="color:#fbbf24">€<span id="mj_lucro">0</span></span></div>
     <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">PT Desembolso:</span> €<span id="mj_pt_iva">0</span></div>
-    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">BR Landed:</span> R$<span id="mj_br">0</span></div>
+    <div class="result-card px-4 py-2 text-sm border border-[#00ff88]/30 bg-[#00ff88]/[.05]"><span class="text-[#00ff88]/70">PVP PT:</span> <span style="color:#00ff88;font-weight:700">€<span id="mj_pvp_pt">0</span></span></div>
+    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">BR Custo:</span> R$<span id="mj_br">0</span></div>
+    <div class="result-card px-4 py-2 text-sm border border-[#00ff88]/30 bg-[#00ff88]/[.05]"><span class="text-[#00ff88]/70">PVP BR:</span> <span style="color:#00ff88;font-weight:700">R$<span id="mj_pvp_br">0</span></span></div>
   </div>
 </div>
 
@@ -663,8 +674,11 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 mb-4" id="fold-upgrades"></div>
   <div class="flex flex-wrap gap-4 items-center">
     <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">EXW c/ upgrades:</span> $<span id="fold_exw">9520</span></div>
-    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">PT Net:</span> €<span id="fold_pt">0</span></div>
-    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">BR Landed:</span> R$<span id="fold_br">0</span></div>
+    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">PT Custo:</span> €<span id="fold_pt">0</span></div>
+    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">Lucro:</span> <span style="color:#fbbf24">€<span id="fold_lucro">0</span></span></div>
+    <div class="result-card px-4 py-2 text-sm border border-[#00ff88]/30 bg-[#00ff88]/[.05]"><span class="text-[#00ff88]/70">PVP PT:</span> <span style="color:#00ff88;font-weight:700">€<span id="fold_pvp_pt">0</span></span></div>
+    <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">BR Custo:</span> R$<span id="fold_br">0</span></div>
+    <div class="result-card px-4 py-2 text-sm border border-[#00ff88]/30 bg-[#00ff88]/[.05]"><span class="text-[#00ff88]/70">PVP BR:</span> <span style="color:#00ff88;font-weight:700">R$<span id="fold_pvp_br">0</span></span></div>
   </div>
 </div>
 
@@ -3080,14 +3094,27 @@ function catCalcPT(exw,freight){
   const freightEur=freight/eurusd;
   const cif=fob+freightEur+(fob+freightEur)*insPct;
   const duty=cif*dutyPct;
-  const net=cif+duty+ops;
-  const iva=(cif+duty)*0.23;
-  const desembolso=net+iva;
-  return{fob:Math.round(fob),cif:Math.round(cif),duty:Math.round(duty),net:Math.round(net),iva:Math.round(iva),desembolso:Math.round(desembolso)};
+  const net=cif+duty+ops; // custo nosso
+  const ivaAlf=(cif+duty)*0.23; // IVA aduaneiro (dedutível, mas desembolso real)
+  const desembolso=net+ivaAlf; // cash-out real
+  // Margem — usa mesma lógica dos tiers da calculadora Internacional
+  const peEur=fob; // preço casa em EUR
+  const tier=peEur<=5000?'low':peEur>20000?'luxury':'medium';
+  const profit=tier==='luxury'?12000:6000;
+  const commission=tier==='low'?500:tier==='medium'?1000:2000;
+  const margin=profit+commission;
+  const subtotal=net+margin; // preço s/ IVA
+  const ivaVenda=subtotal*0.23; // IVA cobrado ao cliente
+  const pvp=subtotal+ivaVenda; // preço final ao cliente
+  return{fob:Math.round(fob),cif:Math.round(cif),duty:Math.round(duty),net:Math.round(net),
+    ivaAlf:Math.round(ivaAlf),desembolso:Math.round(desembolso),
+    margin:Math.round(margin),profit,commission,tier,
+    ivaVenda:Math.round(ivaVenda),subtotal:Math.round(subtotal),pvp:Math.round(pvp)};
 }
 
 function catCalcBR(exw,freight){
   const usdbrl=parseFloat($('cat_usdbrl').value)||5.70;
+  const eurusd=parseFloat($('cat_eurusd').value)||1.08;
   const fob=exw;
   const cif_usd=fob+freight+fob*0.003;
   const cif_brl=cif_usd*usdbrl;
@@ -3098,8 +3125,18 @@ function catCalcBR(exw,freight){
   const cofins=cif_brl*0.0965;
   const afrmm=freight*usdbrl*0.25;
   const siscomex=214.50;
-  const total=cif_brl+ii+ipi+icms+pis+cofins+afrmm+siscomex;
-  return{cif_brl:Math.round(cif_brl),total:Math.round(total)};
+  const custoTotal=cif_brl+ii+ipi+icms+pis+cofins+afrmm+siscomex; // custo importação BR
+  // Margem — mesma lógica, convertida para BRL
+  const peEur=exw/eurusd;
+  const tier=peEur<=5000?'low':peEur>20000?'luxury':'medium';
+  const profitEur=tier==='luxury'?12000:6000;
+  const commissionEur=tier==='low'?500:tier==='medium'?1000:2000;
+  const marginBrl=(profitEur+commissionEur)*usdbrl/eurusd; // EUR→BRL via USD
+  const pvp=custoTotal+marginBrl; // preço final cliente BR (s/ IVA — Brasil não tem IVA venda neste modelo)
+  return{cif_brl:Math.round(cif_brl),ii:Math.round(ii),icms:Math.round(icms),
+    pis:Math.round(pis),cofins:Math.round(cofins),afrmm:Math.round(afrmm),
+    custoTotal:Math.round(custoTotal),margin:Math.round(marginBrl),
+    pvp:Math.round(pvp),tier,total:Math.round(custoTotal)};
 }
 
 function renderCatalog(){
@@ -3119,12 +3156,19 @@ function renderCatalog(){
     html+='<td class="cat-td cat-c">'+p.size+'</td>';
     html+='<td class="cat-td cat-c">'+p.container+'</td>';
     if(hasPx){
+      // EXW
       html+='<td class="cat-td cat-r cat-m cat-g">$'+p.exw.toLocaleString()+'</td>';
-      html+='<td class="cat-td cat-r cat-m">'+eur(pt.net)+'</td>';
-      html+='<td class="cat-td cat-r cat-m cat-b">'+eur(pt.desembolso)+'</td>';
-      html+='<td class="cat-td cat-r cat-m">R$'+br.total.toLocaleString()+'</td>';
+      // PT: Custo | Lucro | IVA Alf | IVA Venda | PVP
+      html+='<td class="cat-td cat-r cat-m cat-sep">'+eur(pt.net)+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-lucro" title="'+pt.tier+': GV €'+pt.profit.toLocaleString()+' + Com €'+pt.commission.toLocaleString()+'">'+eur(pt.margin)+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-iva" title="Dedutível — recuperas na declaração IVA">'+eur(pt.ivaAlf)+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-iva">'+eur(pt.ivaVenda)+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-pvp" title="Cobra ao cliente (c/ IVA 23%)">'+eur(pt.pvp)+'</td>';
+      // BR: Custo | PVP
+      html+='<td class="cat-td cat-r cat-m cat-sep">R$'+br.custoTotal.toLocaleString()+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-pvp" title="Preço cliente BR (custo+margem)">R$'+br.pvp.toLocaleString()+'</td>';
     } else {
-      html+='<td colspan="4" class="cat-pend">PENDENTE — solicitar Jeremy via WhatsApp/email</td>';
+      html+='<td colspan="8" class="cat-pend">PENDENTE — solicitar Jeremy via WhatsApp/email</td>';
     }
     html+='</tr>';
   });
@@ -3161,6 +3205,10 @@ function recalcManju(){
   $('mj_pt').textContent=pt.net.toLocaleString();
   $('mj_pt_iva').textContent=pt.desembolso.toLocaleString();
   $('mj_br').textContent=br.total.toLocaleString();
+  // PVP displays (if elements exist)
+  const pvpPt=$('mj_pvp_pt');if(pvpPt)pvpPt.textContent=pt.pvp.toLocaleString();
+  const pvpBr=$('mj_pvp_br');if(pvpBr)pvpBr.textContent=br.pvp.toLocaleString();
+  const lucroPt=$('mj_lucro');if(lucroPt)lucroPt.textContent=pt.margin.toLocaleString();
 }
 
 function buildFoldUpgrades(){
@@ -3182,6 +3230,9 @@ function recalcFolding(){
   $('fold_exw').textContent=total.toLocaleString();
   $('fold_pt').textContent=pt.net.toLocaleString();
   $('fold_br').textContent=br.total.toLocaleString();
+  const fppt=$('fold_pvp_pt');if(fppt)fppt.textContent=pt.pvp.toLocaleString();
+  const fpbr=$('fold_pvp_br');if(fpbr)fpbr.textContent=br.pvp.toLocaleString();
+  const fl=$('fold_lucro');if(fl)fl.textContent=pt.margin.toLocaleString();
 }
 
 function buildDirectory(){
