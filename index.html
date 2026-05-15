@@ -244,31 +244,42 @@ select{
 /* === CATALOG TABLE === */
 .cat-table{border-collapse:separate;border-spacing:0;font-size:12px;color:rgba(255,255,255,.85)}
 .cat-header{background:rgba(29,184,84,.06)}
-.cat-th{padding:10px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:rgba(94,181,255,.7);border-bottom:2px solid rgba(94,181,255,.12);white-space:nowrap}
+.cat-grp-row{background:rgba(6,10,18,.6)}
+.cat-grp{padding:8px 12px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.2em;text-align:center;border-bottom:2px solid rgba(94,181,255,.15)}
+.cat-grp-cn{color:#fbbf24;background:rgba(251,191,36,.04);border-bottom-color:rgba(251,191,36,.2)}
+.cat-grp-pt{color:#1db854;background:rgba(29,184,84,.04);border-bottom-color:rgba(29,184,84,.2)}
+.cat-grp-br{color:#5eb5ff;background:rgba(94,181,255,.04);border-bottom-color:rgba(94,181,255,.2)}
+.cat-th{padding:8px 10px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(156,163,175,.6);border-bottom:1px solid rgba(255,255,255,.06);white-space:nowrap}
 .cat-row{transition:background .15s}
-.cat-row:hover{background:rgba(29,184,84,.04)}
+.cat-row:hover{background:rgba(29,184,84,.06)}
 .cat-row-ok{background:rgba(29,184,84,.02)}
-.cat-row-pend{opacity:.65}
+.cat-row-ok:nth-child(even){background:rgba(29,184,84,.035)}
+.cat-row-pend{opacity:.55;background:rgba(251,191,36,.02)}
 .cat-row-alt{background:rgba(251,191,36,.03)}
 .cat-row-approx{background:rgba(167,139,250,.02)}
-.cat-td{padding:8px 12px;vertical-align:top;border-bottom:1px solid rgba(255,255,255,.04)}
+.cat-td{padding:7px 10px;vertical-align:middle;border-bottom:1px solid rgba(255,255,255,.04)}
 .cat-c{text-align:center}
 .cat-r{text-align:right}
 .cat-m{font-family:'Space Mono',monospace;font-weight:600;font-size:12px}
 .cat-g{color:#1db854}
 .cat-b{color:#5eb5ff}
-.cat-pvp{color:#00ff88;font-weight:700}
+.cat-pvp{color:#00ff88;font-weight:800;font-size:13px;text-shadow:0 0 12px rgba(0,255,136,.15)}
 .cat-lucro{color:#fbbf24;font-size:11px}
-.cat-iva{color:rgba(156,163,175,.5);font-size:11px}
-.cat-sep{border-left:2px solid rgba(94,181,255,.08)}
-.cat-pend{color:#fbbf24;font-size:11px;font-style:italic;text-align:center}
+.cat-iva{color:rgba(156,163,175,.45);font-size:10px}
+.cat-sep-pt{border-left:2px solid rgba(29,184,84,.15)}
+.cat-sep-br{border-left:2px solid rgba(94,181,255,.15)}
+.cat-pend{color:#fbbf24;font-size:11px;font-style:italic;text-align:center;padding:8px 12px}
 .cat-plink{color:#fff;text-decoration:none;font-weight:600;transition:color .2s}
 .cat-plink:hover{color:#5eb5ff;text-decoration:underline}
-.cat-desc{font-size:10px;color:rgba(156,163,175,.5);margin-top:2px;max-width:320px}
-.cat-bv{color:#1db854;font-size:11px;font-weight:700}
-.cat-ba{color:#a78bfa;font-size:11px;font-weight:700;padding:0 3px;border:1px solid rgba(167,139,250,.3);border-radius:3px}
+.cat-desc{font-size:10px;color:rgba(156,163,175,.45);margin-top:2px;max-width:280px;line-height:1.3}
+.cat-bv{color:#1db854;font-size:10px;font-weight:700}
+.cat-ba{color:#a78bfa;font-size:10px;font-weight:700;padding:0 3px;border:1px solid rgba(167,139,250,.3);border-radius:3px}
 .cat-bo{font-size:7px;padding:1px 5px;border-radius:3px;background:rgba(251,191,36,.15);color:#fbbf24;font-weight:700;letter-spacing:.5px;vertical-align:middle}
-.cat-filter{padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.06);background:rgba(6,10,18,.5);color:rgba(156,163,175,.6);font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
+.cat-tier{display:inline-block;font-size:7px;padding:1px 6px;border-radius:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:4px}
+.cat-tier-low{background:rgba(156,163,175,.1);color:rgba(156,163,175,.7);border:1px solid rgba(156,163,175,.15)}
+.cat-tier-medium{background:rgba(251,191,36,.08);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+.cat-tier-luxury{background:rgba(167,139,250,.08);color:#a78bfa;border:1px solid rgba(167,139,250,.2)}
+.cat-filter{padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.06);background:rgba(6,10,18,.5);color:rgba(156,163,175,.6);font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
 .cat-filter:hover{border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
 .cat-filter.active{border-color:rgba(29,184,84,.4);color:#22dd66;background:rgba(29,184,84,.08)}
 .cat-cfg-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.04);background:rgba(6,10,18,.3);margin-bottom:4px;transition:all .2s}
@@ -625,18 +636,24 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   <div class="overflow-x-auto">
     <table class="cat-table w-full">
       <thead>
+        <tr class="cat-grp-row">
+          <th colspan="3" class="cat-grp cat-grp-cn">&#x1F1E8;&#x1F1F3; CHINA — ORIGEM</th>
+          <th class="cat-grp cat-grp-cn">EXW</th>
+          <th colspan="5" class="cat-grp cat-grp-pt">&#x1F1F5;&#x1F1F9; PORTUGAL — VENDA</th>
+          <th colspan="2" class="cat-grp cat-grp-br">&#x1F1E7;&#x1F1F7; BRASIL — VENDA</th>
+        </tr>
         <tr class="cat-header">
           <th class="cat-th text-left" style="min-width:200px">Produto</th>
           <th class="cat-th cat-c">Tam.</th>
           <th class="cat-th cat-c">Cont.</th>
-          <th class="cat-th cat-r">EXW USD</th>
-          <th class="cat-th cat-r cat-sep" title="Custo nosso (CIF+duty+ops)">PT Custo</th>
-          <th class="cat-th cat-r" title="Lucro GV + Comissão">Lucro</th>
-          <th class="cat-th cat-r" title="IVA aduaneiro (dedutível) — desembolso real">IVA Alf.</th>
-          <th class="cat-th cat-r" title="IVA venda 23% ao cliente">IVA Venda</th>
-          <th class="cat-th cat-r" title="Preço final ao cliente c/ IVA" style="color:#00ff88">PVP PT</th>
-          <th class="cat-th cat-r cat-sep" title="Custo total importação Brasil c/ todos impostos">BR Custo</th>
-          <th class="cat-th cat-r" title="Preço final ao cliente Brasil" style="color:#00ff88">PVP BR</th>
+          <th class="cat-th cat-r" style="color:#fbbf24">EXW USD</th>
+          <th class="cat-th cat-r cat-sep-pt" title="Custo nosso (CIF+duty+ops)">Custo</th>
+          <th class="cat-th cat-r" title="Lucro GV + Comissão vendedor">Lucro</th>
+          <th class="cat-th cat-r" title="IVA aduaneiro 23% (dedutível — recuperas na declaração)">IVA Alf.</th>
+          <th class="cat-th cat-r" title="IVA venda 23% cobrado ao cliente">IVA Venda</th>
+          <th class="cat-th cat-r" title="PREÇO FINAL ao cliente c/ IVA 23%" style="color:#00ff88;font-size:9px;font-weight:800">&#x1F3F7;&#xFE0F; PVP</th>
+          <th class="cat-th cat-r cat-sep-br" title="Custo total importação Brasil c/ todos impostos">Custo</th>
+          <th class="cat-th cat-r" title="PREÇO FINAL ao cliente Brasil" style="color:#00ff88;font-size:9px;font-weight:800">&#x1F3F7;&#xFE0F; PVP</th>
         </tr>
       </thead>
       <tbody id="cat-tbody"></tbody>
@@ -3156,17 +3173,19 @@ function renderCatalog(){
     html+='<td class="cat-td cat-c">'+p.size+'</td>';
     html+='<td class="cat-td cat-c">'+p.container+'</td>';
     if(hasPx){
-      // EXW
+      const tierLabel=pt.tier==='luxury'?'LUXO':pt.tier==='medium'?'MÉDIO':'ECON';
+      const tierCls='cat-tier cat-tier-'+pt.tier;
+      // EXW (China)
       html+='<td class="cat-td cat-r cat-m cat-g">$'+p.exw.toLocaleString()+'</td>';
-      // PT: Custo | Lucro | IVA Alf | IVA Venda | PVP
-      html+='<td class="cat-td cat-r cat-m cat-sep">'+eur(pt.net)+'</td>';
-      html+='<td class="cat-td cat-r cat-m cat-lucro" title="'+pt.tier+': GV €'+pt.profit.toLocaleString()+' + Com €'+pt.commission.toLocaleString()+'">'+eur(pt.margin)+'</td>';
+      // PT: Custo | Lucro+Tier | IVA Alf | IVA Venda | PVP
+      html+='<td class="cat-td cat-r cat-m cat-sep-pt">'+eur(pt.net)+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-lucro" title="GV €'+pt.profit.toLocaleString()+' + Comissão €'+pt.commission.toLocaleString()+'">'+eur(pt.margin)+' <span class="'+tierCls+'">'+tierLabel+'</span></td>';
       html+='<td class="cat-td cat-r cat-m cat-iva" title="Dedutível — recuperas na declaração IVA">'+eur(pt.ivaAlf)+'</td>';
       html+='<td class="cat-td cat-r cat-m cat-iva">'+eur(pt.ivaVenda)+'</td>';
-      html+='<td class="cat-td cat-r cat-m cat-pvp" title="Cobra ao cliente (c/ IVA 23%)">'+eur(pt.pvp)+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-pvp" title="Cobra este valor ao cliente (c/ IVA 23%)">'+eur(pt.pvp)+'</td>';
       // BR: Custo | PVP
-      html+='<td class="cat-td cat-r cat-m cat-sep">R$'+br.custoTotal.toLocaleString()+'</td>';
-      html+='<td class="cat-td cat-r cat-m cat-pvp" title="Preço cliente BR (custo+margem)">R$'+br.pvp.toLocaleString()+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-sep-br">R$'+br.custoTotal.toLocaleString()+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-pvp" title="Cobra este valor ao cliente BR">R$'+br.pvp.toLocaleString()+'</td>';
     } else {
       html+='<td colspan="8" class="cat-pend">PENDENTE — solicitar Jeremy via WhatsApp/email</td>';
     }
