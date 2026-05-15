@@ -539,6 +539,15 @@ const fc=(v,s="€",l="pt-PT")=>`${s}${fmt(v,l)}`;
 const LAND=()=>pn('cfg_landBase')||2000, CRANE=()=>pn('cfg_craneFrPt')||1000, CUSTOMS=()=>pn('cfg_customsFee')||500, INSURANCE=()=>pn('cfg_insurance')||200;
 const DOCFEE=()=>pn('cfg_docFee')||0; // Já incluído no despacho (Across cobra tudo junto)
 const NON_EU_ORIGINS=new Set(['uk','china']);
+const EU_ORIGINS=new Set(['netherlands','france','portugal','belgium']);
+// EU-Mercosur iTA — provisionally in force 1 May 2026 (OJ L 2026/184)
+// NCM 9406.90.20 Category 10: 11 equal annual cuts over 10 years (2026→2036)
+// Base MFN 20% (Gecex 852/2026). Requires Rules of Origin (Annex 3-C/3-D, MaxNOM 50% EXW)
+function mercosurPrefRate(mfnRate,year){
+  if(year<2026)return mfnRate;
+  const stage=Math.min(year-2026,10);
+  return +(mfnRate*Math.max(0,10-stage)/11).toFixed(6);
+}
 
 function toast(msg,ok=true){
   const t=document.createElement('div');
@@ -642,6 +651,8 @@ let R={
     uk:[{from:"Felixstowe",to:"Santos",cost:4950,type:"Flat Rack",note:"⭐ Oficial 2026. NCM 9406.90.20 (Gecex 852). Inclui desp. portuárias, BL e despacho exportação"},{from:"London Gateway",to:"Santos",cost:13500,type:"Flat Rack"},{from:"Tilbury",to:"Santos",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Tilbury",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
     netherlands:[{from:"Rotterdam",to:"Santos",cost:4750,type:"Flat Rack",note:"⭐ Oficial 2026. Inclui desp. portuárias, BL e despacho exportação"},{from:"Rotterdam",to:"Santos",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Vitória",cost:25200,type:"RO-RO"},{from:"Rotterdam",to:"Rio de Janeiro",cost:25200,type:"RO-RO"}],
     portugal:[{from:"Leixões",to:"Santos",cost:8850,type:"Flat Rack",note:"Medidas: 11,58×3,66×3,50m. Inclui desp. portuárias, BL e despacho exportação"}],
+    france:[{from:"Le Havre",to:"Santos",cost:5200,type:"Flat Rack",note:"🇪🇺 Mercosul-UE preferencial. NCM 9406.90.20. Inclui desp. portuárias"},{from:"Le Havre",to:"Santos",cost:26500,type:"RO-RO",note:"🇪🇺 Mercosul-UE preferencial. Full service"},{from:"Marseille",to:"Santos",cost:5800,type:"Flat Rack",note:"🇪🇺 Mercosul-UE preferencial. Via Mediterrâneo"}],
+    belgium:[{from:"Antwerp",to:"Santos",cost:5100,type:"Flat Rack",note:"🇪🇺 Mercosul-UE preferencial. NCM 9406.90.20. Inclui desp. portuárias"},{from:"Zeebrugge",to:"Santos",cost:5400,type:"Flat Rack",note:"🇪🇺 Mercosul-UE preferencial"}],
     china:[{from:"Shanghai",to:"Santos",cost:21000,type:"Flat Rack"},{from:"Shanghai",to:"Santos",cost:2880,type:"Container 20HQ"},{from:"Shanghai",to:"Santos",cost:5760,type:"Container 40HQ"}]}},
     usa:{label:"EUA",flag:"🇺🇸",vatRate:0,routes:{uk:[{from:"Southampton",to:"New York, NY",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Brunswick, GA",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Galveston, TX",cost:34370,type:"RO-RO"}]}}};
 
@@ -805,15 +816,22 @@ function calcInternational(){
 
   if(isBR){
     // Brasil: tributação própria (II + IPI + PIS + COFINS + ICMS gross-up)
+    // EU-Mercosur iTA: origem UE = tarifa preferencial Cat.10 (11 cortes anuais 2026-2036)
+    const isEUOrigin=EU_ORIGINS.has(ok);
+    const curYear=new Date().getFullYear();
+    const mfnII=c.taxII||0;
+    const effectiveII=isEUOrigin?mercosurPrefRate(mfnII,curYear):mfnII;
     fob=pe*(c.fobRate||0);cif=pe+fob+sea+insuranceFee;
-    const vII=cif*(c.taxII||0),vIPI=(cif+vII)*(c.taxIPI||0),bPC=cif+vII+vIPI;
+    const vII=cif*effectiveII,vIPI=(cif+vII)*(c.taxIPI||0),bPC=cif+vII+vIPI;
     const vPIS=bPC*(c.taxPIS||0),vCOF=bPC*(c.taxCOFINS||0);
     const icR=c.taxICMS||0,bICMS=(cif+vII+vIPI+vPIS+vCOF)/((1-icR)||1),vICMS=bICMS*icR;
     // AFRMM: 25% sobre frete marítimo (Adicional ao Frete para Renovação da Marinha Mercante)
     const afrmm=sea*0.25;
     // SISCOMEX: taxa fixa R$214.50 por DI (Declaração de Importação)
     const siscomex=214.50/(lr.brazil?.rate||6.5); // converte R$ para EUR
-    brTax={vII,vIPI,vPIS,vCOF,vICMS,afrmm,siscomex};
+    // vII sem acordo (para cálculo de poupança)
+    const vII_mfn=cif*mfnII;
+    brTax={vII,vIPI,vPIS,vCOF,vICMS,afrmm,siscomex,isEUOrigin,effectiveII,mfnII,vII_mfn,curYear};
     const tT=vII+vIPI+vPIS+vCOF+vICMS;
     sub=cif+tT+afrmm+siscomex+land+crane+despacho+portHandling+PROF+COM;
   } else if(needsCustoms){
@@ -892,6 +910,23 @@ function calcInternational(){
       </div>
       <div class="text-[10px] text-amber-400/40 mt-2">IVA aduaneiro ${fc(ivaAduaneiro)} pago na alfândega, recuperado na declaração periódica de IVA</div>
     </div>`;
+  } else if(isBR&&brTax.isEUOrigin){
+    const savings=brTax.vII_mfn-brTax.vII;
+    const stageNow=Math.min(brTax.curYear-2026,10);
+    const yearsLeft=10-stageNow;
+    g.innerHTML+=`<div class="sm:col-span-2 rounded-xl border border-[#1db854]/25 bg-gradient-to-r from-[#1db854]/[.08] to-[#1db854]/[.03] p-4">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-lg">🇪🇺</span>
+        <div class="text-[10px] uppercase tracking-[.15em] text-[#00ff88] font-semibold">Acordo Mercosul-UE — Tarifa Preferencial (Cat. 10)</div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div><div class="text-[9px] text-[#00ff88]/60 mb-1">II Preferencial ${brTax.curYear}</div><div class="text-sm font-mono font-semibold text-[#00ff88]">${(brTax.effectiveII*100).toFixed(1)}%</div></div>
+        <div><div class="text-[9px] text-gray-500 mb-1">II MFN (s/ acordo)</div><div class="text-sm font-mono font-semibold text-gray-400">${(brTax.mfnII*100).toFixed(1)}%</div></div>
+        <div><div class="text-[9px] text-[#00ff88]/60 mb-1">Poupança II</div><div class="text-sm font-mono font-semibold text-[#00ff88]">${fc(savings)}</div></div>
+        <div><div class="text-[9px] text-[#00ff88]/60 mb-1">0% em</div><div class="text-sm font-mono font-semibold text-[#00ff88]">${yearsLeft>0?yearsLeft+' anos (2036)':'JÁ! 🎉'}</div></div>
+      </div>
+      <div class="text-[10px] text-[#00ff88]/30 mt-3">iTA provisório 1 Mai 2026 (OJ L 2026/184). Declaração de origem Anexo 3-C ou Certificado 3-D (transitório 5a). MaxNOM 50% EXW. Portaria SECEX 491-492/2026.</div>
+    </div>`;
   } else if(!isNonEUOrigin&&isEUDest&&!isBR){
     g.innerHTML+=`<div class="sm:col-span-2 rounded-xl border border-[#5eb5ff]/15 bg-[#5eb5ff]/[.04] p-3 text-center">
       <div class="text-[10px] text-[#5eb5ff]/70">Intracomunitário (UE-UE): IVA reverse charge, efeito zero. Sem alfândega.</div>
@@ -922,8 +957,15 @@ function calcInternational(){
     if(docFee>0)dr("Documentação (BL+EUR.1+cert.)",fc(docFee));
   } else if(isBR){
     ds("Tributos Brasil");
+    if(brTax.isEUOrigin){
+      dtl+=`<div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-[#1db854]/10 border border-[#1db854]/20 mb-2">
+        <span class="text-sm">🇪🇺</span>
+        <span class="text-[11px] text-[#00ff88]">Mercosul-UE: II ${(brTax.effectiveII*100).toFixed(1)}% preferencial (MFN ${(brTax.mfnII*100).toFixed(1)}%) — poupança ${fc(brTax.vII_mfn-brTax.vII)}</span>
+      </div>`;
+    }
     dr("FOB",fc(fob));dr("CIF",fc(cif));
-    dr(`II (${((c.taxII||0)*100).toFixed(1)}%)`,fc(brTax.vII));
+    dr(`II (${(brTax.effectiveII*100).toFixed(1)}%${brTax.isEUOrigin?' pref. Mercosul-UE':''})`,fc(brTax.vII));
+    if(brTax.isEUOrigin)dtl+=`<div class="text-[10px] text-gray-600 -mt-0.5 mb-1">NCM 9406.90.20 Cat.10 — ${(brTax.mfnII*100).toFixed(0)}%→0% linear 2026-2036. Prova de origem obrigatória.</div>`;
     if(brTax.vIPI>0)dr("IPI",fc(brTax.vIPI));
     dr(`PIS (${((c.taxPIS||0)*100).toFixed(1)}%)`,fc(brTax.vPIS));
     dr(`COFINS (${((c.taxCOFINS||0)*100).toFixed(1)}%)`,fc(brTax.vCOF));
