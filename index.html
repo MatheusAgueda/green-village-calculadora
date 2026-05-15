@@ -272,6 +272,14 @@ select{
 .cat-plink{color:#fff;text-decoration:none;font-weight:600;transition:color .2s}
 .cat-plink:hover{color:#5eb5ff;text-decoration:underline}
 .cat-desc{font-size:10px;color:rgba(156,163,175,.45);margin-top:2px;max-width:280px;line-height:1.3}
+.cat-prod-cell{display:flex;align-items:center;gap:10px}
+.cat-thumb{width:72px;height:54px;object-fit:cover;border-radius:6px;flex-shrink:0;background:#1a1a2e;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:transform .25s,box-shadow .25s}
+.cat-thumb:hover{transform:scale(1.08);box-shadow:0 4px 16px rgba(0,0,0,.45)}
+.cat-thumb-wrap{position:relative;flex-shrink:0}
+.cat-thumb-zoom{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:rgba(0,0,0,.85);align-items:center;justify-content:center;cursor:zoom-out}
+.cat-thumb-zoom.active{display:flex}
+.cat-thumb-zoom img{max-width:90vw;max-height:90vh;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.cat-prod-info{min-width:0}
 .cat-bv{color:#1db854;font-size:10px;font-weight:700}
 .cat-ba{color:#a78bfa;font-size:10px;font-weight:700;padding:0 3px;border:1px solid rgba(167,139,250,.3);border-radius:3px}
 .cat-bo{font-size:7px;padding:1px 5px;border-radius:3px;background:rgba(251,191,36,.15);color:#fbbf24;font-weight:700;letter-spacing:.5px;vertical-align:middle}
@@ -3095,6 +3103,28 @@ const CAT_PRODUCTS=[
    url:'https://www.conrayn.net/prefab-house/folding-container-house/plug-and-play-smart-living-the-convenience-of.html'}
 ];
 
+const CAT_IMG_MAP={
+  'https://www.conrayn.net/prefab-pod/10ft-fast-food-mini-mobile-container-houses.html':'https://www.conrayn.net/uploads/29704/10ft-fast-food-mini-mobile-container-houses0576a.png',
+  'https://www.conrayn.net/prefab-house/folding-container-house/expandable-mobile-homes.html':'https://www.conrayn.net/uploads/29704/20ft-foleing-container-house676c0.jpg',
+  'https://www.conrayn.net/prefab-house/folding-container-house/revolutionary-space-solution-one-click.html':'https://www.conrayn.net/uploads/29704/revolutionary-space-solution-one-click7ae10.png',
+  'https://www.conrayn.net/prefab-house/folding-container-house/40ft-house-with-luxury-design-with-3-bedroom.html':'https://www.conrayn.net/uploads/29704/20ft-house-with-luxury-design-with-2-bedroomc6913.png',
+  'https://www.conrayn.net/prefab-house/folding-container-house/expandable-prefab-container-house-premium.html':'https://www.conrayn.net/uploads/29704/expandable-prefab-container-house-premium39982.png',
+  'https://www.conrayn.net/shipping-container-for-living/double-wings-expndable-container-house.html':'https://www.conrayn.net/uploads/29704/double-wings-expndable-container-house61d62.jpg',
+  'https://www.conrayn.net/shipping-container-for-living/expandable-double-winged-container-house.html':'https://www.conrayn.net/uploads/29704/expandable-double-winged-container-house732e8.jpg',
+  'https://www.conrayn.net/modular-homes/expandable-prefabricated-modular-folding1.html':'https://www.conrayn.net/uploads/29704/expandable-prefabricated-modular-folding17e719.jpg',
+  'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule-hotel.html':'https://www.conrayn.net/uploads/29704/sailing-capsule-hotel614c5.jpg',
+  'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule.html':'https://www.conrayn.net/uploads/29704/sailing-capsule20490.jpg',
+  'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html':'https://www.conrayn.net/uploads/29704/prefab-capsule-cabin-movable-hotel-cabin98c1e.jpg',
+  'https://www.conrayn.net/shipping-container-for-living/conrayn-eco-friendly-container-housing.html':'https://www.conrayn.net/uploads/29704/conrayn-eco-friendly-container-housing6e19c.webp',
+  'https://www.conrayn.net/prefab-pod/u-shaped-luxury-mobile-house-prefabricated.html':'https://www.conrayn.net/uploads/29704/u-shape-outdoor-rotating-room-mobile-housecdc94.jpg',
+  'https://www.conrayn.net/modular-homes/apple-cabin-mobile-homestay-outdoor-activity.html':'https://www.conrayn.net/uploads/29704/11-6-metre-modern-office-poda03c9.jpg',
+  'https://www.conrayn.net/modular-pods/move-pod-garden-office-pod-2800mm-length.html':'https://www.conrayn.net/uploads/202429704/move-pod-garden-office-pod-2800mm-length7a83ba45-5ece-4492-b785-91e0b534574d.jpg',
+  'https://www.conrayn.net/modular-pods/flat-packed-garden-office-pod.html':'https://www.conrayn.net/uploads/202329704/flat-packed-garden-office-pod97134d90-3a25-48a1-84c6-374593f06c70.jpg',
+  'https://www.conrayn.net/prefab-pod/prefab-living-pod/capsule-tiny-homes-by-conrayn-redefining.html':'https://www.conrayn.net/uploads/29704/capsule-tiny-homes-by-conrayn-redefining22fa7.jpg',
+  'https://www.conrayn.net/prefab-pod/spacehousepod-house.html':'https://www.conrayn.net/uploads/29704/modern-prefab-maisonette-space-capsule38d44.png',
+  'https://www.conrayn.net/prefab-house/folding-container-house/plug-and-play-smart-living-the-convenience-of.html':'https://www.conrayn.net/uploads/29704/plug-and-play-smart-living-the-convenience-ofcdeb7.png'
+};
+
 const FOLD_UPGRADES=[
   {id:'carved',label:'Carved Panels',usd:1085},
   {id:'spc',label:'SPC Flooring',usd:900},
@@ -3286,7 +3316,9 @@ function renderCatalog(){
     const rc=p.pending?'cat-row cat-row-pend':p.approx?'cat-row cat-row-approx':p.other?'cat-row cat-row-alt':'cat-row cat-row-ok';
     const badge=p.verified?'<span class="cat-bv" title="Preço verificado">✓</span> ':p.approx?'<span class="cat-ba" title="Estimativa">~</span> ':p.other?'<span class="cat-bo">OUTRO</span> ':'';
     html+='<tr class="'+rc+'" data-cat="'+p.cat+'">';
-    html+='<td class="cat-td"><a href="'+p.url+'" target="_blank" rel="noopener" class="cat-plink">'+badge+p.name+'</a><div class="cat-desc">'+p.desc+'</div></td>';
+    const imgSrc=CAT_IMG_MAP[p.url]||'';
+    const thumbHtml=imgSrc?'<img class="cat-thumb" src="'+imgSrc+'" alt="'+p.name+'" loading="lazy" onclick="event.stopPropagation();GV.zoomImg(this.src)">':'';
+    html+='<td class="cat-td"><div class="cat-prod-cell">'+thumbHtml+'<div class="cat-prod-info"><a href="'+p.url+'" target="_blank" rel="noopener" class="cat-plink">'+badge+p.name+'</a><div class="cat-desc">'+p.desc+'</div></div></div></td>';
     html+='<td class="cat-td cat-c">'+p.size+'</td>';
     html+='<td class="cat-td cat-c">'+p.container+'</td>';
     if(hasPx){
@@ -3394,11 +3426,27 @@ function initCatalog(){
 }
 
 // ============================================================
+// Zoom overlay for product thumbnails
+function zoomImg(src){
+  let ov=document.getElementById('cat-zoom-overlay');
+  if(!ov){
+    ov=document.createElement('div');
+    ov.id='cat-zoom-overlay';
+    ov.className='cat-thumb-zoom';
+    ov.innerHTML='<img>';
+    ov.addEventListener('click',function(){ov.classList.remove('active')});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape')ov.classList.remove('active')});
+    document.body.appendChild(ov);
+  }
+  ov.querySelector('img').src=src;
+  ov.classList.add('active');
+}
+// ============================================================
 
 return{switchTab,calcInternational,applySettings,fetchRates,exportPDF,init,
   updateTierPreview,onOriginChange,onRouteChange,autoSelectCurrency,showRouteNote,copyIntl,addRoute,removeOrigin,addOrigin,addNewCountry,exportJSON,importJSON,
   marSel,marClose,marFilterRec,marFilterDest,marFilterOrig,marFilterType,
-  recalcCatalog,filterCatalog,recalcManju,recalcFolding,initCatalog};
+  recalcCatalog,filterCatalog,recalcManju,recalcFolding,initCatalog,zoomImg};
 })();
 window.addEventListener('DOMContentLoaded',GV.init);
 </script>
