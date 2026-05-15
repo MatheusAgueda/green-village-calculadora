@@ -3002,12 +3002,15 @@ const CAT_PRODUCTS=[
   // ══════════════════════════════════════════════════════
   {id:'gar3x9',name:'Garage 3×9m (27 m²)',desc:'3D Metal, roller shutter eléctrico. 11/40HQ.',cat:'garage',size:'3×9m',
    exw:5858,freight:291,container:'11×40HQ',verified:true,
+   img:'images/garage-small.jpeg',
    url:'https://www.conrayn.net/prefab-pod/motorcycle-showroom-garage-house-design.html'},
   {id:'gar3x12',name:'Garage 3×11.8m (35 m²)',desc:'3D Metal, roller shutter eléctrico. 9/40HQ.',cat:'garage',size:'3×11.8m',
    exw:7650,freight:462,container:'9×40HQ',verified:true,
+   img:'images/garage-small.jpeg',
    url:'https://www.conrayn.net/prefab-pod/motorcycle-showroom-garage-house-design.html'},
   {id:'gar9x9',name:'Garage 9×9m (81 m²)',desc:'3D Metal, roller shutter. Duplo. 5/40HQ.',cat:'garage',size:'9×9m',
    exw:13150,freight:850,container:'5×40HQ',verified:true,
+   img:'images/garage-large.jpeg',
    url:'https://www.conrayn.net/prefab-pod/motorcycle-showroom-garage-house-design.html'},
 
   // ══════════════════════════════════════════════════════
@@ -3078,21 +3081,27 @@ const CAT_PRODUCTS=[
   // ══════════════════════════════════════════════════════
   {id:'carbonXS',name:'Carbon Fiber XS (2.15m)',desc:'Mini cabine fibra carbono. Quiosque/sentinela.',cat:'carbon',size:'2.15m',
    exw:5335,freight:1075,container:'4×40HQ',verified:true,
+   img:'images/carbon-xs.jpeg',
    url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
   {id:'carbonSOff',name:'Carbon Fiber S Office (2.8m)',desc:'Office pod fibra carbono.',cat:'carbon',size:'2.8m',
    exw:6001,freight:1075,container:'4×40HQ',verified:true,
+   img:'images/carbon-s-office.jpeg',
    url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
   {id:'carbonSRes',name:'Carbon Fiber S Residential (2.8m)',desc:'Pod residencial fibra carbono.',cat:'carbon',size:'2.8m',
    exw:7265,freight:1075,container:'4×40HQ',verified:true,
+   img:'images/carbon-s-res.jpeg',
    url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
   {id:'carbonXM',name:'Carbon Fiber XM (3.8m)',desc:'Tamanho médio fibra carbono.',cat:'carbon',size:'3.8m',
    exw:8910,freight:2150,container:'2×40HQ',verified:true,
+   img:'images/carbon-xm.jpeg',
    url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
   {id:'carbonL',name:'Carbon Fiber L (5.8m)',desc:'Grande. Alternativa ao Manju.',cat:'carbon',size:'5.8m',
    exw:14080,freight:2230,container:'2×40HQ',verified:true,
+   img:'images/carbon-l.jpeg',
    url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
   {id:'carbonXL',name:'Carbon Fiber XL (11.6m)',desc:'Duplo módulo. Máximo fibra carbono.',cat:'carbon',size:'11.6m',
    exw:24200,freight:4300,container:'40HQ',verified:true,
+   img:'images/carbon-xl.jpeg',
    url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
 
   // ══════════════════════════════════════════════════════
@@ -3325,7 +3334,7 @@ function renderCatalog(){
     const rc=p.pending?'cat-row cat-row-pend':p.approx?'cat-row cat-row-approx':p.other?'cat-row cat-row-alt':'cat-row cat-row-ok';
     const badge=p.verified?'<span class="cat-bv" title="Preço verificado">✓</span> ':p.approx?'<span class="cat-ba" title="Estimativa">~</span> ':p.other?'<span class="cat-bo">OUTRO</span> ':'';
     html+='<tr class="'+rc+'" data-cat="'+p.cat+'">';
-    const imgSrc=CAT_IMG_MAP[p.url]||'';
+    const imgSrc=p.img||CAT_IMG_MAP[p.url]||'';
     const thumbHtml=imgSrc?'<img class="cat-thumb" src="'+imgSrc+'" alt="'+p.name+'" loading="lazy" onclick="event.stopPropagation();GV.zoomImg(this.src)">':'';
     html+='<td class="cat-td"><div class="cat-prod-cell">'+thumbHtml+'<div class="cat-prod-info"><a href="'+p.url+'" target="_blank" rel="noopener" class="cat-plink">'+badge+p.name+'</a><div class="cat-desc">'+p.desc+'</div></div></div></td>';
     html+='<td class="cat-td cat-c">'+p.size+'</td>';
