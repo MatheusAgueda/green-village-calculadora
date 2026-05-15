@@ -241,22 +241,29 @@ select{
 @media print{body{background:#fff!important;color:#000!important}}
 
 /* === CATALOG TAB === */
-.cat-card{background:linear-gradient(135deg,rgba(17,26,46,.8),rgba(12,18,32,.9));border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);position:relative}
-.cat-card:hover{border-color:rgba(255,255,255,.12);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
-.cat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
-.cat-img{width:100%;height:180px;object-fit:cover;border-bottom:1px solid rgba(255,255,255,.06);background:linear-gradient(135deg,rgba(17,26,46,.5),rgba(6,10,18,.8))}
-.cat-img-placeholder{width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,rgba(17,26,46,.5),rgba(6,10,18,.8));border-bottom:1px solid rgba(255,255,255,.06)}
-.cat-body{padding:16px}
-.cat-tag{display:inline-block;font-size:8px;padding:2px 8px;border-radius:4px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-right:4px}
-.cat-tag-price{background:rgba(29,184,84,.1);color:#1db854;border:1px solid rgba(29,184,84,.2)}
-.cat-tag-pending{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
-.cat-tag-cat{background:rgba(94,181,255,.08);color:#5eb5ff;border:1px solid rgba(94,181,255,.15)}
-.cat-price-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03)}
-.cat-price-row:last-child{border-bottom:none}
-.cat-price-label{font-size:10px;color:rgba(156,163,175,.5);text-transform:uppercase;letter-spacing:.5px}
-.cat-price-val{font-family:'Space Mono',monospace;font-weight:700;font-size:14px}
-.cat-link{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:#5eb5ff;text-decoration:none;transition:color .2s;margin-top:8px}
-.cat-link:hover{color:#88ccff}
+/* === CATALOG TABLE === */
+.cat-table{border-collapse:separate;border-spacing:0;font-size:12px;color:rgba(255,255,255,.85)}
+.cat-header{background:rgba(29,184,84,.06)}
+.cat-th{padding:10px 12px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:rgba(94,181,255,.7);border-bottom:2px solid rgba(94,181,255,.12);white-space:nowrap}
+.cat-row{transition:background .15s}
+.cat-row:hover{background:rgba(29,184,84,.04)}
+.cat-row-ok{background:rgba(29,184,84,.02)}
+.cat-row-pend{opacity:.65}
+.cat-row-alt{background:rgba(251,191,36,.03)}
+.cat-row-approx{background:rgba(167,139,250,.02)}
+.cat-td{padding:8px 12px;vertical-align:top;border-bottom:1px solid rgba(255,255,255,.04)}
+.cat-c{text-align:center}
+.cat-r{text-align:right}
+.cat-m{font-family:'Space Mono',monospace;font-weight:600;font-size:12px}
+.cat-g{color:#1db854}
+.cat-b{color:#5eb5ff}
+.cat-pend{color:#fbbf24;font-size:11px;font-style:italic;text-align:center}
+.cat-plink{color:#fff;text-decoration:none;font-weight:600;transition:color .2s}
+.cat-plink:hover{color:#5eb5ff;text-decoration:underline}
+.cat-desc{font-size:10px;color:rgba(156,163,175,.5);margin-top:2px;max-width:320px}
+.cat-bv{color:#1db854;font-size:11px;font-weight:700}
+.cat-ba{color:#a78bfa;font-size:11px;font-weight:700;padding:0 3px;border:1px solid rgba(167,139,250,.3);border-radius:3px}
+.cat-bo{font-size:7px;padding:1px 5px;border-radius:3px;background:rgba(251,191,36,.15);color:#fbbf24;font-weight:700;letter-spacing:.5px;vertical-align:middle}
 .cat-filter{padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.06);background:rgba(6,10,18,.5);color:rgba(156,163,175,.6);font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
 .cat-filter:hover{border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.7)}
 .cat-filter.active{border-color:rgba(29,184,84,.4);color:#22dd66;background:rgba(29,184,84,.08)}
@@ -587,21 +594,47 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   <div class="flex flex-wrap items-center gap-2">
     <span class="text-[9px] uppercase tracking-[.2em] text-gray-500 font-bold mr-2">Filtro</span>
     <button onclick="GV.filterCatalog('all')" class="cat-filter active" data-cat="all">Todos</button>
-    <button onclick="GV.filterCatalog('expandable')" class="cat-filter" data-cat="expandable">Expansíveis</button>
+    <button onclick="GV.filterCatalog('expandable')" class="cat-filter" data-cat="expandable">Expansiveis</button>
     <button onclick="GV.filterCatalog('folding')" class="cat-filter" data-cat="folding">Folding</button>
-    <button onclick="GV.filterCatalog('sailhouse')" class="cat-filter" data-cat="sailhouse">PC Sailhouse</button>
-    <button onclick="GV.filterCatalog('manju')" class="cat-filter" data-cat="manju">Manju 5.8m</button>
-    <button onclick="GV.filterCatalog('small')" class="cat-filter" data-cat="small">Unidades Pequenas</button>
-    <button onclick="GV.filterCatalog('boathouse')" class="cat-filter" data-cat="boathouse">Boat-House</button>
-    <button onclick="GV.filterCatalog('capsule')" class="cat-filter" data-cat="capsule">Capsule</button>
+    <button onclick="GV.filterCatalog('sailhouse')" class="cat-filter" data-cat="sailhouse">Sailhouse</button>
+    <button onclick="GV.filterCatalog('manju')" class="cat-filter" data-cat="manju">Manju</button>
     <button onclick="GV.filterCatalog('apple')" class="cat-filter" data-cat="apple">Apple Cabin</button>
+    <button onclick="GV.filterCatalog('capsule')" class="cat-filter" data-cat="capsule">Capsule</button>
+    <button onclick="GV.filterCatalog('pod')" class="cat-filter" data-cat="pod">Mobile Pod</button>
+    <button onclick="GV.filterCatalog('small')" class="cat-filter" data-cat="small">Pequenas</button>
+    <button onclick="GV.filterCatalog('boathouse')" class="cat-filter" data-cat="boathouse">Boat-House</button>
     <button onclick="GV.filterCatalog('container')" class="cat-filter" data-cat="container">Container</button>
-    <button onclick="GV.filterCatalog('pending')" class="cat-filter" data-cat="pending">Preço Pendente</button>
+    <button onclick="GV.filterCatalog('pending')" class="cat-filter" data-cat="pending">Pendentes</button>
   </div>
 </div>
 
-<!-- Product grid -->
-<div id="cat-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mb-5"></div>
+<!-- Product table -->
+<div class="glass rounded-3xl p-5 glow-card mb-5">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-sm font-display font-bold text-white tracking-tight">Tabela de Produtos <span id="cat-count" class="text-[10px] text-gray-500 font-normal ml-2"></span></h3>
+    <div class="flex gap-3 text-[8px] uppercase tracking-wider text-gray-500">
+      <span class="flex items-center gap-1"><span style="color:#1db854">&#9679;</span> Verificado</span>
+      <span class="flex items-center gap-1"><span style="color:#fbbf24">&#9679;</span> Pendente</span>
+      <span class="flex items-center gap-1"><span style="color:#a78bfa">&#9679;</span> Aproximado</span>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="cat-table w-full">
+      <thead>
+        <tr class="cat-header">
+          <th class="cat-th text-left" style="min-width:240px">Produto</th>
+          <th class="cat-th cat-c">Tam.</th>
+          <th class="cat-th cat-c">Cont.</th>
+          <th class="cat-th cat-r">EXW USD</th>
+          <th class="cat-th cat-r">PT Net EUR</th>
+          <th class="cat-th cat-r">PT Desemb EUR</th>
+          <th class="cat-th cat-r">BR Landed BRL</th>
+        </tr>
+      </thead>
+      <tbody id="cat-tbody"></tbody>
+    </table>
+  </div>
+</div>
 
 <!-- Manju Configurator -->
 <div id="cat-manju-cfg" class="glass rounded-3xl p-5 glow-card mb-5">
@@ -632,6 +665,23 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">EXW c/ upgrades:</span> $<span id="fold_exw">9520</span></div>
     <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">PT Net:</span> €<span id="fold_pt">0</span></div>
     <div class="result-card px-4 py-2 text-sm"><span class="text-gray-400">BR Landed:</span> R$<span id="fold_br">0</span></div>
+  </div>
+</div>
+
+<!-- Insulation Upgrades Reference -->
+<div class="glass rounded-3xl p-5 glow-card mb-5">
+  <h3 class="text-sm font-display font-bold text-white tracking-tight mb-3">Upgrades Isolamento — Delta sobre 65mm EPS standard</h3>
+  <p class="text-[10px] text-gray-400 mb-3">Valores adicionais ao preco base. Aplicar sobre qualquer modelo expansivel.</p>
+  <div class="overflow-x-auto">
+    <table class="w-full text-xs">
+      <thead><tr class="text-[9px] uppercase tracking-[.15em] text-gray-500 border-b border-white/[.06]">
+        <th class="text-left py-2 px-2">Upgrade</th><th class="text-right py-2 px-2">10ft</th><th class="text-right py-2 px-2">20ft</th><th class="text-right py-2 px-2">30ft</th><th class="text-right py-2 px-2">40ft</th>
+      </tr></thead>
+      <tbody class="text-gray-300">
+        <tr class="border-b border-white/[.04]"><td class="py-1.5 px-2">100mm EPS</td><td class="py-1.5 px-2 text-right text-[#5eb5ff]">+$380</td><td class="py-1.5 px-2 text-right text-[#5eb5ff]">+$680</td><td class="py-1.5 px-2 text-right text-[#5eb5ff]">+$980</td><td class="py-1.5 px-2 text-right text-[#5eb5ff]">+$1,280</td></tr>
+        <tr><td class="py-1.5 px-2">100mm Rock Wool</td><td class="py-1.5 px-2 text-right text-[#5eb5ff]">+$520</td><td class="py-1.5 px-2 text-right text-[#5eb5ff]">+$920</td><td class="py-1.5 px-2 text-right text-[#5eb5ff]">+$1,320</td><td class="py-1.5 px-2 text-right text-[#5eb5ff]">+$1,720</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -2788,111 +2838,113 @@ function init(){
 const CAT_PRODUCTS=[
   // === EXPANDABLE HOMES ===
   {id:'exp20std',name:'20ft Standard Expandable',desc:'2 quartos, cozinha em L, WC. Estrutura aço galvanizado.',cat:'expandable',size:'20ft',
-   exw:6644,freight:2150,container:'20ft',
-   img:'https://www.conrayn.net/uploads/29704/20ft-foleing-container-house676c0.jpg',
+   exw:6644,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/prefab-house/folding-container-house/expandable-mobile-homes.html'},
   {id:'exp20up',name:'20ft Upgraded Expandable',desc:'Painéis 3D, janelas alumínio com corte térmico, porta segurança.',cat:'expandable',size:'20ft',
-   exw:8294,freight:2150,container:'20ft',
-   img:'https://www.conrayn.net/uploads/29704/expandable-prefab-container-house-premium39982.png',
+   exw:8294,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/prefab-house/folding-container-house/expandable-prefab-container-house-premium.html'},
   {id:'exp40std',name:'40ft Standard Expandable',desc:'3 quartos, 2 WC. Máximo espaço por contentor.',cat:'expandable',size:'40ft',
-   exw:11150,freight:4300,container:'40HQ',
-   img:'https://www.conrayn.net/uploads/29704/20ft-house-with-luxury-design-with-2-bedroomc6913.png',
+   exw:11150,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/prefab-house/folding-container-house/40ft-house-with-luxury-design-with-3-bedroom.html'},
   {id:'exp40up',name:'40ft Upgraded (GreenVMH PI Spec)',desc:'PI 2026-03-31. Painéis 3D, corte térmico, porta segurança, terraço.',cat:'expandable',size:'40ft',
-   exw:18711,freight:4300,container:'40HQ',
-   img:'https://www.conrayn.net/uploads/29704/20ft-house-with-luxury-design-with-2-bedroomc6913.png',
+   exw:18711,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/prefab-house/folding-container-house/40ft-house-with-luxury-design-with-3-bedroom.html'},
   {id:'exp20dw',name:'20ft Double-Wing Expandable',desc:'Expansão dupla lateral. 2 quartos amplos.',cat:'expandable',size:'20ft',
-   exw:12857,freight:2150,container:'20ft',
-   img:'https://www.conrayn.net/uploads/29704/double-wings-expndable-container-house61d62.jpg',
+   exw:12857,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/shipping-container-for-living/double-wings-expndable-container-house.html'},
   {id:'exp40dw',name:'40ft Double-Wing Expandable',desc:'Expansão dupla. 3+ quartos, terraço possível.',cat:'expandable',size:'40ft',
-   exw:22856,freight:4300,container:'40HQ',
-   img:'https://www.conrayn.net/uploads/29704/expandable-double-winged-container-house732e8.jpg',
+   exw:22856,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/shipping-container-for-living/expandable-double-winged-container-house.html'},
+  {id:'exp10',name:'10ft Expandable',desc:'Mini expansível — preço em cotação PDF não extraída.',cat:'expandable',size:'10ft',
+   exw:0,freight:2150,container:'20ft',pending:true,
+   url:'https://www.conrayn.net/prefab-pod/10ft-fast-food-mini-mobile-container-houses.html'},
+  {id:'exp30',name:'30ft Expandable',desc:'Expansível 30ft — preço em cotação PDF não extraída.',cat:'expandable',size:'30ft',
+   exw:0,freight:4300,container:'40HQ',pending:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/revolutionary-space-solution-one-click.html'},
+  {id:'exp700',name:'700mm Expandable',desc:'Micro expansível — preço em cotação PDF não extraída.',cat:'expandable',size:'700mm',
+   exw:0,freight:2150,container:'20ft',pending:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/plug-and-play-smart-living-the-convenience-of.html'},
 
   // === FOLDING HOUSES ===
-  {id:'fold40dw',name:'40ft Double-Wing Folding',desc:'1BR+1LR. Base para upgrades. Montagem rápida.',cat:'folding',size:'40ft',
-   exw:9520,freight:4300,container:'40HQ',
-   img:'https://www.conrayn.net/uploads/29704/expandable-prefabricated-modular-folding17e719.jpg',
+  {id:'fold40dw',name:'40ft Double-Wing Folding',desc:'1BR+1LR. Base para upgrades. Montagem rápida. Out 2025.',cat:'folding',size:'40ft',
+   exw:9520,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/modular-homes/expandable-prefabricated-modular-folding1.html'},
 
   // === PC SAILHOUSE ===
   {id:'sail20',name:'PC Sailhouse M1 (20ft)',desc:'Design náutico. Estrutura leve. Ideal glamping.',cat:'sailhouse',size:'20ft',
-   exw:8200,freight:2150,container:'20ft',
-   img:'https://www.conrayn.net/uploads/29704/sailing-capsule-hotel614c5.jpg',
+   exw:8200,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule-hotel.html'},
   {id:'sail40',name:'PC Sailhouse M2 (40ft)',desc:'Versão grande. Suite + sala + WC.',cat:'sailhouse',size:'40ft',
-   exw:14500,freight:4300,container:'40HQ',
-   img:'https://www.conrayn.net/uploads/29704/sailing-capsule20490.jpg',
+   exw:14500,freight:4300,container:'40HQ',verified:true,
+   url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule.html'},
+  {id:'pcCabin',name:'PC Cabin (lista completa)',desc:'Preços em lista PDF não extraída — solicitar Jeremy.',cat:'sailhouse',size:'vários',
+   exw:0,freight:4300,container:'40HQ',pending:true,
    url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule.html'},
 
   // === OPEN-TOP CONTAINER ===
-  {id:'ot40',name:'40ft Open-Top Container',desc:'Para carga sobredimensionada. CIF Leixões verificado.',cat:'container',size:'40OT',
-   exw:27200,freight:8400,container:'40FR',
-   img:'https://www.conrayn.net/uploads/29704/conrayn-eco-friendly-container-housing6e19c.webp',
+  {id:'ot40',name:'40ft Open-Top Container',desc:'Carga sobredimensionada. CIF Leixões $37,135 verificado.',cat:'container',size:'40OT',
+   exw:27200,freight:8400,container:'40FR',verified:true,
+   url:'https://www.conrayn.net/shipping-container-for-living/conrayn-eco-friendly-container-housing.html'},
+  {id:'garage20',name:'Modular Garage 20ft',desc:'Garagem modular — preços em PDF não extraído (Dez 2025).',cat:'container',size:'20ft',
+   exw:0,freight:2150,container:'20ft',pending:true,
    url:'https://www.conrayn.net/shipping-container-for-living/conrayn-eco-friendly-container-housing.html'},
 
   // === MANJU 5.8m ===
   {id:'manju',name:'Manju 5.8m (Empty Shell)',desc:'L5.8×W3.5×H3.5m. 40FR OWOH. 2 sets/container. Configurável.',cat:'manju',size:'5.8m',
-   exw:16000,freight:8400,container:'40FR',
-   img:'https://www.conrayn.net/uploads/29704/u-shape-outdoor-rotating-room-mobile-housecdc94.jpg',
+   exw:16000,freight:8400,container:'40FR',verified:true,
+   url:'https://www.conrayn.net/prefab-pod/u-shaped-luxury-mobile-house-prefabricated.html'},
+  {id:'manjuBR',name:'Manju 5.8m (Versão Brasil)',desc:'Cotação específica Brasil. $11,100 EXW (WhatsApp Jeremy).',cat:'manju',size:'5.8m',
+   exw:11100,freight:8400,container:'40FR',verified:true,
    url:'https://www.conrayn.net/prefab-pod/u-shaped-luxury-mobile-house-prefabricated.html'},
 
+  // === APPLE CABIN ===
+  {id:'apple58',name:'Apple Cabin 5.8m',desc:'Apple Cabin c/ instalação. $15,200 EXW (WhatsApp Jeremy).',cat:'apple',size:'5.8m',
+   exw:15200,freight:4300,container:'40HQ',verified:true,
+   url:'https://www.conrayn.net/modular-homes/apple-cabin-mobile-homestay-outdoor-activity.html'},
+  {id:'apple6m',name:'Apple Cabin 6m/8m (por porto)',desc:'Cotação por porto destino — XLSX Abr 2026 não extraído.',cat:'apple',size:'6-8m',
+   exw:0,freight:4300,container:'40HQ',pending:true,
+   url:'https://www.conrayn.net/modular-homes/apple-cabin-mobile-homestay-outdoor-activity.html'},
+
   // === SMALL UNITS ===
-  {id:'unitA',name:'Unit A 3.8m',desc:'Micro-pod 3.8m. Ideal quiosque ou office.',cat:'small',size:'3.8m',
-   exw:8100,freight:2150,container:'20ft',
-   img:'https://www.conrayn.net/uploads/202429704/move-pod-garden-office-pod-2800mm-length7a83ba45-5ece-4492-b785-91e0b534574d.jpg',
+  {id:'unitA',name:'Unit A 3.8m',desc:'Micro-pod 3.8m. Ideal quiosque ou office. Dez 2025.',cat:'small',size:'3.8m',
+   exw:8100,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/modular-pods/move-pod-garden-office-pod-2800mm-length.html'},
-  {id:'unitB',name:'Unit B 3.8m',desc:'Micro-pod económico. Pod garden office.',cat:'small',size:'3.8m',
-   exw:5335,freight:2150,container:'20ft',
-   img:'https://www.conrayn.net/uploads/202329704/flat-packed-garden-office-pod97134d90-3a25-48a1-84c6-374593f06c70.jpg',
+  {id:'unitB',name:'Unit B 3.8m',desc:'Micro-pod económico. Pod garden office. Dez 2025.',cat:'small',size:'3.8m',
+   exw:5335,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/modular-pods/flat-packed-garden-office-pod.html'},
 
   // === LUXURY BOAT-HOUSE ===
-  {id:'boat20',name:'Luxury Boat-House 20ft',desc:'Design barco. Glamping premium.',cat:'boathouse',size:'20ft',
-   exw:12857,freight:2150,container:'20ft',
-   img:'https://www.conrayn.net/uploads/29704/sailing-capsule-hotel614c5.jpg',
+  {id:'boat20',name:'Luxury Boat-House 20ft',desc:'Design barco. Glamping premium. Ago 2025.',cat:'boathouse',size:'20ft',
+   exw:12857,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule-hotel.html'},
-  {id:'boat40',name:'Luxury Boat-House 40ft',desc:'Versão grande. Suite completa.',cat:'boathouse',size:'40ft',
-   exw:22856,freight:4300,container:'40HQ',
-   img:'https://www.conrayn.net/uploads/29704/sailing-capsule20490.jpg',
+  {id:'boat40',name:'Luxury Boat-House 40ft',desc:'Versão grande. Suite completa. Ago 2025.',cat:'boathouse',size:'40ft',
+   exw:22856,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule.html'},
 
-  // === PREÇO PENDENTE (PDF não extraído) ===
-  {id:'capsK5',name:'Capsule K5',desc:'Capsule House — preços em PDF não extraído (Aug 2025).',cat:'capsule',size:'capsule',
-   exw:0,freight:2150,container:'20ft',pending:true,
-   img:'https://www.conrayn.net/uploads/29704/capsule-tiny-homes-by-conrayn-redefining22fa7.jpg',
-   url:'https://www.conrayn.net/prefab-pod/prefab-living-pod/capsule-tiny-homes-by-conrayn-redefining.html'},
-  {id:'capsK7',name:'Capsule K7 — Standard Vision Pod',desc:'Vision Mobile Pod — preços em PDF não extraído (Jan 2026).',cat:'capsule',size:'capsule',
-   exw:0,freight:2150,container:'20ft',pending:true,
-   img:'https://www.conrayn.net/uploads/29704/prefab-capsule-cabin-movable-hotel-cabin98c1e.jpg',
+  // === CAPSULE ===
+  {id:'capsK7',name:'Capsule K7 — Standard Vision Pod',desc:'Estimativa ~$6,644 (ref. 20ft std). PDF não extraído Jan 2026.',cat:'capsule',size:'capsule',
+   exw:6644,freight:2150,container:'20ft',approx:true,
    url:'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html'},
-  {id:'carbon58',name:'Carbon Fiber Cabin 5.8m',desc:'Cabine fibra carbono — preços em PDF não extraído (Jan 2026).',cat:'capsule',size:'5.8m',
+  {id:'capsK5',name:'Capsule K5',desc:'Capsule House — preço em PDF não extraído (Ago 2025).',cat:'capsule',size:'capsule',
+   exw:0,freight:2150,container:'20ft',pending:true,
+   url:'https://www.conrayn.net/prefab-pod/prefab-living-pod/capsule-tiny-homes-by-conrayn-redefining.html'},
+  {id:'capsA70',name:'Capsule A70 (Glamni)',desc:'Fornecedor alternativo Glamni. $26,432 EXW.',cat:'capsule',size:'A70',
+   exw:26432,freight:4300,container:'40HQ',other:true,
+   url:'https://www.conrayn.net/prefab-pod/prefab-living-pod/capsule-tiny-homes-by-conrayn-redefining.html'},
+  {id:'carbon58',name:'Carbon Fiber Cabin 5.8m',desc:'Cabine fibra carbono — preço em PDF não extraído (Jan 2026).',cat:'capsule',size:'5.8m',
    exw:0,freight:8400,container:'40FR',pending:true,
-   img:'https://www.conrayn.net/uploads/29704/modern-prefab-maisonette-space-capsule38d44.png',
    url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
-  {id:'garage20',name:'Modular Garage 20ft',desc:'Garagem modular — preços em PDF não extraído (Dec 2025).',cat:'container',size:'20ft',
+
+  // === MOBILE POD ===
+  {id:'podStd',name:'Mobile Pod — Standard',desc:'3 tiers. Preços em PDF não extraído.',cat:'pod',size:'pod',
    exw:0,freight:2150,container:'20ft',pending:true,
-   img:'https://www.conrayn.net/uploads/29704/conrayn-eco-friendly-container-housing6e19c.webp',
-   url:'https://www.conrayn.net/shipping-container-for-living/conrayn-eco-friendly-container-housing.html'},
-  {id:'exp10',name:'10ft Expandable',desc:'Mini expansível — preço em cotação PDF.',cat:'expandable',size:'10ft',
+   url:'https://www.conrayn.net/modular-pods/move-pod-garden-office-pod-2800mm-length.html'},
+  {id:'podPrem',name:'Mobile Pod — Premium',desc:'Tier premium. Preços em PDF não extraído.',cat:'pod',size:'pod',
    exw:0,freight:2150,container:'20ft',pending:true,
-   img:'https://www.conrayn.net/uploads/29704/10ft-fast-food-mini-mobile-container-houses0576a.png',
-   url:'https://www.conrayn.net/prefab-pod/10ft-fast-food-mini-mobile-container-houses.html'},
-  {id:'exp30',name:'30ft Expandable',desc:'Expansível 30ft — preço em cotação PDF.',cat:'expandable',size:'30ft',
+   url:'https://www.conrayn.net/modular-pods/move-pod-garden-office-pod-2800mm-length.html'},
+  {id:'podHigh',name:'Mobile Pod — High-End',desc:'Tier high-end. Preços em PDF não extraído.',cat:'pod',size:'pod',
    exw:0,freight:4300,container:'40HQ',pending:true,
-   img:'https://www.conrayn.net/uploads/29704/revolutionary-space-solution-one-click7ae10.png',
-   url:'https://www.conrayn.net/prefab-house/folding-container-house/revolutionary-space-solution-one-click.html'},
-  {id:'exp700',name:'700mm Expandable',desc:'Micro expansível — preço em cotação PDF.',cat:'expandable',size:'700mm',
-   exw:0,freight:2150,container:'20ft',pending:true,
-   img:'https://www.conrayn.net/uploads/29704/plug-and-play-smart-living-the-convenience-ofcdeb7.png',
-   url:'https://www.conrayn.net/prefab-house/folding-container-house/plug-and-play-smart-living-the-convenience-of.html'},
-  {id:'apple6m',name:'Apple Cabin 6m/8m',desc:'Apple House — cotação por porto (Apr 2026 XLSX).',cat:'apple',size:'6-8m',
-   exw:0,freight:4300,container:'40HQ',pending:true,
-   img:'https://www.conrayn.net/uploads/29704/11-6-metre-modern-office-poda03c9.jpg',
-   url:'https://www.conrayn.net/modular-homes/apple-cabin-mobile-homestay-outdoor-activity.html'}
+   url:'https://www.conrayn.net/modular-pods/move-pod-garden-office-pod-2800mm-length.html'}
 ];
 
 const FOLD_UPGRADES=[
@@ -3051,38 +3103,34 @@ function catCalcBR(exw,freight){
 }
 
 function renderCatalog(){
-  const grid=$('cat-grid');
-  let html='';
+  const tbody=$('cat-tbody');
   const prods=catFilter==='all'?CAT_PRODUCTS:
     catFilter==='pending'?CAT_PRODUCTS.filter(p=>p.pending):
     CAT_PRODUCTS.filter(p=>p.cat===catFilter);
+  let html='';
   prods.forEach(p=>{
-    const pt=p.pending?null:catCalcPT(p.exw,p.freight);
-    const br=p.pending?null:catCalcBR(p.exw,p.freight);
-    html+='<div class="cat-card" data-cat="'+p.cat+'">';
-    html+='<div class="cat-img-wrap"><img class="cat-img" src="'+p.img+'" alt="'+p.name+'" loading="lazy" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22><rect fill=%22%23111%22 width=%22300%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23444%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2214%22>Sem imagem</text></svg>\'"></div>';
-    html+='<div class="cat-body">';
-    html+='<h4 class="text-sm font-bold text-white mb-1">'+p.name+'</h4>';
-    html+='<p class="text-[10px] text-gray-400 mb-2">'+p.desc+'</p>';
-    html+='<div class="flex flex-wrap gap-1 mb-2">';
-    html+='<span class="cat-tag-size">'+p.size+'</span>';
-    html+='<span class="cat-tag-container">'+p.container+'</span>';
-    if(p.pending) html+='<span class="cat-tag-pending">PRECO PENDENTE</span>';
-    html+='</div>';
-    if(!p.pending){
-      html+='<div class="space-y-1 mb-2">';
-      html+='<div class="flex justify-between text-[11px]"><span class="text-gray-500">EXW USD</span><span class="cat-price-exw">$'+p.exw.toLocaleString()+'</span></div>';
-      html+='<div class="flex justify-between text-[11px]"><span class="text-gray-500">PT Net</span><span class="cat-price-pt" data-id="'+p.id+'_pt">'+eur(pt.net)+'</span></div>';
-      html+='<div class="flex justify-between text-[11px]"><span class="text-gray-500">PT Desembolso</span><span class="cat-price-pt" data-id="'+p.id+'_ptd">'+eur(pt.desembolso)+'</span></div>';
-      html+='<div class="flex justify-between text-[11px]"><span class="text-gray-500">BR Landed</span><span class="cat-price-br" data-id="'+p.id+'_br">R$'+br.total.toLocaleString()+'</span></div>';
-      html+='</div>';
+    const hasPx=!p.pending&&p.exw>0;
+    const pt=hasPx?catCalcPT(p.exw,p.freight):null;
+    const br=hasPx?catCalcBR(p.exw,p.freight):null;
+    const rc=p.pending?'cat-row cat-row-pend':p.approx?'cat-row cat-row-approx':p.other?'cat-row cat-row-alt':'cat-row cat-row-ok';
+    const badge=p.verified?'<span class="cat-bv" title="Preço verificado">✓</span> ':p.approx?'<span class="cat-ba" title="Estimativa">~</span> ':p.other?'<span class="cat-bo">OUTRO</span> ':'';
+    html+='<tr class="'+rc+'" data-cat="'+p.cat+'">';
+    html+='<td class="cat-td"><a href="'+p.url+'" target="_blank" rel="noopener" class="cat-plink">'+badge+p.name+'</a><div class="cat-desc">'+p.desc+'</div></td>';
+    html+='<td class="cat-td cat-c">'+p.size+'</td>';
+    html+='<td class="cat-td cat-c">'+p.container+'</td>';
+    if(hasPx){
+      html+='<td class="cat-td cat-r cat-m cat-g">$'+p.exw.toLocaleString()+'</td>';
+      html+='<td class="cat-td cat-r cat-m">'+eur(pt.net)+'</td>';
+      html+='<td class="cat-td cat-r cat-m cat-b">'+eur(pt.desembolso)+'</td>';
+      html+='<td class="cat-td cat-r cat-m">R$'+br.total.toLocaleString()+'</td>';
     } else {
-      html+='<div class="text-center py-3"><span class="text-[11px] text-amber-400/80 italic">Solicitar precos a Jeremy via WhatsApp/email</span></div>';
+      html+='<td colspan="4" class="cat-pend">PENDENTE — solicitar Jeremy via WhatsApp/email</td>';
     }
-    html+='<a href="'+p.url+'" target="_blank" rel="noopener" class="cat-link">Ver em conrayn.net →</a>';
-    html+='</div></div>';
+    html+='</tr>';
   });
-  grid.innerHTML=html;
+  tbody.innerHTML=html;
+  const cnt=$('cat-count');
+  if(cnt) cnt.textContent=prods.length+' produto'+(prods.length!==1?'s':'');
 }
 
 function eur(v){return '€'+v.toLocaleString();}
