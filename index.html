@@ -609,13 +609,15 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
   <div class="flex flex-wrap items-center gap-2">
     <span class="text-[9px] uppercase tracking-[.2em] text-gray-500 font-bold mr-2">Filtro</span>
     <button onclick="GV.filterCatalog('all')" class="cat-filter active" data-cat="all">Todos</button>
-    <button onclick="GV.filterCatalog('expandable')" class="cat-filter" data-cat="expandable">Expansiveis</button>
+    <button onclick="GV.filterCatalog('expandable')" class="cat-filter" data-cat="expandable">Expansíveis</button>
     <button onclick="GV.filterCatalog('folding')" class="cat-filter" data-cat="folding">Folding</button>
     <button onclick="GV.filterCatalog('sailhouse')" class="cat-filter" data-cat="sailhouse">Sailhouse</button>
+    <button onclick="GV.filterCatalog('pcCabin')" class="cat-filter" data-cat="pcCabin">PC Cabin</button>
+    <button onclick="GV.filterCatalog('garage')" class="cat-filter" data-cat="garage">Garage</button>
     <button onclick="GV.filterCatalog('manju')" class="cat-filter" data-cat="manju">Manju</button>
     <button onclick="GV.filterCatalog('apple')" class="cat-filter" data-cat="apple">Apple Cabin</button>
     <button onclick="GV.filterCatalog('capsule')" class="cat-filter" data-cat="capsule">Capsule</button>
-    <button onclick="GV.filterCatalog('pod')" class="cat-filter" data-cat="pod">Mobile Pod</button>
+    <button onclick="GV.filterCatalog('carbon')" class="cat-filter" data-cat="carbon">Carbon Fiber</button>
     <button onclick="GV.filterCatalog('small')" class="cat-filter" data-cat="small">Pequenas</button>
     <button onclick="GV.filterCatalog('boathouse')" class="cat-filter" data-cat="boathouse">Boat-House</button>
     <button onclick="GV.filterCatalog('container')" class="cat-filter" data-cat="container">Container</button>
@@ -2867,115 +2869,230 @@ function init(){
 // ============================================================
 
 const CAT_PRODUCTS=[
-  // === EXPANDABLE HOMES ===
-  {id:'exp20std',name:'20ft Standard Expandable',desc:'2 quartos, cozinha em L, WC. Estrutura aço galvanizado.',cat:'expandable',size:'20ft',
-   exw:6644,freight:2150,container:'20ft',verified:true,
+  // ══════════════════════════════════════════════════════
+  // EXPANDABLE HOMES — STANDARD TIER (Color Steel)
+  // Source: Expandable Container Homes Price_List_2026.pdf
+  // ══════════════════════════════════════════════════════
+  {id:'exp10std',name:'10ft Expandable Standard',desc:'Mini expansível. Quiosque, office, studio. Color steel.',cat:'expandable',size:'10ft',
+   exw:5044,freight:1075,container:'4×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-pod/10ft-fast-food-mini-mobile-container-houses.html'},
+  {id:'exp20bare',name:'20ft Std Bare (sem WC/cozinha)',desc:'Shell sem acabamentos. Personalizar à medida.',cat:'expandable',size:'20ft',
+   exw:5198,freight:2150,container:'2×40HQ',verified:true,
    url:'https://www.conrayn.net/prefab-house/folding-container-house/expandable-mobile-homes.html'},
-  {id:'exp20up',name:'20ft Upgraded Expandable',desc:'Painéis 3D, janelas alumínio com corte térmico, porta segurança.',cat:'expandable',size:'20ft',
-   exw:8294,freight:2150,container:'20ft',verified:true,
+  {id:'exp20std',name:'20ft Expandable Standard',desc:'2 quartos, cozinha em L, WC. Aço galvanizado.',cat:'expandable',size:'20ft',
+   exw:6644,freight:2150,container:'2×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/expandable-mobile-homes.html'},
+  {id:'exp30std',name:'30ft Expandable Standard',desc:'Tamanho intermédio. 2-3 quartos. Color steel.',cat:'expandable',size:'30ft',
+   exw:9617,freight:4300,container:'1×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/revolutionary-space-solution-one-click.html'},
+  {id:'exp40std',name:'40ft Expandable Standard',desc:'3 quartos, 2 WC. Máximo espaço. Color steel.',cat:'expandable',size:'40ft',
+   exw:13256,freight:4300,container:'1×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/40ft-house-with-luxury-design-with-3-bedroom.html'},
+
+  // ══════════════════════════════════════════════════════
+  // EXPANDABLE — HIGH-SPEC (3D Metal + Thermal Break)
+  // Source: High-Spec Version Mobile_Pod_Price_List.pdf
+  // ══════════════════════════════════════════════════════
+  {id:'exp10hi',name:'10ft High-Spec',desc:'3D Metal exterior, janelas alumínio corte térmico.',cat:'expandable',size:'10ft',
+   exw:6806,freight:1075,container:'4×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-pod/10ft-fast-food-mini-mobile-container-houses.html'},
+  {id:'exp20hibare',name:'20ft High-Spec Bare',desc:'3D Metal + corte térmico. Shell sem WC/cozinha.',cat:'expandable',size:'20ft',
+   exw:6983,freight:2150,container:'2×40HQ',verified:true,
    url:'https://www.conrayn.net/prefab-house/folding-container-house/expandable-prefab-container-house-premium.html'},
-  {id:'exp40std',name:'40ft Standard Expandable',desc:'3 quartos, 2 WC. Máximo espaço por contentor.',cat:'expandable',size:'40ft',
-   exw:11150,freight:4300,container:'40HQ',verified:true,
+  {id:'exp20hi',name:'20ft High-Spec Full',desc:'3D Metal, corte térmico, WC, cozinha. Modelo promoção.',cat:'expandable',size:'20ft',
+   exw:11196,freight:2150,container:'2×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/expandable-prefab-container-house-premium.html'},
+  {id:'exp30hi',name:'30ft High-Spec',desc:'3D Metal, corte térmico, 30ft.',cat:'expandable',size:'30ft',
+   exw:14152,freight:4300,container:'1×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/revolutionary-space-solution-one-click.html'},
+  {id:'exp40hi',name:'40ft High-Spec',desc:'3D Metal, corte térmico, 3BR, 2WC. Modelo promoção.',cat:'expandable',size:'40ft',
+   exw:19125,freight:4300,container:'1×40HQ',verified:true,
    url:'https://www.conrayn.net/prefab-house/folding-container-house/40ft-house-with-luxury-design-with-3-bedroom.html'},
-  {id:'exp40up',name:'40ft Upgraded (GreenVMH PI Spec)',desc:'PI 2026-03-31. Painéis 3D, corte térmico, porta segurança, terraço.',cat:'expandable',size:'40ft',
-   exw:18711,freight:4300,container:'40HQ',verified:true,
+
+  // ══════════════════════════════════════════════════════
+  // EXPANDABLE — PREMIUM (3D Metal + Bamboo-Fiber Interior)
+  // Source: Premium Version Mobile_Pod_Price_List.pdf
+  // ══════════════════════════════════════════════════════
+  {id:'exp10prem',name:'10ft Premium',desc:'3D Metal + painel bambu-fibra interior. Topo de gama.',cat:'expandable',size:'10ft',
+   exw:7406,freight:1075,container:'4×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-pod/10ft-fast-food-mini-mobile-container-houses.html'},
+  {id:'exp20prembare',name:'20ft Premium Bare',desc:'Premium shell sem acabamentos interiores.',cat:'expandable',size:'20ft',
+   exw:7583,freight:2150,container:'2×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/expandable-prefab-container-house-premium.html'},
+  {id:'exp20prem',name:'20ft Premium Full',desc:'3D Metal + bambu-fibra, WC, cozinha. Máximo acabamento.',cat:'expandable',size:'20ft',
+   exw:12002,freight:2150,container:'2×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/expandable-prefab-container-house-premium.html'},
+  {id:'exp30prem',name:'30ft Premium',desc:'3D Metal + bambu-fibra, 30ft. Topo de gama.',cat:'expandable',size:'30ft',
+   exw:15152,freight:4300,container:'1×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/revolutionary-space-solution-one-click.html'},
+  {id:'exp40prem',name:'40ft Premium',desc:'3D Metal + bambu-fibra, 3BR, 2WC. Topo Conrayn.',cat:'expandable',size:'40ft',
+   exw:20332,freight:4300,container:'1×40HQ',verified:true,
    url:'https://www.conrayn.net/prefab-house/folding-container-house/40ft-house-with-luxury-design-with-3-bedroom.html'},
-  {id:'exp20dw',name:'20ft Double-Wing Expandable',desc:'Expansão dupla lateral. 2 quartos amplos.',cat:'expandable',size:'20ft',
+
+  // ══════════════════════════════════════════════════════
+  // EXPANDABLE — PI SPEC (GreenVMH custom)
+  // Source: PI 40FT 2026-03-31 + PI 2025-12-19
+  // ══════════════════════════════════════════════════════
+  {id:'exp40up',name:'40ft GreenVMH PI Spec',desc:'PI 2026-03-31. Base $14,216 + upgrades $4,495. Terraço.',cat:'expandable',size:'40ft',
+   exw:18711,freight:4300,container:'1×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/40ft-house-with-luxury-design-with-3-bedroom.html'},
+
+  // ══════════════════════════════════════════════════════
+  // DOUBLE-WING EXPANDABLE
+  // ══════════════════════════════════════════════════════
+  {id:'exp20dw',name:'20ft Double-Wing',desc:'Expansão dupla lateral. 2 quartos amplos.',cat:'expandable',size:'20ft',
    exw:12857,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/shipping-container-for-living/double-wings-expndable-container-house.html'},
-  {id:'exp40dw',name:'40ft Double-Wing Expandable',desc:'Expansão dupla. 3+ quartos, terraço possível.',cat:'expandable',size:'40ft',
+  {id:'exp40dw',name:'40ft Double-Wing',desc:'Expansão dupla. 3+ quartos, terraço.',cat:'expandable',size:'40ft',
    exw:22856,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/shipping-container-for-living/expandable-double-winged-container-house.html'},
-  {id:'exp10',name:'10ft Expandable',desc:'Mini expansível — preço em cotação PDF não extraída.',cat:'expandable',size:'10ft',
-   exw:0,freight:2150,container:'20ft',pending:true,
-   url:'https://www.conrayn.net/prefab-pod/10ft-fast-food-mini-mobile-container-houses.html'},
-  {id:'exp30',name:'30ft Expandable',desc:'Expansível 30ft — preço em cotação PDF não extraída.',cat:'expandable',size:'30ft',
-   exw:0,freight:4300,container:'40HQ',pending:true,
-   url:'https://www.conrayn.net/prefab-house/folding-container-house/revolutionary-space-solution-one-click.html'},
-  {id:'exp700',name:'700mm Expandable',desc:'Micro expansível — preço em cotação PDF não extraída.',cat:'expandable',size:'700mm',
-   exw:0,freight:2150,container:'20ft',pending:true,
-   url:'https://www.conrayn.net/prefab-house/folding-container-house/plug-and-play-smart-living-the-convenience-of.html'},
 
-  // === FOLDING HOUSES ===
-  {id:'fold40dw',name:'40ft Double-Wing Folding',desc:'1BR+1LR. Base para upgrades. Montagem rápida. Out 2025.',cat:'folding',size:'40ft',
+  // ══════════════════════════════════════════════════════
+  // FOLDING HOUSE
+  // ══════════════════════════════════════════════════════
+  {id:'fold40dw',name:'40ft Double-Wing Folding',desc:'1BR+1LR. Base para upgrades. Montagem rápida.',cat:'folding',size:'40ft',
    exw:9520,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/modular-homes/expandable-prefabricated-modular-folding1.html'},
 
-  // === PC SAILHOUSE ===
-  {id:'sail20',name:'PC Sailhouse M1 (20ft)',desc:'Design náutico. Estrutura leve. Ideal glamping.',cat:'sailhouse',size:'20ft',
-   exw:8200,freight:2150,container:'20ft',verified:true,
+  // ══════════════════════════════════════════════════════
+  // PC SAILHOUSE
+  // Source: Project Quotes XLSX 2026-03-16 (5 files confirmed)
+  // ══════════════════════════════════════════════════════
+  {id:'sail78',name:'PC Sailhouse S (7.8m)',desc:'L7.8×W3.6×H3.68m, 25.5 sqm. 10-12/40HQ. Glamping náutico.',cat:'sailhouse',size:'7.8m',
+   exw:7123,freight:430,container:'10×40HQ',verified:true,
    url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule-hotel.html'},
-  {id:'sail40',name:'PC Sailhouse M2 (40ft)',desc:'Versão grande. Suite + sala + WC.',cat:'sailhouse',size:'40ft',
-   exw:14500,freight:4300,container:'40HQ',verified:true,
-   url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule.html'},
-  {id:'pcCabin',name:'PC Cabin (lista completa)',desc:'Preços em lista PDF não extraída — solicitar Jeremy.',cat:'sailhouse',size:'vários',
-   exw:0,freight:4300,container:'40HQ',pending:true,
+  {id:'sail84',name:'PC Sailhouse L (8.4m)',desc:'L8.4×W3.6×H3.68m, 27.6 sqm. 1BR+1BA+Living.',cat:'sailhouse',size:'8.4m',
+   exw:7508,freight:430,container:'10×40HQ',verified:true,
    url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule.html'},
 
-  // === OPEN-TOP CONTAINER ===
-  {id:'ot40',name:'40ft Open-Top Container',desc:'Carga sobredimensionada. CIF Leixões $37,135 verificado.',cat:'container',size:'40OT',
+  // ══════════════════════════════════════════════════════
+  // PC CABIN (Geodesic Domes)
+  // Source: PC Cabin For Green Village 2026.xlsx (CIF S.Europe)
+  // ══════════════════════════════════════════════════════
+  {id:'pc35',name:'PC Cabin Φ3.5m',desc:'9.6 sqm, H2.7m. Glamping ideal. 50-70/40HQ.',cat:'pcCabin',size:'Φ3.5m',
+   exw:1556,freight:39,container:'60×40HQ',verified:true,
+   url:'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html'},
+  {id:'pc50',name:'PC Cabin Φ5.0m',desc:'H3.1m. Suite independente. 20-28/40HQ.',cat:'pcCabin',size:'Φ5.0m',
+   exw:2497,freight:107,container:'24×40HQ',verified:true,
+   url:'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html'},
+  {id:'pc60',name:'PC Cabin Φ6.0m',desc:'H3.5m. Dome grande. 14-18/40HQ.',cat:'pcCabin',size:'Φ6.0m',
+   exw:3540,freight:278,container:'16×40HQ',verified:true,
+   url:'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html'},
+  {id:'pc70',name:'PC Cabin Φ7.0m (XL)',desc:'H4.5m. Suite completa. Máximo. 8-10/40HQ.',cat:'pcCabin',size:'Φ7.0m',
+   exw:7673,freight:408,container:'9×40HQ',verified:true,
+   url:'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html'},
+  {id:'pc35bi',name:'PC Cabin Bi-Level Φ3.5+2.5m',desc:'Dome empilhado 2 pisos. Único. 40-60/40HQ.',cat:'pcCabin',size:'Φ3.5+2.5m',
+   exw:2891,freight:70,container:'50×40HQ',verified:true,
+   url:'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html'},
+  {id:'pd35x5',name:'Panoramic Dome 3.5×5m',desc:'Dome panorâmico elongado. Restaurante/eventos. 20-24/40HQ.',cat:'pcCabin',size:'3.5×5m',
+   exw:3657,freight:141,container:'22×40HQ',verified:true,
+   url:'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html'},
+
+  // ══════════════════════════════════════════════════════
+  // MODULAR GARAGE
+  // Source: Conrayn Modular Garage Price_List.pdf
+  // ══════════════════════════════════════════════════════
+  {id:'gar3x9',name:'Garage 3×9m (27 m²)',desc:'3D Metal, roller shutter eléctrico. 11/40HQ.',cat:'garage',size:'3×9m',
+   exw:5858,freight:291,container:'11×40HQ',verified:true,
+   url:'https://www.conrayn.net/shipping-container-for-living/conrayn-eco-friendly-container-housing.html'},
+  {id:'gar3x12',name:'Garage 3×11.8m (35 m²)',desc:'3D Metal, roller shutter eléctrico. 9/40HQ.',cat:'garage',size:'3×11.8m',
+   exw:7650,freight:462,container:'9×40HQ',verified:true,
+   url:'https://www.conrayn.net/shipping-container-for-living/conrayn-eco-friendly-container-housing.html'},
+  {id:'gar9x9',name:'Garage 9×9m (81 m²)',desc:'3D Metal, roller shutter. Duplo. 5/40HQ.',cat:'garage',size:'9×9m',
+   exw:13150,freight:850,container:'5×40HQ',verified:true,
+   url:'https://www.conrayn.net/shipping-container-for-living/conrayn-eco-friendly-container-housing.html'},
+
+  // ══════════════════════════════════════════════════════
+  // OPEN-TOP CONTAINER
+  // ══════════════════════════════════════════════════════
+  {id:'ot40',name:'40ft Open-Top Container',desc:'Carga sobredimensionada. CIF Leixões $37,135.',cat:'container',size:'40OT',
    exw:27200,freight:8400,container:'40FR',verified:true,
    url:'https://www.conrayn.net/shipping-container-for-living/conrayn-eco-friendly-container-housing.html'},
-  {id:'garage20',name:'Modular Garage 20ft',desc:'Garagem modular — preços em PDF não extraído (Dez 2025).',cat:'container',size:'20ft',
-   exw:0,freight:2150,container:'20ft',pending:true,
-   url:'https://www.conrayn.net/shipping-container-for-living/conrayn-eco-friendly-container-housing.html'},
 
-  // === MANJU 5.8m ===
-  {id:'manju',name:'Manju 5.8m (Empty Shell)',desc:'L5.8×W3.5×H3.5m. 40FR OWOH. 2 sets/container. Configurável.',cat:'manju',size:'5.8m',
+  // ══════════════════════════════════════════════════════
+  // MANJU 5.8m
+  // Source: MANJU Price CIF.pdf + WhatsApp Jeremy
+  // ══════════════════════════════════════════════════════
+  {id:'manju',name:'Manju 5.8m (Shell)',desc:'L5.8×W3.5×H3.5m. 40FR OWOH. 2 sets/container.',cat:'manju',size:'5.8m',
    exw:16000,freight:8400,container:'40FR',verified:true,
    url:'https://www.conrayn.net/prefab-pod/u-shaped-luxury-mobile-house-prefabricated.html'},
-  {id:'manjuBR',name:'Manju 5.8m (Versão Brasil)',desc:'Cotação específica Brasil. $11,100 EXW (WhatsApp Jeremy).',cat:'manju',size:'5.8m',
-   exw:11100,freight:8400,container:'40FR',verified:true,
+  {id:'manjuBR',name:'Manju 5.8m (Rota Brasil)',desc:'Mesmo EXW. Freight BR: $1,500 dom + $9,600 mar.',cat:'manju',size:'5.8m',
+   exw:16000,freight:11100,container:'40FR',verified:true,
    url:'https://www.conrayn.net/prefab-pod/u-shaped-luxury-mobile-house-prefabricated.html'},
 
-  // === APPLE CABIN ===
-  {id:'apple58',name:'Apple Cabin 5.8m',desc:'Apple Cabin c/ instalação. $15,200 EXW (WhatsApp Jeremy).',cat:'apple',size:'5.8m',
+  // ══════════════════════════════════════════════════════
+  // APPLE CABIN
+  // ══════════════════════════════════════════════════════
+  {id:'apple58',name:'Apple Cabin 5.8m',desc:'Apple Cabin c/ instalação. WhatsApp Jeremy.',cat:'apple',size:'5.8m',
    exw:15200,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/modular-homes/apple-cabin-mobile-homestay-outdoor-activity.html'},
-  {id:'apple6m',name:'Apple Cabin 6m/8m (por porto)',desc:'Cotação por porto destino — XLSX Abr 2026 não extraído.',cat:'apple',size:'6-8m',
+  {id:'apple6m',name:'Apple Cabin 6m/8m',desc:'Cotação por porto destino — solicitar Jeremy.',cat:'apple',size:'6-8m',
    exw:0,freight:4300,container:'40HQ',pending:true,
    url:'https://www.conrayn.net/modular-homes/apple-cabin-mobile-homestay-outdoor-activity.html'},
 
-  // === SMALL UNITS ===
-  {id:'unitA',name:'Unit A 3.8m',desc:'Micro-pod 3.8m. Ideal quiosque ou office. Dez 2025.',cat:'small',size:'3.8m',
+  // ══════════════════════════════════════════════════════
+  // SMALL UNITS / PODS
+  // ══════════════════════════════════════════════════════
+  {id:'unitA',name:'Unit A 3.8m',desc:'Micro-pod 3.8m. Quiosque ou office.',cat:'small',size:'3.8m',
    exw:8100,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/modular-pods/move-pod-garden-office-pod-2800mm-length.html'},
-  {id:'unitB',name:'Unit B 3.8m',desc:'Micro-pod económico. Pod garden office. Dez 2025.',cat:'small',size:'3.8m',
+  {id:'unitB',name:'Unit B 3.8m',desc:'Pod económico. Garden office.',cat:'small',size:'3.8m',
    exw:5335,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/modular-pods/flat-packed-garden-office-pod.html'},
 
-  // === LUXURY BOAT-HOUSE ===
-  {id:'boat20',name:'Luxury Boat-House 20ft',desc:'Design barco. Glamping premium. Ago 2025.',cat:'boathouse',size:'20ft',
+  // ══════════════════════════════════════════════════════
+  // LUXURY BOAT-HOUSE
+  // ══════════════════════════════════════════════════════
+  {id:'boat20',name:'Luxury Boat-House 20ft',desc:'Design barco. Glamping premium.',cat:'boathouse',size:'20ft',
    exw:12857,freight:2150,container:'20ft',verified:true,
    url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule-hotel.html'},
-  {id:'boat40',name:'Luxury Boat-House 40ft',desc:'Versão grande. Suite completa. Ago 2025.',cat:'boathouse',size:'40ft',
+  {id:'boat40',name:'Luxury Boat-House 40ft',desc:'Versão grande. Suite completa.',cat:'boathouse',size:'40ft',
    exw:22856,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/modular-pods/bubble-pods-house/sailing-capsule.html'},
 
-  // === CAPSULE ===
-  {id:'capsK7',name:'Capsule K7 — Standard Vision Pod',desc:'Estimativa ~$6,644 (ref. 20ft std). PDF não extraído Jan 2026.',cat:'capsule',size:'capsule',
-   exw:6644,freight:2150,container:'20ft',approx:true,
-   url:'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html'},
-  {id:'capsK5',name:'Capsule K5',desc:'Capsule House — preço em PDF não extraído (Ago 2025).',cat:'capsule',size:'capsule',
-   exw:0,freight:2150,container:'20ft',pending:true,
+  // ══════════════════════════════════════════════════════
+  // CAPSULE HOUSE
+  // Source: Capsule_House CIF Price + material_List.pdf
+  // ══════════════════════════════════════════════════════
+  {id:'capsK5',name:'Capsule K5 (8.5m)',desc:'Smart toilet, skylight, AC, fingerprint lock. Luxo.',cat:'capsule',size:'8.5m',
+   exw:19900,freight:9500,container:'40FR',verified:true,
    url:'https://www.conrayn.net/prefab-pod/prefab-living-pod/capsule-tiny-homes-by-conrayn-redefining.html'},
-  {id:'capsA70',name:'Capsule A70 (Glamni)',desc:'Fornecedor alternativo Glamni. $26,432 EXW.',cat:'capsule',size:'A70',
+  {id:'capsK7',name:'Capsule K7 (11.5m)',desc:'Smart toilet, skylight, AC, fingerprint lock. Máximo luxo.',cat:'capsule',size:'11.5m',
+   exw:25900,freight:9500,container:'40FR',verified:true,
+   url:'https://www.conrayn.net/modular-pods/prefab-capsule-cabin-movable-hotel-cabin.html'},
+  {id:'capsA70',name:'Capsule A70 (Glamni)',desc:'Fornecedor alternativo Glamni.',cat:'capsule',size:'A70',
    exw:26432,freight:4300,container:'40HQ',other:true,
    url:'https://www.conrayn.net/prefab-pod/prefab-living-pod/capsule-tiny-homes-by-conrayn-redefining.html'},
-  {id:'carbon58',name:'Carbon Fiber Cabin 5.8m',desc:'Cabine fibra carbono — preço em PDF não extraído (Jan 2026).',cat:'capsule',size:'5.8m',
-   exw:0,freight:8400,container:'40FR',pending:true,
+
+  // ══════════════════════════════════════════════════════
+  // CARBON FIBER CABIN
+  // Source: Carbon Fiber Cabin CIF price.pdf
+  // ══════════════════════════════════════════════════════
+  {id:'carbonXS',name:'Carbon Fiber XS (2.15m)',desc:'Mini cabine fibra carbono. Quiosque/sentinela.',cat:'carbon',size:'2.15m',
+   exw:5335,freight:1075,container:'4×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
+  {id:'carbonSOff',name:'Carbon Fiber S Office (2.8m)',desc:'Office pod fibra carbono.',cat:'carbon',size:'2.8m',
+   exw:6001,freight:1075,container:'4×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
+  {id:'carbonSRes',name:'Carbon Fiber S Residential (2.8m)',desc:'Pod residencial fibra carbono.',cat:'carbon',size:'2.8m',
+   exw:7265,freight:1075,container:'4×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
+  {id:'carbonXM',name:'Carbon Fiber XM (3.8m)',desc:'Tamanho médio fibra carbono.',cat:'carbon',size:'3.8m',
+   exw:8910,freight:2150,container:'2×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
+  {id:'carbonL',name:'Carbon Fiber L (5.8m)',desc:'Grande. Alternativa ao Manju.',cat:'carbon',size:'5.8m',
+   exw:14080,freight:2230,container:'2×40HQ',verified:true,
+   url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
+  {id:'carbonXL',name:'Carbon Fiber XL (11.6m)',desc:'Duplo módulo. Máximo fibra carbono.',cat:'carbon',size:'11.6m',
+   exw:24200,freight:4300,container:'40HQ',verified:true,
    url:'https://www.conrayn.net/prefab-pod/spacehousepod-house.html'},
 
-  // === MOBILE POD ===
-  {id:'podStd',name:'Mobile Pod — Standard',desc:'3 tiers. Preços em PDF não extraído.',cat:'pod',size:'pod',
+  // ══════════════════════════════════════════════════════
+  // PENDING (sem preço verificado)
+  // ══════════════════════════════════════════════════════
+  {id:'exp700',name:'700mm Expandable',desc:'Micro expansível — preço pendente Jeremy.',cat:'expandable',size:'700mm',
    exw:0,freight:2150,container:'20ft',pending:true,
-   url:'https://www.conrayn.net/modular-pods/move-pod-garden-office-pod-2800mm-length.html'},
-  {id:'podPrem',name:'Mobile Pod — Premium',desc:'Tier premium. Preços em PDF não extraído.',cat:'pod',size:'pod',
-   exw:0,freight:2150,container:'20ft',pending:true,
-   url:'https://www.conrayn.net/modular-pods/move-pod-garden-office-pod-2800mm-length.html'},
-  {id:'podHigh',name:'Mobile Pod — High-End',desc:'Tier high-end. Preços em PDF não extraído.',cat:'pod',size:'pod',
-   exw:0,freight:4300,container:'40HQ',pending:true,
-   url:'https://www.conrayn.net/modular-pods/move-pod-garden-office-pod-2800mm-length.html'}
+   url:'https://www.conrayn.net/prefab-house/folding-container-house/plug-and-play-smart-living-the-convenience-of.html'}
 ];
 
 const FOLD_UPGRADES=[
