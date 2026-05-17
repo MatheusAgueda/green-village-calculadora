@@ -1,0 +1,51 @@
+name: Sync Calculator to project-green
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'service-worker.js'
+      - 'images/**'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source (calculadora)
+        uses: actions/checkout@v4
+        with:
+          path: source
+
+      - name: Checkout target (project-green)
+        uses: actions/checkout@v4
+        with:
+          repository: Green-Village-Mobile-Homes/project-green
+          token: ${{ secrets.SYNC_PAT }}
+          path: target
+
+      - name: Sync calculator files
+        run: |
+          DEST="target/apps/site/public/calculadora"
+          cp source/index.html "$DEST/index.html"
+          cp source/service-worker.js "$DEST/service-worker.js"
+          mkdir -p "$DEST/images"
+          cp -r source/images/* "$DEST/images/" 2>/dev/null || true
+          echo "Synced files:"
+          ls -la "$DEST/"
+
+      - name: Check for changes
+        id: diff
+        working-directory: target
+        run: |
+          git diff --quiet && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        working-directory: target
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps/site/public/calculadora/
+          git commit -m "chore: sync calculator from green-village-calculadora"
+          git push
