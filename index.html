@@ -3580,7 +3580,7 @@ function catCalcBR(exw,freight){
   const tier=peEur<=5000?'low':peEur>20000?'luxury':'medium';
   const profitEur=tier==='luxury'?12000:6000;
   const commissionEur=tier==='low'?500:tier==='medium'?1000:2000;
-  const marginBrl=(profitEur+commissionEur)*usdbrl/eurusd; // EUR→BRL via USD
+  const marginBrl=(profitEur+commissionEur)*eurusd*usdbrl; // EUR→USD→BRL
   const pvp=custoTotal+marginBrl; // preço final cliente BR (s/ IVA — Brasil não tem IVA venda neste modelo)
   return{cif_brl:Math.round(cif_brl),ii:Math.round(ii),icms:Math.round(icms),
     pis:Math.round(pis),cofins:Math.round(cofins),afrmm:Math.round(afrmm),
