@@ -283,13 +283,6 @@ select{
 .cat-bv{color:#1db854;font-size:13px;font-weight:700}
 .cat-ba{color:#a78bfa;font-size:12px;font-weight:700;padding:1px 5px;border:1px solid rgba(167,139,250,.3);border-radius:4px}
 .cat-bo{font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(251,191,36,.15);color:#fbbf24;font-weight:700;letter-spacing:.5px;vertical-align:middle}
-.cat-row-comp{background:rgba(96,165,250,.04)}
-.cat-row-comp:nth-child(even){background:rgba(96,165,250,.07)}
-.cat-row-fraud{background:rgba(239,68,68,.06)!important}
-.cat-bc{font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(96,165,250,.15);color:#60a5fa;font-weight:700;letter-spacing:.5px;vertical-align:middle}
-.cat-bf{font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(239,68,68,.2);color:#f87171;font-weight:700;letter-spacing:.5px;vertical-align:middle}
-.cat-comp-info{font-size:10px;color:#94a3b8;text-align:center;font-style:italic}
-.cat-pvp-comp{color:#60a5fa!important;font-weight:700}
 .cat-tier{display:inline-block;font-size:9px;padding:2px 8px;border-radius:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;vertical-align:middle;margin-left:6px}
 .cat-tier-low{background:rgba(156,163,175,.12);color:rgba(156,163,175,.8);border:1px solid rgba(156,163,175,.2)}
 .cat-tier-medium{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.25)}
@@ -636,7 +629,7 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     <button onclick="GV.filterCatalog('small')" class="cat-filter" data-cat="small">Pequenas</button>
     <button onclick="GV.filterCatalog('boathouse')" class="cat-filter" data-cat="boathouse">Boat-House</button>
     <button onclick="GV.filterCatalog('container')" class="cat-filter" data-cat="container">Container</button>
-    <button onclick="GV.filterCatalog('brComp')" class="cat-filter" data-cat="brComp">Mercado BR</button>
+
     <button onclick="GV.filterCatalog('pending')" class="cat-filter" data-cat="pending">Pendentes</button>
   </div>
 </div>
@@ -3215,161 +3208,6 @@ const CAT_PRODUCTS=[
    img:'images/exp700.jpeg',
    url:'https://www.conrayn.net/prefab-house/folding-container-house/plug-and-play-smart-living-the-convenience-of.html'},
 
-  // ══════════════════════════════════════════════════════
-  // CONCORRÊNCIA BR — Mercado Brasileiro
-  // Source: MERCADO_CONTAINER_BRASIL_2026_v10.pdf (CIA Einstein)
-  // Preços BRL retalho. Maioria produto chinês revendido.
-  // ══════════════════════════════════════════════════════
-
-  // Box Modular (Novo Hamburgo RS — CNPJ 39.830.119/0001-27, 793K TikTok, R$5,800-8,600/m²)
-  {id:'brbox_tiny',name:'Tiny Dam 14.6m²',desc:'Box Modular · Novo Hamburgo RS. Container modular premium.',cat:'brComp',size:'14.6m²',
-   exw:0,freight:0,container:'—',brl:125800,company:'Box Modular',loc:'RS',verified:true,
-   url:'https://boxmodular.com.br'},
-  {id:'brbox_s15',name:'Suite 15 Serrana 14.59m²',desc:'Box Modular · Perfil serrano. 1BR.',cat:'brComp',size:'14.59m²',
-   exw:0,freight:0,container:'—',brl:123400,company:'Box Modular',loc:'RS',verified:true,
-   url:'https://boxmodular.com.br'},
-  {id:'brbox_s22',name:'Suite 22 Cambara 21.84m²',desc:'Box Modular · 1BR expandido.',cat:'brComp',size:'21.84m²',
-   exw:0,freight:0,container:'—',brl:168800,company:'Box Modular',loc:'RS',verified:true,
-   url:'https://boxmodular.com.br'},
-  {id:'brbox_mini',name:'Mini Pra Dois 21.84m²',desc:'Box Modular · Para casal. 1BR+1WC.',cat:'brComp',size:'21.84m²',
-   exw:0,freight:0,container:'—',brl:169400,company:'Box Modular',loc:'RS',verified:true,
-   url:'https://boxmodular.com.br'},
-  {id:'brbox_esc',name:'Escritório 18.24m²',desc:'Box Modular · Office module container.',cat:'brComp',size:'18.24m²',
-   exw:0,freight:0,container:'—',brl:129200,company:'Box Modular',loc:'RS',verified:true,
-   url:'https://boxmodular.com.br'},
-  {id:'brbox_cab',name:'Cabana Expointer 27.2m²',desc:'Box Modular · Premium cabana line. Topo da gama.',cat:'brComp',size:'27.2m²',
-   exw:0,freight:0,container:'—',brl:239000,company:'Box Modular',loc:'RS',verified:true,
-   url:'https://boxmodular.com.br'},
-  {id:'brbox_mod',name:'Módulo c/Banheiro 11.7m²',desc:'Box Modular · Entry R$68K. Até 27.2m² R$163K.',cat:'brComp',size:'11.7-27m²',
-   exw:0,freight:0,container:'—',brl:68000,company:'Box Modular',loc:'RS',verified:true,
-   url:'https://boxmodular.com.br'},
-
-  // Casa do Container (Gravataí RS — CNPJ 02.505.665/0001-82, 27 anos mercado)
-  {id:'brcdc_tiny',name:'Tiny House 9.76m²',desc:'Casa do Container · 27 anos. Entry absoluto.',cat:'brComp',size:'9.76m²',
-   exw:0,freight:0,container:'—',brl:24900,company:'Casa do Container',loc:'RS',verified:true,
-   url:'https://casadocontainer.com.br'},
-  {id:'brcdc_kit',name:'Kit Net 15m²',desc:'Casa do Container · Studio compacto.',cat:'brComp',size:'15m²',
-   exw:0,freight:0,container:'—',brl:37000,company:'Casa do Container',loc:'RS',verified:true,
-   url:'https://casadocontainer.com.br'},
-  {id:'brcdc_entry',name:'Casa Container Entry',desc:'Casa do Container · Modelo entrada.',cat:'brComp',size:'~20m²',
-   exw:0,freight:0,container:'—',brl:69900,company:'Casa do Container',loc:'RS',verified:true,
-   url:'https://casadocontainer.com.br'},
-
-  // Arquitetizze Imports (Araquari SC — 8 SKUs, WooCommerce, importação directa China)
-  {id:'braqz_desm',name:'Desmontável 18m²',desc:'Arquitetizze · Import. directa China. WooCommerce.',cat:'brComp',size:'18m²',
-   exw:0,freight:0,container:'—',brl:19990,company:'Arquitetizze',loc:'SC',verified:true,
-   url:'https://arquitetizze.com.br'},
-  {id:'braqz_toldo',name:'Container c/Toldo 21m²',desc:'Arquitetizze · Com toldo exterior.',cat:'brComp',size:'21m²',
-   exw:0,freight:0,container:'—',brl:28280,company:'Arquitetizze',loc:'SC',verified:true,
-   url:'https://arquitetizze.com.br'},
-  {id:'braqz_terr',name:'Casa Container Terraço 3×6m',desc:'Arquitetizze · Com terraço integrado.',cat:'brComp',size:'18m²',
-   exw:0,freight:0,container:'—',brl:79900,company:'Arquitetizze',loc:'SC',verified:true,
-   url:'https://arquitetizze.com.br'},
-  {id:'braqz_exp',name:'Expansível 37m²',desc:'Arquitetizze · De R$158K, promo R$99.800.',cat:'brComp',size:'37m²',
-   exw:0,freight:0,container:'—',brl:99800,company:'Arquitetizze',loc:'SC',verified:true,
-   url:'https://arquitetizze.com.br'},
-  {id:'braqz_cap58',name:'Cápsula 5.85m',desc:'Arquitetizze · Cápsula fibra importada.',cat:'brComp',size:'5.85m',
-   exw:0,freight:0,container:'—',brl:64507,company:'Arquitetizze',loc:'SC',verified:true,
-   url:'https://arquitetizze.com.br'},
-  {id:'braqz_cap115',name:'Cápsula 11.5m',desc:'Arquitetizze · Cápsula grande importada.',cat:'brComp',size:'11.5m',
-   exw:0,freight:0,container:'—',brl:132363,company:'Arquitetizze',loc:'SC',verified:true,
-   url:'https://arquitetizze.com.br'},
-
-  // Formaco (Passo Fundo RS — dobrável sanfona)
-  {id:'brfmc_14',name:'Sanfona 14.5m²',desc:'Formaco · Dobrável sanfona. Passo Fundo RS.',cat:'brComp',size:'14.5m²',
-   exw:0,freight:0,container:'—',brl:36000,company:'Formaco',loc:'RS',verified:true,
-   url:'https://formaco.com.br'},
-  {id:'brfmc_27',name:'Sanfona 27m²',desc:'Formaco · Dobrável sanfona médio.',cat:'brComp',size:'27m²',
-   exw:0,freight:0,container:'—',brl:90000,company:'Formaco',loc:'RS',verified:true,
-   url:'https://formaco.com.br'},
-  {id:'brfmc_38',name:'Sanfona 38m²',desc:'Formaco · Dobrável sanfona grande.',cat:'brComp',size:'38m²',
-   exw:0,freight:0,container:'—',brl:145000,company:'Formaco',loc:'RS',verified:true,
-   url:'https://formaco.com.br'},
-
-  // RF Capsule House (Itajaí SC — fibra náutica)
-  {id:'brrf_29',name:'Cápsula Náutica 29m²',desc:'RF Capsule · Fibra náutica premium. Itajaí SC.',cat:'brComp',size:'29m²',
-   exw:0,freight:0,container:'—',brl:159000,company:'RF Capsule House',loc:'SC',verified:true,
-   url:'https://rfcapsulehouse.com.br'},
-
-  // Container Express / Gariani (São Vicente SP — FRAUDE ReclameAqui)
-  {id:'brcex_20s',name:'20ft Standard 15m²',desc:'Container Express · São Vicente SP.',cat:'brComp',size:'15m²',
-   exw:0,freight:0,container:'—',brl:14700,company:'Container Express',loc:'SP',verified:true,fraud:true,
-   url:'#'},
-  {id:'brcex_20l',name:'20ft Luxo',desc:'Container Express · São Vicente SP.',cat:'brComp',size:'~15m²',
-   exw:0,freight:0,container:'—',brl:46000,company:'Container Express',loc:'SP',verified:true,fraud:true,
-   url:'#'},
-  {id:'brcex_40s',name:'40ft Standard 28m²',desc:'Container Express · São Vicente SP.',cat:'brComp',size:'28m²',
-   exw:0,freight:0,container:'—',brl:38500,company:'Container Express',loc:'SP',verified:true,fraud:true,
-   url:'#'},
-  {id:'brcex_40l',name:'40ft Luxo',desc:'Container Express · São Vicente SP.',cat:'brComp',size:'~28m²',
-   exw:0,freight:0,container:'—',brl:89000,company:'Container Express',loc:'SP',verified:true,fraud:true,
-   url:'#'},
-
-  // Jack Container (SC)
-  {id:'brjck_dob',name:'Dobrável Pronto',desc:'Jack Container · SC. Pronto pra morar.',cat:'brComp',size:'~27m²',
-   exw:0,freight:0,container:'—',brl:50000,company:'Jack Container',loc:'SC',verified:true,
-   url:'#'},
-
-  // MCPF (e-commerce — 15 anos garantia estrutura)
-  {id:'brmcpf_dob',name:'Dobrável 15a Garantia',desc:'MCPF · E-commerce. 15 anos garantia estrutura.',cat:'brComp',size:'~27m²',
-   exw:0,freight:0,container:'—',brl:46000,company:'MCPF',loc:'BR',verified:true,
-   url:'#'},
-
-  // Solitec Realty (FOB China conhecido: USD 9,800)
-  {id:'brslt_exp',name:'Expansível 37m² (FOB $9,800)',desc:'Solitec · FOB China USD 9,800. NÃO VERIFICADO.',cat:'brComp',size:'37m²',
-   exw:9800,freight:0,container:'—',brl:57000,company:'Solitec Realty',loc:'BR',approx:true,
-   url:'#'},
-
-  // Tiny Houses Brasil (artesanal premium — ÚNICO modelo O3)
-  {id:'brthb_fenix',name:'Fenix 15m²',desc:'Tiny Houses Brasil · Artesanal premium. +R$250K.',cat:'brComp',size:'15m²',
-   exw:0,freight:0,container:'—',brl:250000,company:'Tiny Houses Brasil',loc:'BR',verified:true,
-   url:'https://tinyhousesbrasil.com.br'},
-
-  // Servcon Container (SP — 500+ dobráveis vendidos, R$4,650/m²)
-  {id:'brsvc_dob',name:'Dobrável R$4,650/m²',desc:'Servcon · 500+ vendidos. ~R$125K por 27m².',cat:'brComp',size:'~27m²',
-   exw:0,freight:0,container:'—',brl:125550,company:'Servcon Container',loc:'SP',verified:true,
-   url:'#'},
-
-  // Miranda Container (MT — industrial, locação disponível)
-  {id:'brmrd_entry',name:'Container Entry',desc:'Miranda · MT. Industrial. Locação R$1,600/mês.',cat:'brComp',size:'~15m²',
-   exw:0,freight:0,container:'—',brl:15000,company:'Miranda Container',loc:'MT',verified:true,
-   url:'#'},
-  {id:'brmrd_top',name:'Container Top R$108K',desc:'Miranda · MT. Modelo top industrial.',cat:'brComp',size:'~40m²',
-   exw:0,freight:0,container:'—',brl:108243,company:'Miranda Container',loc:'MT',verified:true,
-   url:'#'},
-
-  // Fort Containers (kit 2 containers)
-  {id:'brfrt_2',name:'2 Containers Combo',desc:'Fort Containers · Kit 2 containers.',cat:'brComp',size:'2×20ft',
-   exw:0,freight:0,container:'—',brl:15600,company:'Fort Containers',loc:'BR',verified:true,
-   url:'#'},
-
-  // Flexbox Container (Campinas SP — usados e novos)
-  {id:'brflx_20u',name:'Container Usado 20ft',desc:'Flexbox · Campinas SP. R$8K-16K.',cat:'brComp',size:'20ft',
-   exw:0,freight:0,container:'—',brl:12000,company:'Flexbox Container',loc:'SP',approx:true,
-   url:'#'},
-  {id:'brflx_20n',name:'Container Novo 20ft',desc:'Flexbox · Campinas SP. R$16K-25K.',cat:'brComp',size:'20ft',
-   exw:0,freight:0,container:'—',brl:20500,company:'Flexbox Container',loc:'SP',approx:true,
-   url:'#'},
-
-  // Sky Capsule / Luban Cabin K50 (FOB China USD 36,800 conhecido)
-  {id:'brsky_38',name:'Luban K50 38m²',desc:'Sky Capsule · EXW USD 36,800. Retalho R$119K-730K.',cat:'brComp',size:'38m²',
-   exw:36800,freight:0,container:'—',brl:119000,company:'Sky Capsule',loc:'BR',verified:true,
-   url:'#'},
-
-  // Holi Haus (Shandong capsule — NÃO VERIFICADO)
-  {id:'brhol_38',name:'Cápsula Shandong 38m²',desc:'Holi Haus · Shandong capsule. NÃO VERIFICADO.',cat:'brComp',size:'38m²',
-   exw:0,freight:0,container:'—',brl:119000,company:'Holi Haus',loc:'BR',approx:true,
-   url:'#'},
-
-  // Capsule House Brasil (China import + nacional, ISO9001)
-  {id:'brcpb_iso',name:'Cápsula ISO9001',desc:'Capsule House Brasil · China + nacional. ISO9001.',cat:'brComp',size:'~30m²',
-   exw:0,freight:0,container:'—',brl:119000,company:'Capsule House Brasil',loc:'BR',verified:true,
-   url:'#'},
-
-  // Minha Casa Box (PE+PT — Light Steel Frame)
-  {id:'brmcb_lsf',name:'LSF Steel Frame',desc:'Minha Casa Box · PE. Light Steel Frame.',cat:'brComp',size:'~30m²',
-   exw:0,freight:0,container:'—',brl:115000,company:'Minha Casa Box',loc:'PE',approx:true,
-   url:'#'}
 ];
 
 const CAT_IMG_MAP={
@@ -3589,24 +3427,17 @@ function renderCatalog(){
   let html='';
   prods.forEach(p=>{
     const hasPx=!p.pending&&p.exw>0;
-    const isBR=!!p.brl;
-    const pt=hasPx&&!isBR?catCalcPT(p.exw,p.freight):null;
-    const br=hasPx&&!isBR?catCalcBR(p.exw,p.freight):null;
-    const rc=isBR?(p.fraud?'cat-row cat-row-comp cat-row-fraud':'cat-row cat-row-comp'):p.pending?'cat-row cat-row-pend':p.approx?'cat-row cat-row-approx':p.other?'cat-row cat-row-alt':'cat-row cat-row-ok';
-    const badge=isBR?(p.fraud?'<span class="cat-bf">FRAUDE</span> ':'<span class="cat-bc">BR</span> '):p.verified?'<span class="cat-bv" title="Preço verificado">✓</span> ':p.approx?'<span class="cat-ba" title="Estimativa">~</span> ':p.other?'<span class="cat-bo">OUTRO</span> ':'';
+    const pt=hasPx?catCalcPT(p.exw,p.freight):null;
+    const br=hasPx?catCalcBR(p.exw,p.freight):null;
+    const rc=p.pending?'cat-row cat-row-pend':p.approx?'cat-row cat-row-approx':p.other?'cat-row cat-row-alt':'cat-row cat-row-ok';
+    const badge=p.verified?'<span class="cat-bv" title="Preço verificado">✓</span> ':p.approx?'<span class="cat-ba" title="Estimativa">~</span> ':p.other?'<span class="cat-bo">OUTRO</span> ':'';
     html+='<tr class="'+rc+'" data-cat="'+p.cat+'">';
     const imgSrc=p.img||CAT_IMG_MAP[p.url]||'';
     const thumbHtml=imgSrc?'<img class="cat-thumb" src="'+imgSrc+'" alt="'+p.name+'" loading="lazy" onclick="event.stopPropagation();GV.zoomImg(this.src)">':'';
     html+='<td class="cat-td"><div class="cat-prod-cell">'+thumbHtml+'<div class="cat-prod-info"><a href="'+p.url+'" target="_blank" rel="noopener" class="cat-plink">'+badge+p.name+'</a><div class="cat-desc">'+p.desc+'</div></div></div></td>';
     html+='<td class="cat-td cat-c">'+p.size+'</td>';
     html+='<td class="cat-td cat-c">'+p.container+'</td>';
-    if(isBR){
-      // Competitor product — show company info + BRL retail price
-      html+='<td class="cat-td cat-r cat-m cat-g">'+(p.exw?'$'+p.exw.toLocaleString():'—')+'</td>';
-      html+='<td colspan="5" class="cat-td cat-comp-info">'+p.company+' · '+p.loc+(p.fraud?' · <span style="color:#f87171">FRAUDE ReclameAqui</span>':'')+'</td>';
-      html+='<td class="cat-td cat-r cat-m cat-sep-br">—</td>';
-      html+='<td class="cat-td cat-r cat-m cat-pvp-comp" title="Preço retalho concorrente BR">R$'+p.brl.toLocaleString()+'</td>';
-    } else if(hasPx){
+    if(hasPx){
       const tierLabel=pt.tier==='luxury'?'LUXO':pt.tier==='medium'?'MÉDIO':'ECON';
       const tierCls='cat-tier cat-tier-'+pt.tier;
       // EXW (China)
