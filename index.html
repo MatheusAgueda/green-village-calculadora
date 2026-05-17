@@ -629,6 +629,11 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
     <button onclick="GV.filterCatalog('small')" class="cat-filter" data-cat="small">Pequenas</button>
     <button onclick="GV.filterCatalog('boathouse')" class="cat-filter" data-cat="boathouse">Boat-House</button>
     <button onclick="GV.filterCatalog('container')" class="cat-filter" data-cat="container">Container</button>
+    <button onclick="GV.filterCatalog('detachable')" class="cat-filter" data-cat="detachable">Detachable</button>
+    <button onclick="GV.filterCatalog('foldable')" class="cat-filter" data-cat="foldable">Foldable</button>
+    <button onclick="GV.filterCatalog('kitchen')" class="cat-filter" data-cat="kitchen">Kitchen</button>
+    <button onclick="GV.filterCatalog('trailer')" class="cat-filter" data-cat="trailer">Trailer</button>
+    <button onclick="GV.filterCatalog('floating')" class="cat-filter" data-cat="floating">Floating</button>
 
     <button onclick="GV.filterCatalog('pending')" class="cat-filter" data-cat="pending">Pendentes</button>
   </div>
@@ -3199,6 +3204,166 @@ const CAT_PRODUCTS=[
    exw:24200,freight:4300,container:'40HQ',verified:true,
    img:'images/carbon-xl.jpeg',
    url:'https://www.conrayn.net/prefab-house/modern-garden-house/applecabin-tinyhome.html'},
+
+  // ══════════════════════════════════════════════════════
+  // GLAMNI — Detachable Containers
+  // ══════════════════════════════════════════════════════
+  {id:'det40',name:'Detachable 40ft (Glamni)',desc:'Container desmontavel flat-pack 40ft Glamni.',cat:'detachable',size:'40ft',
+   exw:1000,freight:697,container:'40HQ',approx:true,
+   img:'images/det40.jpeg',url:''},
+  {id:'det30',name:'Detachable 30ft (Glamni)',desc:'Container desmontavel flat-pack 30ft Glamni.',cat:'detachable',size:'30ft',
+   exw:1000,freight:697,container:'40HQ',approx:true,
+   img:'images/det30.jpeg',url:''},
+  {id:'det20',name:'Detachable 20ft (Glamni)',desc:'Container desmontavel flat-pack 20ft Glamni.',cat:'detachable',size:'20ft',
+   exw:1000,freight:697,container:'20ft',approx:true,
+   img:'images/det20.jpeg',url:''},
+
+  // ══════════════════════════════════════════════════════
+  // GLAMNI — Folding / Foldable Houses
+  // ══════════════════════════════════════════════════════
+  {id:'glamX40',name:'Glamni X 40ft Folding',desc:'Folding house X 40ft Glamni. Abertura rapida.',cat:'folding',size:'40ft',
+   exw:1700,freight:716,container:'40HQ',approx:true,
+   img:'images/glamX40.jpeg',url:''},
+  {id:'glamZ40',name:'Glamni Z 40ft Foldable',desc:'Foldable house Z 40ft Glamni.',cat:'foldable',size:'40ft',
+   exw:1700,freight:716,container:'40HQ',approx:true,
+   img:'images/glamZ40.jpeg',url:''},
+  {id:'glamX30',name:'Glamni X 30ft Folding',desc:'Folding house X 30ft Glamni.',cat:'folding',size:'30ft',
+   exw:1700,freight:716,container:'40HQ',approx:true,
+   img:'images/glamX30.jpeg',url:''},
+  {id:'glamZ30',name:'Glamni Z 30ft Foldable',desc:'Foldable house Z 30ft Glamni.',cat:'foldable',size:'30ft',
+   exw:1700,freight:716,container:'40HQ',approx:true,
+   img:'images/glamZ30.jpeg',url:''},
+  {id:'glamX20',name:'Glamni X 20ft Folding',desc:'Folding house X 20ft Glamni.',cat:'folding',size:'20ft',
+   exw:1700,freight:716,container:'40HQ',approx:true,
+   img:'images/glamX20.jpeg',url:''},
+  {id:'glamZ20',name:'Glamni Z 20ft Foldable',desc:'Foldable house Z 20ft Glamni.',cat:'foldable',size:'20ft',
+   exw:1700,freight:716,container:'40HQ',approx:true,
+   img:'images/glamZ20.jpeg',url:''},
+
+  // ══════════════════════════════════════════════════════
+  // GLAMNI — Expandable / Double-Wing
+  // ══════════════════════════════════════════════════════
+  {id:'dw20g',name:'Double-Wing 20ft (Glamni)',desc:'DW expansivel 20ft Glamni. 55m2.',cat:'expandable',size:'20ft',
+   exw:5500,freight:2828,container:'40HQ',approx:true,
+   img:'images/dw20g.jpeg',url:''},
+  {id:'exp20g',name:'Expandable 20ft (Glamni)',desc:'Expansivel 20ft Glamni. 37m2.',cat:'expandable',size:'20ft',
+   exw:5500,freight:2828,container:'40HQ',approx:true,
+   img:'images/exp20g.jpeg',url:''},
+  {id:'dw40g',name:'Double-Wing 40ft (Glamni)',desc:'DW expansivel 40ft Glamni. 110m2.',cat:'expandable',size:'40ft',
+   exw:9000,freight:2927,container:'40HQ',approx:true,
+   img:'images/dw40g.jpeg',url:''},
+  {id:'exp40g',name:'Expandable 40ft (Glamni)',desc:'Expansivel 40ft Glamni. 74m2.',cat:'expandable',size:'40ft',
+   exw:9000,freight:2927,container:'40HQ',approx:true,
+   img:'images/exp40g.jpeg',url:''},
+  {id:'luxExp40',name:'Luxury Expandable 40ft (Glamni)',desc:'Expansivel luxo 40ft Glamni. 74m2.',cat:'expandable',size:'40ft',
+   exw:9000,freight:2927,container:'40HQ',approx:true,
+   img:'images/luxExp40.jpeg',url:''},
+  {id:'exp3br',name:'3-Bedroom Expandable (Glamni)',desc:'Expansivel 3 quartos Glamni. 73m2.',cat:'expandable',size:'40ft',
+   exw:9000,freight:2927,container:'40HQ',approx:true,
+   img:'images/exp3br.jpeg',url:''},
+  {id:'luxExp20',name:'Luxury Expandable 20ft (Glamni)',desc:'Expansivel luxo 20ft Glamni. 37m2.',cat:'expandable',size:'20ft',
+   exw:9000,freight:2927,container:'40HQ',approx:true,
+   img:'images/luxExp20.jpeg',url:''},
+
+  // ══════════════════════════════════════════════════════
+  // GLAMNI — Outdoor Kitchens
+  // ══════════════════════════════════════════════════════
+  {id:'kitA1',name:'Outdoor Kitchen A1 (Glamni)',desc:'Cozinha outdoor A1 Glamni. Compacta. 6m2.',cat:'kitchen',size:'6m2',
+   exw:14400,freight:3079,container:'40HQ',approx:true,
+   img:'images/kitA1.jpeg',url:''},
+  {id:'kitA3',name:'Outdoor Kitchen A3 (Glamni)',desc:'Cozinha outdoor A3 Glamni. 8m2.',cat:'kitchen',size:'8m2',
+   exw:17400,freight:3164,container:'40HQ',approx:true,
+   img:'images/kitA3.jpeg',url:''},
+  {id:'kitA5',name:'Outdoor Kitchen A5 (Glamni)',desc:'Cozinha outdoor A5 Glamni. 10m2.',cat:'kitchen',size:'10m2',
+   exw:19600,freight:3226,container:'40HQ',approx:true,
+   img:'images/kitA5.jpeg',url:''},
+  {id:'kitA7',name:'Outdoor Kitchen A7 (Glamni)',desc:'Cozinha outdoor A7 Glamni. Premium. 14m2.',cat:'kitchen',size:'14m2',
+   exw:25600,freight:12135,container:'40FR',approx:true,
+   img:'images/kitA7.jpeg',url:''},
+
+  // ══════════════════════════════════════════════════════
+  // GLAMNI — Trailer / Caravana
+  // ══════════════════════════════════════════════════════
+  {id:'trailer1',name:'Event Trailer Caravan (Glamni)',desc:'Caravana evento Glamni. Rebocavel. 25m2.',cat:'trailer',size:'25m2',
+   exw:9000,freight:11667,container:'40FR',approx:true,
+   img:'images/trailer1.jpeg',url:''},
+
+  // ══════════════════════════════════════════════════════
+  // GLAMNI — Capsule Houses
+  // ══════════════════════════════════════════════════════
+  {id:'capsA30',name:'Capsule A30 (Glamni)',desc:'Capsula A30 Glamni. 12m2.',cat:'capsule',size:'12m2',
+   exw:15500,freight:11850,container:'40FR',approx:true,
+   img:'images/capsA30.jpeg',url:''},
+  {id:'capsG30',name:'Capsule G30 (Glamni)',desc:'Capsula G30 Glamni. 12m2.',cat:'capsule',size:'12m2',
+   exw:20600,freight:11994,container:'40FR',approx:true,
+   img:'images/capsG30.jpeg',url:''},
+  {id:'capsA50',name:'Capsule A50 (Glamni)',desc:'Capsula A50 Glamni. 20m2.',cat:'capsule',size:'20m2',
+   exw:21600,freight:12022,container:'40FR',approx:true,
+   img:'images/capsA50.jpeg',url:''},
+  {id:'capsW3',name:'Capsule W3 (Glamni)',desc:'Capsula W3 Glamni. Design compacto. 12m2.',cat:'capsule',size:'12m2',
+   exw:23000,freight:12062,container:'40FR',approx:true,
+   img:'images/capsW3.jpeg',url:''},
+  {id:'capsX60',name:'Capsule X60 (Glamni)',desc:'Capsula X60 Glamni. 20m2.',cat:'capsule',size:'20m2',
+   exw:25200,freight:12124,container:'40FR',approx:true,
+   img:'images/capsX60.jpeg',url:''},
+  {id:'capsX60Q',name:'Capsule X60Q (Glamni)',desc:'Capsula X60Q variante quad. 20m2.',cat:'capsule',size:'20m2',
+   exw:26200,freight:12152,container:'40FR',approx:true,
+   img:'images/capsX60Q.jpeg',url:''},
+  {id:'capsU30',name:'Capsule U30 (Glamni)',desc:'Capsula U30 Glamni. Design U. 12m2.',cat:'capsule',size:'12m2',
+   exw:27800,freight:12197,container:'40FR',approx:true,
+   img:'images/capsU30.jpeg',url:''},
+  {id:'capsG50',name:'Capsule G50 (Glamni)',desc:'Capsula G50 Glamni. 20m2.',cat:'capsule',size:'20m2',
+   exw:36600,freight:12445,container:'40FR',approx:true,
+   img:'images/capsG50.jpeg',url:''},
+  {id:'capsL50',name:'Capsule L50 (Glamni)',desc:'Capsula L50 Glamni. 20m2.',cat:'capsule',size:'20m2',
+   exw:36600,freight:12445,container:'40FR',approx:true,
+   img:'images/capsL50.jpeg',url:''},
+  {id:'capsM50',name:'Capsule M50 (Glamni)',desc:'Capsula M50 Glamni. 20m2.',cat:'capsule',size:'20m2',
+   exw:36600,freight:12445,container:'40FR',approx:true,
+   img:'images/capsM50.jpeg',url:''},
+  {id:'capsG50F',name:'Capsule G50F (Glamni)',desc:'Capsula G50F variante F. 20m2.',cat:'capsule',size:'20m2',
+   exw:37300,freight:12465,container:'40FR',approx:true,
+   img:'images/capsG50F.jpeg',url:''},
+  {id:'capsL50F',name:'Capsule L50F (Glamni)',desc:'Capsula L50F variante F. 20m2.',cat:'capsule',size:'20m2',
+   exw:37300,freight:12465,container:'40FR',approx:true,
+   img:'images/capsL50F.jpeg',url:''},
+  {id:'capsU50',name:'Capsule U50 (Glamni)',desc:'Capsula U50 Glamni. Design U grande. 20m2.',cat:'capsule',size:'20m2',
+   exw:37600,freight:12473,container:'40FR',approx:true,
+   img:'images/capsU50.jpeg',url:''},
+  {id:'capsW6',name:'Capsule W6 (Glamni)',desc:'Capsula W6 Glamni. 20m2.',cat:'capsule',size:'20m2',
+   exw:41000,freight:12569,container:'40FR',approx:true,
+   img:'images/capsW6.jpeg',url:''},
+  {id:'capsG70',name:'Capsule G70 (Glamni)',desc:'Capsula G70 Glamni. Grande. 30m2.',cat:'capsule',size:'30m2',
+   exw:47600,freight:12755,container:'40FR',approx:true,
+   img:'images/capsG70.jpeg',url:''},
+  {id:'capsL70',name:'Capsule L70 (Glamni)',desc:'Capsula L70 Glamni. Grande. 30m2.',cat:'capsule',size:'30m2',
+   exw:47600,freight:12755,container:'40FR',approx:true,
+   img:'images/capsL70.jpeg',url:''},
+  {id:'capsM70',name:'Capsule M70 (Glamni)',desc:'Capsula M70 Glamni. Grande. 30m2.',cat:'capsule',size:'30m2',
+   exw:47600,freight:12755,container:'40FR',approx:true,
+   img:'images/capsM70.jpeg',url:''},
+  {id:'capsG70F',name:'Capsule G70F (Glamni)',desc:'Capsula G70F variante F grande. 30m2.',cat:'capsule',size:'30m2',
+   exw:48300,freight:12775,container:'40FR',approx:true,
+   img:'images/capsG70F.jpeg',url:''},
+  {id:'capsW9',name:'Capsule W9 (Glamni)',desc:'Capsula W9 Glamni. Maximo W. 30m2.',cat:'capsule',size:'30m2',
+   exw:51000,freight:12851,container:'40FR',approx:true,
+   img:'images/capsW9.jpeg',url:''},
+  {id:'capsDL',name:'Double Layer Capsule (Glamni)',desc:'Capsula dupla camada Glamni. 38m2.',cat:'capsule',size:'38m2',
+   exw:53000,freight:12908,container:'40FR',approx:true,
+   img:'images/capsDL.jpeg',url:''},
+
+  // ══════════════════════════════════════════════════════
+  // GLAMNI — Floating Houses
+  // ══════════════════════════════════════════════════════
+  {id:'floatFH30',name:'Floating House FH30 (Glamni)',desc:'Casa flutuante FH30 Glamni. 30m2.',cat:'floating',size:'30m2',
+   exw:32174,freight:12320,container:'40FR',approx:true,
+   img:'images/floatFH30.jpeg',url:''},
+  {id:'floatFH60',name:'Floating House FH60 (Glamni)',desc:'Casa flutuante FH60 Glamni. 60m2.',cat:'floating',size:'60m2',
+   exw:39600,freight:12530,container:'40FR',approx:true,
+   img:'images/floatFH60.jpeg',url:''},
+  {id:'floatFH90',name:'Floating House FH90 (Glamni)',desc:'Casa flutuante FH90 Glamni. 90m2.',cat:'floating',size:'90m2',
+   exw:56570,freight:13008,container:'40FR',approx:true,
+   img:'images/floatFH90.jpeg',url:''},
 
   // ══════════════════════════════════════════════════════
   // PENDING (sem preço verificado)
