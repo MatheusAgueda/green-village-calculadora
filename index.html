@@ -3586,9 +3586,13 @@ function catCalcBR(exw,freight){
 
 function renderCatalog(){
   const tbody=$('cat-tbody');
-  const prods=catFilter==='all'?CAT_PRODUCTS:
+  const prods=(catFilter==='all'?CAT_PRODUCTS:
     catFilter==='pending'?CAT_PRODUCTS.filter(p=>p.pending):
-    CAT_PRODUCTS.filter(p=>p.cat===catFilter);
+    CAT_PRODUCTS.filter(p=>p.cat===catFilter)).slice().sort((a,b)=>{
+      const pa=a.pending||a.exw<=0?Infinity:catCalcBR(a.exw,a.freight).pvp;
+      const pb=b.pending||b.exw<=0?Infinity:catCalcBR(b.exw,b.freight).pvp;
+      return pa-pb;
+    });
   let html='';
   prods.forEach(p=>{
     const hasPx=!p.pending&&p.exw>0;
