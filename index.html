@@ -793,7 +793,7 @@ function toast(msg,ok=true){
 
 const csym={EUR:"€",GBP:"£",BRL:"R$",USD:"$",PLN:"zł"};
 const oLabels={uk:"🇬🇧 Inglaterra",netherlands:"🇳🇱 Holanda",france:"🇫🇷 França",portugal:"🇵🇹 Portugal",belgium:"🇧🇪 Bélgica",china:"🇨🇳 China"};
-const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"]);
+const EU=new Set(["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria","azores"]);
 
 function rates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;};
@@ -805,7 +805,7 @@ function rates(){
 function localRates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), cny=(g('cny')||8), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
   const e={rate:1,symbol:"€",code:"EUR"};
-  return{portugal:e,spain:e,france:e,italy:e,greece:e,malta:e,"netherlands-dest":e,croatia:e,bulgaria:e,
+  return{portugal:e,spain:e,france:e,italy:e,greece:e,malta:e,"netherlands-dest":e,poland:e,croatia:e,bulgaria:e,azores:e,
     poland:{rate:pln>0?pln:4.5,symbol:"zł",code:"PLN"},brazil:{rate:brl>0?brl:6.5,symbol:"R$",code:"BRL"},
     china:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
 }
@@ -890,7 +890,36 @@ let R={
     france:[{from:"Le Havre",to:"Santos",cost:5200,type:"Flat Rack",note:"🇪🇺 Mercosul-UE preferencial. NCM 9406.90.20. Inclui desp. portuárias"},{from:"Le Havre",to:"Santos",cost:26500,type:"RO-RO",note:"🇪🇺 Mercosul-UE preferencial. Full service"},{from:"Marseille",to:"Santos",cost:5800,type:"Flat Rack",note:"🇪🇺 Mercosul-UE preferencial. Via Mediterrâneo"}],
     belgium:[{from:"Antwerp",to:"Santos",cost:5100,type:"Flat Rack",note:"🇪🇺 Mercosul-UE preferencial. NCM 9406.90.20. Inclui desp. portuárias"},{from:"Zeebrugge",to:"Santos",cost:5400,type:"Flat Rack",note:"🇪🇺 Mercosul-UE preferencial"}],
     china:[{from:"Shanghai",to:"Santos",cost:21000,type:"Flat Rack"},{from:"Shanghai",to:"Santos",cost:2880,type:"Container 20HQ"},{from:"Shanghai",to:"Santos",cost:5760,type:"Container 40HQ"}]}},
-    usa:{label:"EUA",flag:"🇺🇸",vatRate:0,routes:{uk:[{from:"Southampton",to:"New York, NY",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Brunswick, GA",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Galveston, TX",cost:34370,type:"RO-RO"}]}}};
+    usa:{label:"EUA",flag:"🇺🇸",vatRate:0,routes:{uk:[{from:"Southampton",to:"New York, NY",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Brunswick, GA",cost:29550,type:"RO-RO"},{from:"Southampton",to:"Galveston, TX",cost:34370,type:"RO-RO"}]}},
+    azores:{label:"Arquipélago dos Açores",flag:"🇵🇹",vatRate:.16,routes:{
+      portugal:[
+        {from:"Leixões",to:"Ponta Delgada (São Miguel)",cost:5985,type:"Flat Rack",recommended:true,note:"⭐ RECOMENDADO — Savino Del Bene. Casa grande (11,58×3,68m / 5t). Inclui desp. portuárias e BL."},
+        {from:"Leixões",to:"Ponta Delgada (São Miguel)",cost:4150,type:"Flat Rack",note:"Across real — casa menor (8×4m). Preço confirmado fatura FT 2026/124."},
+        {from:"Leixões",to:"Ponta Delgada (São Miguel)",cost:8162,type:"Breakbulk",note:"Transporte convencional — casa grande. Preço varia conforme dimensões."},
+        {from:"Leixões",to:"Horta (Faial)",cost:6650,type:"Flat Rack",note:"Via Ponta Delgada com transbordo inter-ilhas. Preço ref. casa grande."},
+        {from:"Leixões",to:"Angra do Heroísmo (Terceira)",cost:4550,type:"Flat Rack",note:"Cotação Across 2026. Preço ref. casa 8×4m."},
+        {from:"Leixões",to:"Ponta Delgada (São Miguel)",cost:7900,type:"Flat Rack (Savino premium)",note:"Savino Del Bene cotação alternativa — serviço completo."},
+        {from:"Leixões",to:"Ponta Delgada (São Miguel)",cost:13350,type:"Breakbulk (Savino premium)",note:"Savino Del Bene convencional — serviço completo, casa grande."}
+      ],
+      uk:[
+        {from:"Purfleet → Leixões → PDL",to:"Ponta Delgada (São Miguel)",cost:9985,type:"RoRo + Flat Rack",recommended:true,note:"⭐ RECOMENDADO — UK→Leixões (RoRo €4.000) + Leixões→PDL (€5.985). Transbordo em Leixões."},
+        {from:"Purfleet → Leixões → Horta",to:"Horta (Faial)",cost:10650,type:"RoRo + Flat Rack",note:"UK→Leixões (RoRo €4.000) + Leixões→Faial (€6.650). Transbordo em Leixões."},
+        {from:"Purfleet → Leixões → Terceira",to:"Angra do Heroísmo (Terceira)",cost:8550,type:"RoRo + Flat Rack",note:"UK→Leixões (RoRo €4.000) + Leixões→Terceira (€4.550). Transbordo em Leixões."}
+      ],
+      netherlands:[
+        {from:"Rotterdam → Leixões → PDL",to:"Ponta Delgada (São Miguel)",cost:8985,type:"RoRo + Flat Rack",recommended:true,note:"⭐ RECOMENDADO — Rotterdam→Leixões (RoRo €3.000) + Leixões→PDL (€5.985). Transbordo em Leixões."},
+        {from:"Rotterdam → Leixões → Horta",to:"Horta (Faial)",cost:9650,type:"RoRo + Flat Rack",note:"Rotterdam→Leixões (€3.000) + Leixões→Faial (€6.650). Transbordo em Leixões."},
+        {from:"Rotterdam → Leixões → Terceira",to:"Angra do Heroísmo (Terceira)",cost:7550,type:"RoRo + Flat Rack",note:"Rotterdam→Leixões (€3.000) + Leixões→Terceira (€4.550). Transbordo em Leixões."}
+      ],
+      france:[
+        {from:"França → Leixões → PDL",to:"Ponta Delgada (São Miguel)",cost:13485,type:"Camião + Flat Rack",note:"França→PT (camião €7.500) + Leixões→PDL (€5.985). Camião até Leixões + marítimo."},
+        {from:"França → Leixões → Horta",to:"Horta (Faial)",cost:14150,type:"Camião + Flat Rack",note:"França→PT (€7.500) + Leixões→Faial (€6.650). Camião até Leixões + marítimo."}
+      ],
+      belgium:[
+        {from:"Bélgica → Leixões → PDL",to:"Ponta Delgada (São Miguel)",cost:8985,type:"RoRo + Flat Rack",recommended:true,note:"⭐ Mesma rota Rotterdam→Leixões (RoRo €3.000) + Leixões→PDL (€5.985). Transbordo em Leixões."},
+        {from:"Bélgica → Leixões → Horta",to:"Horta (Faial)",cost:9650,type:"RoRo + Flat Rack",note:"Bélgica→Leixões (€3.000) + Leixões→Faial (€6.650). Transbordo em Leixões."}
+      ]
+    }}};
 
 // === TABS ===
 function switchTab(t){
@@ -905,7 +934,7 @@ function switchTab(t){
 
 // === COUNTRY BUTTONS ===
 function buildCountryButtons(){
-  const euK=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria"],nonK=["brazil","usa"];
+  const euK=["portugal","spain","france","italy","greece","malta","netherlands-dest","poland","croatia","bulgaria","azores"],nonK=["brazil","usa"];
   const mk=(k,el)=>{const c=R[k];if(!c)return;const b=document.createElement('button');
     b.className='country-btn flex items-center gap-1.5 px-3 py-2 rounded-xl border border-white/[.06] bg-gv-bg/60 text-gray-400 text-[13px] cursor-pointer';
     b.dataset.country=k;b.innerHTML=`<span class="text-lg">${c.flag}</span><span class="font-medium">${c.label}</span>`;b.onclick=()=>selectCountry(k);el.appendChild(b);};
