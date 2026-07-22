@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script>
-tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif'],display:['Sora','sans-serif'],mono:['Space Mono','monospace']},colors:{gv:{bg:'#060a12',card:'#0c1220',soft:'#111a2e',accent:'#00ff88',accentDim:'#00cc6e',blue:'#5eb5ff',purple:'#a78bfa',border:'rgba(255,255,255,0.06)'}}}}}
+window.tailwind&&(tailwind.config={theme:{extend:{fontFamily:{sans:['Outfit','sans-serif'],display:['Sora','sans-serif'],mono:['Space Mono','monospace']},colors:{gv:{bg:'#060a12',card:'#0c1220',soft:'#111a2e',accent:'#00ff88',accentDim:'#00cc6e',blue:'#5eb5ff',purple:'#a78bfa',border:'rgba(255,255,255,0.06)'}}}}})
 </script>
 <style>
 *{box-sizing:border-box}
@@ -579,8 +579,6 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
 
 </div>
 
-</div>
-
 <!-- TAB 4: CATÁLOGO CHINÊS -->
 <div id="panel-catalog" class="hidden fade-in">
 
@@ -812,7 +810,7 @@ function rates(){
 function localRates(){
   const g=k=>{const v=pn('cfg_'+k);return v>0?v:0;}, brl=(g('brl')||6.5), cny=(g('cny')||8), usd=(g('usd')||1.1), pln=(g('pln')||4.5);
   const e={rate:1,symbol:"€",code:"EUR"};
-  return{portugal:e,spain:e,france:e,italy:e,greece:e,malta:e,"netherlands-dest":e,poland:e,croatia:e,bulgaria:e,azores:e,
+  return{portugal:e,spain:e,france:e,italy:e,greece:e,malta:e,"netherlands-dest":e,croatia:e,bulgaria:e,azores:e,
     poland:{rate:pln>0?pln:4.5,symbol:"zł",code:"PLN"},brazil:{rate:brl>0?brl:6.5,symbol:"R$",code:"BRL"},
     china:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"},usa:{rate:usd>0?usd:1.1,symbol:"$",code:"USD"}};
 }
@@ -1399,7 +1397,7 @@ function buildRouteEditor(){
     const body=$(`re_${ck}_body`);
 
     if(ck==='brazil')body.innerHTML+=`<div class="rounded-xl border border-white/[.04] bg-gv-bg/50 p-4"><div class="text-[10px] uppercase tracking-[.2em] text-amber-400 mb-3 font-medium">Taxas Brasil (Internacional)</div><div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
-${[['fobRate','FOB Rate'],['taxII','II'],['taxIPI','IPI'],['taxPIS','PIS'],['taxCOFINS','COFINS'],['taxICMS','ICMS']].map(([f,l])=>`<div><label class="text-[9px] text-gray-500">${l}</label><input type="text" data-field="${f}" data-country= value="${((c[f]||0)*100).toFixed(1)}" class="cfg-input w-full rounded-lg border border-white/8 bg-gv-bg/80 text-white text-xs px-2 py-1.5 font-mono"/>%</div>`).join('')}</div></div>`;
+${[['fobRate','FOB Rate'],['taxII','II'],['taxIPI','IPI'],['taxPIS','PIS'],['taxCOFINS','COFINS'],['taxICMS','ICMS']].map(([f,l])=>`<div><label class="text-[9px] text-gray-500">${l}</label><input type="text" data-field="${f}" data-country="brazil" value="${((c[f]||0)*100).toFixed(1)}" class="cfg-input w-full rounded-lg border border-white/8 bg-gv-bg/80 text-white text-xs px-2 py-1.5 font-mono"/>%</div>`).join('')}</div></div>`;
 
     if(ck==='china'&&c.vatExtra!==undefined)body.innerHTML+=`<div class="rounded-xl border border-white/[.04] bg-gv-bg/50 p-4"><div class="text-[10px] uppercase tracking-[.2em] text-[#5eb5ff] mb-3 font-medium">Taxa Extra China</div><div class="flex items-center gap-2"><label class="text-[9px] text-gray-500">Taxa adicional</label><input type="text" data-field="vatExtra" data-country="china" value="${((c.vatExtra||0)*100).toFixed(1)}" class="cfg-input w-16 rounded-lg border border-white/8 bg-gv-bg/80 text-white text-xs px-2 py-1.5 font-mono"/><span class="text-[9px] text-gray-500">%</span></div></div>`;
 
@@ -1444,7 +1442,7 @@ function addNewCountry(){
 function saveRoutes(){
   $$('[data-field="vatRate"]').forEach(i=>{if(R[i.dataset.country])R[i.dataset.country].vatRate=(parseFloat(i.value.replace(',','.'))||0)/100;});
   ['fobRate','taxII','taxIPI','taxPIS','taxCOFINS','taxICMS'].forEach(f=>{
-    const i=document.querySelector(`[data-field="${f}"][data-country=]`);if(i&&R.brazil)R.brazil[f]=(parseFloat(i.value.replace(',','.'))||0)/100;
+    const i=document.querySelector(`[data-field="${f}"][data-country="brazil"]`);if(i&&R.brazil)R.brazil[f]=(parseFloat(i.value.replace(',','.'))||0)/100;
   });
   const cx=document.querySelector('[data-field="vatExtra"][data-country="china"]');
   if(cx&&R.china)R.china.vatExtra=(parseFloat(cx.value.replace(',','.'))||0)/100;
@@ -1606,6 +1604,8 @@ const PDB={
   aveiro:[40.860,-8.650],sines:[37.950,-8.870],lisboa:[38.710,-9.140],faro:[37.020,-7.930],
   'caniçal':[32.737,-16.733],canical:[32.737,-16.733],
   'porto santo':[33.060,-16.340],'ponta delgada':[37.740,-25.670],pico:[38.530,-28.530],
+  horta:[38.535,-28.627],'angra do heroísmo':[38.655,-27.218],'angra do heroismo':[38.655,-27.218],
+  'frança':[46.5,2.5],'bélgica':[50.85,4.35],belgica:[50.85,4.35],
   // ES
   vigo:[42.237,-8.715],santander:[43.462,-3.810],valencia:[39.452,-.320],algeciras:[36.132,-5.443],
   sagunto:[39.646,-.214],'las palmas':[28.144,-15.414],barcelona:[41.350,2.166],bilbao:[43.340,-3.042],
@@ -2585,7 +2585,7 @@ function buildMarFilters(){
   // Type filters
   const types=[...new Set(marFlat.map(r=>r.type.replace(/\s*\+.*$/,'').replace(/\s*\(.*$/,'')))].filter(Boolean).sort();
   $('mar-filter-type').innerHTML='<button class="mar-filter-btn active" onclick="GV.marFilterType(null)">Todos</button>'+
-    types.map(t=>'<button class="mar-filter-btn" onclick="GV.marFilterType(\''+t+'\')" data-ft="'+t+'">'+t+'</button>').join('');
+    types.map(t=>{const esc=t.replace(/'/g,"\\'");return'<button class="mar-filter-btn" onclick="GV.marFilterType(\''+esc+'\')" data-ft="'+t+'">'+t+'</button>'}).join('');
 }
 
 function applyMarFilter(){
@@ -2656,8 +2656,9 @@ function renderMarRoutes(){
     marLys[r.id]={g3,g2,g1,core,dash,r};
     core.on('click',()=>marSel(r.id));g1.on('click',()=>marSel(r.id));g2.on('click',()=>marSel(r.id));
   });
-  // Animate flowing dashes
-  let dO=0;(function aD(){dO-=.4;Object.values(marLys).forEach(({dash})=>{if(!dash)return;const e=dash.getElement&&dash.getElement();if(e)e.style.strokeDashoffset=dO+'px'});requestAnimationFrame(aD)})();
+  // Animate flowing dashes (single loop — cancel previous to avoid stacking on each filter change)
+  if(window._marDashAnimId)cancelAnimationFrame(window._marDashAnimId);
+  let dO=0;(function aD(){dO-=.4;Object.values(marLys).forEach(({dash})=>{if(!dash)return;const e=dash.getElement&&dash.getElement();if(e)e.style.strokeDashoffset=dO+'px'});window._marDashAnimId=requestAnimationFrame(aD)})();
 }
 
 // ── PORT MARKERS — professional design with glow + label ──
@@ -3564,14 +3565,16 @@ function catCalcPT(exw,freight){
 function catCalcBR(exw,freight){
   const usdbrl=parseFloat($('cat_usdbrl').value)||5.70;
   const eurusd=parseFloat($('cat_eurusd').value)||1.08;
+  const insPct=(parseFloat($('cat_ins').value)||0.3)/100;
   const fob=exw;
-  const cif_usd=fob+freight+fob*0.003;
+  const cif_usd=fob+freight+(fob+freight)*insPct;
   const cif_brl=cif_usd*usdbrl;
   const ii=cif_brl*0.20;
   const ipi=0;
-  const icms=(cif_brl+ii+ipi)*0.18/(1-0.18);
-  const pis=cif_brl*0.0211;
+  const pis=cif_brl*0.021;
   const cofins=cif_brl*0.0965;
+  // Base ICMS inclui PIS/COFINS + gross-up — mesma fórmula da aba Internacional
+  const icms=(cif_brl+ii+ipi+pis+cofins)*0.18/(1-0.18);
   const afrmm=freight*usdbrl*0.25;
   const siscomex=214.50;
   const custoTotal=cif_brl+ii+ipi+icms+pis+cofins+afrmm+siscomex; // custo importação BR
@@ -3607,7 +3610,8 @@ function renderCatalog(){
     html+='<tr class="'+rc+'" data-cat="'+p.cat+'">';
     const imgSrc=p.img||CAT_IMG_MAP[p.url]||'';
     const thumbHtml=imgSrc?'<img class="cat-thumb" src="'+imgSrc+'" alt="'+p.name+'" loading="lazy" onclick="event.stopPropagation();GV.zoomImg(this.src)">':'';
-    html+='<td class="cat-td"><div class="cat-prod-cell">'+thumbHtml+'<div class="cat-prod-info"><a href="'+p.url+'" target="_blank" rel="noopener" class="cat-plink">'+badge+p.name+'</a><div class="cat-desc">'+p.desc+'</div></div></div></td>';
+    const nameHtml=p.url?'<a href="'+p.url+'" target="_blank" rel="noopener" class="cat-plink">'+badge+p.name+'</a>':'<span class="cat-plink">'+badge+p.name+'</span>';
+    html+='<td class="cat-td"><div class="cat-prod-cell">'+thumbHtml+'<div class="cat-prod-info">'+nameHtml+'<div class="cat-desc">'+p.desc+'</div></div></div></td>';
     html+='<td class="cat-td cat-c">'+p.size+'</td>';
     html+='<td class="cat-td cat-c">'+p.container+'</td>';
     if(hasPx){

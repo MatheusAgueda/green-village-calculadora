@@ -25,3 +25,9 @@ Thumbs.db
 .cache/
 dist/
 build/
+
+# Ferramentas locais (nunca commitar binários de CLI)
+gh_*/
+
+# Claude Code — configuração local da máquina
+.claude/settings.local.json
